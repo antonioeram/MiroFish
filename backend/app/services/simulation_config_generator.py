@@ -1,5 +1,5 @@
 """
-模拟配置智能生成器
+Configurare simulare智能生成器
 使用LLM根据模拟需求、文档内容、图谱信息自动生成细致的模拟参数
 实现全程自动化，无需人工设置参数
 
@@ -81,7 +81,7 @@ class AgentActivityConfig:
 
 @dataclass  
 class TimeSimulationConfig:
-    """时间模拟配置（基于中国人作息习惯）"""
+    """时间Configurare simulare（基于中国人作息习惯）"""
     # 模拟总时长（模拟小时数）
     total_simulation_hours: int = 72  # 默认模拟72小时（3天）
     
@@ -198,7 +198,7 @@ class SimulationParameters:
 
 class SimulationConfigGenerator:
     """
-    模拟配置智能生成器
+    Configurare simulare智能生成器
     
     使用LLM分析模拟需求、文档内容、图谱实体信息，
     自动生成最佳的模拟参数配置
@@ -252,7 +252,7 @@ class SimulationConfigGenerator:
         progress_callback: Optional[Callable[[int, int, str], None]] = None,
     ) -> SimulationParameters:
         """
-        智能生成完整的模拟配置（分步生成）
+        智能生成完整的Configurare simulare（分步生成）
         
         Args:
             simulation_id: 模拟ID
@@ -268,7 +268,7 @@ class SimulationConfigGenerator:
         Returns:
             SimulationParameters: 完整的模拟参数
         """
-        logger.info(f"开始智能生成模拟配置: simulation_id={simulation_id}, 实体数={len(entities)}")
+        logger.info(f"开始智能生成Configurare simulare: simulation_id={simulation_id}, 实体数={len(entities)}")
         
         # 计算总步骤数
         num_batches = math.ceil(len(entities) / self.AGENTS_PER_BATCH)
@@ -373,7 +373,7 @@ class SimulationConfigGenerator:
             generation_reasoning=" | ".join(reasoning_parts)
         )
         
-        logger.info(f"模拟配置生成完成: {len(params.agent_configs)} 个Agent配置")
+        logger.info(f"Configurare simulare生成完成: {len(params.agent_configs)} 个Agent配置")
         
         return params
     
@@ -539,7 +539,7 @@ class SimulationConfigGenerator:
         # 计算最大允许值（80%的agent数）
         max_agents_allowed = max(1, int(num_entities * 0.9))
         
-        prompt = f"""基于以下模拟需求，生成时间模拟配置。
+        prompt = f"""基于以下模拟需求，生成时间Configurare simulare。
 
 {context_truncated}
 
@@ -584,7 +584,7 @@ class SimulationConfigGenerator:
 - work_hours (int数组): 工作时段
 - reasoning (string): 简要说明为什么这样配置"""
 
-        system_prompt = "你是社交媒体模拟专家。返回纯JSON格式，时间配置需符合中国人作息习惯。"
+        system_prompt = "你是社交媒体模拟专家。Returnează format JSON pur，时间配置需符合中国人作息习惯。"
         
         try:
             return self._call_llm_with_retry(prompt, system_prompt)
@@ -700,7 +700,7 @@ class SimulationConfigGenerator:
     "reasoning": "<简要说明>"
 }}"""
 
-        system_prompt = "你是舆论分析专家。返回纯JSON格式。注意 poster_type 必须精确匹配可用实体类型。"
+        system_prompt = "你是舆论分析专家。Returnează format JSON pur。注意 poster_type 必须精确匹配可用实体类型。"
         
         try:
             return self._call_llm_with_retry(prompt, system_prompt)
