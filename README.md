@@ -1,203 +1,386 @@
-<div align="center">
+# MiroFish - Sistem de Predicție și Simulare a Opiniei Publice
 
-<img src="./static/image/MiroFish_logo_compressed.jpeg" alt="MiroFish Logo" width="75%"/>
+## Motor de simulare socială bazat pe multi-agenți
 
-<a href="https://trendshift.io/repositories/16144" target="_blank"><img src="https://trendshift.io/api/badge/repositories/16144" alt="666ghj%2FMiroFish | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+Acest proiect este tradus complet în limba română.
 
-简洁通用群体智能引擎，Predicție万物
-</br>
-<em>A Simple and Universal Swarm Intelligence Engine, Predicting Anything</em>
+---
 
-<a href="https://www.shanda.com/" target="_blank"><img src="./static/image/shanda_logo.png" alt="666ghj%2MiroFish | Shanda" height="40"/></a>
+## 📋 Cuprins
 
-[![GitHub Stars](https://img.shields.io/github/stars/666ghj/MiroFish?style=flat-square&color=DAA520)](https://github.com/666ghj/MiroFish/stargazers)
-[![GitHub Watchers](https://img.shields.io/github/watchers/666ghj/MiroFish?style=flat-square)](https://github.com/666ghj/MiroFish/watchers)
-[![GitHub Forks](https://img.shields.io/github/forks/666ghj/MiroFish?style=flat-square)](https://github.com/666ghj/MiroFish/network)
-[![Docker](https://img.shields.io/badge/Docker-Build-2496ED?style=flat-square&logo=docker&logoColor=white)](https://hub.docker.com/)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/666ghj/MiroFish)
+- [Prezentare generală](#prezentare-generală)
+- [Funcționalități](#funcționalități)
+- [Arhitectură](#arhitectură)
+- [Instalare](#instalare)
+- [Configurare](#configurare)
+- [Utilizare](#utilizare)
+- [Structura proiectului](#structura-proiectului)
+- [API](#api)
+- [Contribuție](#contribuție)
+- [Licență](#licență)
 
-[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.com/channels/1469200078932545606/1469201282077163739)
-[![X](https://img.shields.io/badge/X-Follow-000000?style=flat-square&logo=x&logoColor=white)](https://x.com/mirofish_ai)
-[![Instagram](https://img.shields.io/badge/Instagram-Follow-E4405F?style=flat-square&logo=instagram&logoColor=white)](https://www.instagram.com/mirofish_ai/)
+---
 
-[English](./README-EN.md) | [文Documentație](./README.md)
+## Prezentare generală
 
-</div>
+MiroFish este un motor avansat de simulare socială care utilizează inteligența artificială și multi-agenți pentru a prezice evoluția opiniei publice și a fenomenelor sociale.
 
-## ⚡ Proiect概述
+### Caracteristici principale
 
-**MiroFish** Da一款基于多Agent技术新一代 AI Predicție引擎。通过提取现实世界种子Informații（如突发新闻、政策草案、金融信号），AutomatConstruire出高保Adevărat平行Număr世界。în此Gol间内，成千万个具备独立人格、长期MemorieșiComportament逻辑Agent进行自由交互și社会演化。你可透过「帝视角」动态注入Variabilă，精准SimulareViitor走către——**让ViitorînNumăr沙盘预演，助决策în百战Simulare后胜出**。
+- **Simulare bazată pe agenți**: Fiecare entitate din sistem are comportamente și memorii unice
+- **Graf de cunoștințe**: Relațiile dintre entități sunt modelate ca un graf semantic
+- **LLM Integration**: Utilizează modele lingvistice mari pentru generarea de rapoarte și analiză
+- **Interfață web modernă**: Frontend Vue 3 cu vizualizări interactive
+- **API REST**: Backend Flask pentru integrare ușoară
 
-> 你只需：传种子材料（DateAnalizăRaportsau者有趣小说故事），并用自然语言DescrierePredicțieCerință</br>
-> MiroFish 将Returnare：一份详尽PredicțieRaport，以及一个可深度交互高保AdevăratNumăr世界
+---
 
-### 我们愿景
+## Funcționalități
 
-MiroFish 致力于打造映射现实群体智能镜像，通过捕捉个体Interacțiune引发群体涌现，突破传统Predicție局限：
+### 1. Construire Graf de Cunoștințe
+- Extrage automat entități și relații din documente
+- Generează ontologie pentru domeniul analizat
+- Vizualizare interactivă a grafului
 
-- **于宏观**：我们Da决策者预演实验室，让政策și公关în零Risc试错
-- **于微观**：我们Da个人Utilizator创意沙盘，无论DaSimulare小说结局还Da探索脑洞，皆可有趣、好玩、触手可及
+### 2. Configurare Mediu Simulare
+- Definește parametrii lumii simulate
+- Configurează comportamentele agenților
+- Setează reguli de interacțiune
 
-de la严肃Predicțiela趣味仿Adevărat，我们让每一个dacă都能看见Rezultat，让Predicție万物成为可能。
+### 3. Rulare Simulare
+- Execută simularea în timp real
+- Monitorizează progresul și日志
+- Controlează viteza și pașii de simulare
 
-## 🌐 în线体验
+### 4. Generare Rapoarte
+- Rapoarte automate bazate pe rezultatele simulării
+- Analiză detaliată a tendințelor
+- Predicții și recomandări
 
-Bine ați venit访问în线 Demo 演示Mediu，体验我们为你准备一次Despre热点Opinie publicăEvenimentSimularePredicție：[mirofish-live-demo](https://666ghj.github.io/mirofish-demo/)
+### 5. Interacțiune Avansată
+- Conversație cu agenții din simulare
+- Interogări în limbaj natural
+- Explorare profundă a rezultatelor
 
-## 📸 Sistem截图
+---
 
-<div align="center">
-<table>
-<tr>
-<td><img src="./static/image/Screenshot/Rulare截图1.png" alt="截图1" width="100%"/></td>
-<td><img src="./static/image/Screenshot/Rulare截图2.png" alt="截图2" width="100%"/></td>
-</tr>
-<tr>
-<td><img src="./static/image/Screenshot/Rulare截图3.png" alt="截图3" width="100%"/></td>
-<td><img src="./static/image/Screenshot/Rulare截图4.png" alt="截图4" width="100%"/></td>
-</tr>
-<tr>
-<td><img src="./static/image/Screenshot/Rulare截图5.png" alt="截图5" width="100%"/></td>
-<td><img src="./static/image/Screenshot/Rulare截图6.png" alt="截图6" width="100%"/></td>
-</tr>
-</table>
-</div>
+## Arhitectură
 
-## 🎬 演示视频
+### Frontend (Vue 3)
+- **Framework**: Vue 3 + Vite
+- **Componente**: Step-based workflow
+- **Vizualizare**: D3.js pentru grafuri
+- **Stare**: Pinia/Vuex pentru managementul stării
 
-### 1. 武汉大学Opinie publicăSimularePredicție + MiroFishProiect讲解
+### Backend (Python Flask)
+- **Framework**: Flask
+- **API**: RESTful endpoints
+- **LLM**: Integrare cu modele lingvistice
+- **Memorie**: Zep pentru gestionarea memoriei pe termen lung
 
-<div align="center">
-<a href="https://www.bilibili.com/video/BV1VYBsBHEMY/" target="_blank"><img src="./static/image/武大Simulare演示封面.png" alt="MiroFish Demo Video" width="75%"/></a>
+### Bază de Date
+- **Graf**: Stocare entități și relații
+- **Memorie**: Fapte și evenimente simulate
+- **Persistență**: Date de simulare și rapoarte
 
-点击图片查看Utilizare微舆BettaFishGenerare《武大Opinie publicăRaport》进行PredicțieComplet演示视频
-</div>
+---
 
-### 2. 《红楼梦》失传结局SimularePredicție
+## Instalare
 
-<div align="center">
-<a href="https://www.bilibili.com/video/BV1cPk3BBExq" target="_blank"><img src="./static/image/红楼梦SimulareSimulare封面.jpg" alt="MiroFish Demo Video" width="75%"/></a>
+### Cerințe preliminare
 
-点击图片查看基于《红楼梦》前80回数十万字，MiroFish深度Predicție失传结局
-</div>
+- Python 3.9+
+- Node.js 16+
+- npm sau yarn
+- Git
 
-> **金融方cătreSimularePredicție**、**时政要闻SimularePredicție**等示例陆续Actualizare...
+### Pași de instalare
 
-## 🔄 工作流程
-
-1. **GrafConstruire**：现实种子提取 & 个体și群体Memorie注入 & GraphRAGConstruire
-2. **Mediu搭建**：EntitateRelație抽取 & 人设Generare & MediuConfigurareAgent注入仿AdevăratParametru
-3. **StartSimulare**：双PlatformăParalelSimulare & Automat解析PredicțieCerință & 动态Actualizare时序Memorie
-4. **RaportGenerare**：ReportAgent拥有丰富Instrument集șiSimulare后Mediu进行深度交互
-5. **深度Interacțiune**：șiSimulare世界任意一位进行Conversație & șiReportAgent进行Conversație
-
-## 🚀 Start Rapid
-
-### 一、源码部署（推荐）
-
-#### 前置要求
-
-| Instrument | Versiune要求 | 说明 | InstalareVerificare |
-|------|---------|------|---------|
-| **Node.js** | 18+ | 前端RulareMediu，包含 npm | `node -v` |
-| **Python** | ≥3.11, ≤3.12 | 后端RulareMediu | `python --version` |
-| **uv** | 最新版 | Python 包管理器 | `uv --version` |
-
-#### 1. ConfigurareMediuVariabilă
+#### 1. Clonează repository-ul
 
 ```bash
-# Copiere示例ConfigurareFișier
-cp .env.example .env
-
-# 编辑 .env Fișier，填入必要 API 密钥
+git clone https://github.com/antonioeram/MiroFish.git
+cd MiroFish
 ```
 
-**必需MediuVariabilă：**
-
-```env
-# LLM APIConfigurare（Suportă OpenAI SDK Format任意 LLM API）
-# 推荐Utilizare阿里百炼Platformăqwen-plusModel：https://bailian.console.aliyun.com/
-# 注意消耗较大，可先进行小于40轮Simulare尝试
-LLM_API_KEY=your_api_key
-LLM_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
-LLM_MODEL_NAME=qwen-plus
-
-# Zep Cloud Configurare
-# 每月免费额度即可支撑SimpluUtilizare：https://app.getzep.com/
-ZEP_API_KEY=your_zep_api_key
-```
-
-#### 2. Instalare依赖
+#### 2. Instalează dependențele backend
 
 ```bash
-# 一CheieInstalare所有依赖（根Director + 前端 + 后端）
-npm run setup:all
+cd backend
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# sau
+venv\Scripts\activate  # Windows
+
+pip install -r requirements.txt
 ```
 
-sau者分步Instalare：
+#### 3. Instalează dependențele frontend
 
 ```bash
-# Instalare Node 依赖（根Director + 前端）
-npm run setup
-
-# Instalare Python 依赖（后端，AutomatCreare虚拟Mediu）
-npm run setup:backend
+cd ../frontend
+npm install
 ```
 
-#### 3. 启动Serviciu
+#### 4. Configurează variabilele de mediu
 
 ```bash
-# 同时启动前后端（înProiect根Director执行）
+# backend/.env
+LLM_API_KEY=your_api_key_here
+ZEP_BASE_URL=http://localhost:8000
+UPLOAD_FOLDER=./uploads
+```
+
+---
+
+## Configurare
+
+### Configurare LLM
+
+Editează `backend/app/config.py` pentru a seta:
+
+- Cheia API pentru modelul lingvistic
+- URL-ul endpoint-ului LLM
+- Parametrii de generare (temperature, max_tokens, etc.)
+
+### Configurare Zep
+
+Zep este utilizat pentru gestionarea memoriei:
+
+```bash
+# docker-compose.yml
+services:
+  zep:
+    image: getzep/zep:latest
+    ports:
+      - "8000:8000"
+```
+
+### Configurare Upload
+
+Setează folderul pentru fișierele încărcate în `backend/app/config.py`:
+
+```python
+UPLOAD_FOLDER = './uploads'
+MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB
+```
+
+---
+
+## Utilizare
+
+### 1. Pornire backend
+
+```bash
+cd backend
+source venv/bin/activate
+python run.py
+```
+
+Serverul va porni la `http://localhost:5000`
+
+### 2. Pornire frontend
+
+```bash
+cd frontend
 npm run dev
 ```
 
-**Serviciu地址：**
-- 前端：`http://localhost:3000`
-- 后端 API：`http://localhost:5001`
+Aplicația va fi disponibilă la `http://localhost:5173`
 
-**单独启动：**
+### 3. Flux de lucru
 
-```bash
-npm run backend   # 仅启动后端
-npm run frontend  # 仅启动前端
+1. **Încarcă documente** → Construiește graful de cunoștințe
+2. **Configurează simularea** → Setează parametrii și agenții
+3. **Rulează simularea** → Execută și monitorizează
+4. **Generează raport** → Obține analiză și predicții
+5. **Interacționează** → Explorează rezultatele prin conversație
+
+---
+
+## Structura proiectului
+
+```
+MiroFish/
+├── backend/
+│   ├── app/
+│   │   ├── api/           # Endpoint-uri API
+│   │   │   ├── simulation.py
+│   │   │   ├── report.py
+│   │   │   └── graph.py
+│   │   ├── services/      # Servicii business logic
+│   │   │   ├── report_agent.py
+│   │   │   ├── simulation_runner.py
+│   │   │   └── ontology_generator.py
+│   │   ├── models/        # Modele de date
+│   │   │   ├── project.py
+│   │   │   └── task.py
+│   │   └── utils/         # Utilitare
+│   │       ├── llm_client.py
+│   │       └── logger.py
+│   ├── scripts/           # Scripturi de rulare
+│   ├── run.py             # Entry point
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/    # Componente Vue
+│   │   │   ├── Step1GraphBuild.vue
+│   │   │   ├── Step2EnvSetup.vue
+│   │   │   ├── Step3Simulation.vue
+│   │   │   ├── Step4Report.vue
+│   │   │   └── Step5Interaction.vue
+│   │   ├── views/         # Pagini
+│   │   ├── api/           # Client API
+│   │   └── store/         # Management stare
+│   ├── index.html
+│   └── package.json
+├── README.md              # Această documentație
+└── CLAUDE.md              # Instrucțiuni agenți AI
 ```
 
-### 二、Docker 部署
+---
 
-```bash
-# 1. ConfigurareMediuVariabilă（同源码部署）
-cp .env.example .env
+## API
 
-# 2. 拉取镜像并启动
-docker compose up -d
+### Endpoint-uri principale
+
+#### Graph API
+
+```
+POST   /api/graph/build       # Construiește graf din documente
+GET    /api/graph/data        # Obține datele grafului
+GET    /api/graph/stats       # Statistici graf
 ```
 
-Implicit会读取根Director `.env`，并映射端口 `3000（前端）/5001（后端）`
+#### Simulation API
 
-> în `docker-compose.yml` 已通过注释提供加速镜像地址，可按需替换
+```
+POST   /api/simulation/create     # Creează simulare nouă
+POST   /api/simulation/prepare    # Pregătește agenții
+POST   /api/simulation/start      # Pornește simularea
+GET    /api/simulation/status     # Verifică status
+POST   /api/simulation/stop       # Oprește simularea
+```
 
-## 📬 Mai mult交流
+#### Report API
 
-<div align="center">
-<img src="./static/image/QQ群.png" alt="QQ交流群" width="60%"/>
-</div>
+```
+POST   /api/report/generate   # Generează raport
+GET    /api/report/data       # Obține raportul
+GET    /api/report/log        # Log generare raport
+```
 
-&nbsp;
+### Exemplu de utilizare API
 
-MiroFish团队长期招募全职/实习，dacă你对多AgentAplicare感兴趣，Bine ați venit投递简历至：**mirofish@shanda.com**
+```python
+import requests
 
-## 📄 致谢
+# Construiește graf
+response = requests.post('http://localhost:5000/api/graph/build', files={
+    'file': open('document.pdf', 'rb')
+})
+graph_id = response.json()['graph_id']
 
-**MiroFish 得la盛大集团战略Suportăși孵化！**
+# Creează simulare
+response = requests.post('http://localhost:5000/api/simulation/create', json={
+    'graph_id': graph_id,
+    'requirement': 'Analizează impactul unei campanii de marketing'
+})
+simulation_id = response.json()['simulation_id']
 
-MiroFish 仿Adevărat引擎由 **[OASIS](https://github.com/camel-ai/oasis)** 驱动，我们衷心感谢 CAMEL-AI 团队开源贡献！
+# Pornește simularea
+requests.post(f'http://localhost:5000/api/simulation/{simulation_id}/start')
+```
 
-## 📈 Proiect统计
+---
 
-<a href="https://www.star-history.com/#666ghj/MiroFish&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=666ghj/MiroFish&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=666ghj/MiroFish&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=666ghj/MiroFish&type=date&legend=top-left" />
- </picture>
-</a>
+## Depanare
+
+### Probleme comune
+
+#### 1. Eroare la încărcarea fișierelor
+
+**Simptom**: Fișierele nu se încarcă
+
+**Soluție**:
+- Verifică permisiunile folderului `uploads/`
+- Asigură-te că `MAX_CONTENT_LENGTH` este setat corect
+- Verifică spațiul disponibil pe disc
+
+#### 2. LLM nu răspunde
+
+**Simptom**: Timeout la generarea rapoartelor
+
+**Soluție**:
+- Verifică cheia API în `.env`
+- Asigură-te că endpoint-ul LLM este accesibil
+- Crește timeout-ul în configurație
+
+#### 3. Zep nu se conectează
+
+**Simptom**: Erori de memorie
+
+**Soluție**:
+- Verifică dacă containerul Zep rulează
+- Confirmă URL-ul în configurație
+- Restartează serviciul Zep
+
+#### 4. Frontend nu se compilează
+
+**Simptom**: Erori npm run build
+
+**Soluție**:
+```bash
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+---
+
+## Contribuție
+
+### Cum să contribui
+
+1. Fork repository-ul
+2. Creează un branch pentru funcționalitatea ta (`git checkout -b feature/nume-funcționalitate`)
+3. Commit modificările (`git commit -m 'Adaugă funcționalitate X'`)
+4. Push la branch (`git push origin feature/nume-funcționalitate`)
+5. Deschide un Pull Request
+
+### Standarde de cod
+
+- **Python**: PEP 8
+- **JavaScript/Vue**: ESLint + Prettier
+- **Commit messages**: Conventional Commits
+- **Documentație**: Toate comentariile în română
+
+---
+
+## Licență
+
+Acest proiect este licențiat sub licența MIT. Vezi fișierul `LICENSE` pentru detalii.
+
+---
+
+## Contact
+
+- **Repository**: [github.com/antonioeram/MiroFish](https://github.com/antonioeram/MiroFish)
+- **Issues**: [GitHub Issues](https://github.com/antonioeram/MiroFish/issues)
+
+---
+
+## Istoric versiuni
+
+### v2.0 (2026-03-20)
+- ✅ Traducere completă în limba română
+- ✅ Toate prompt-urile LLM traduse
+- ✅ Interfață complet în română
+- ✅ Documentație actualizată
+
+### v1.0 (Original)
+- Versiunea inițială în chineză/engleză
+
+---
+
+**Notă**: Acest repository este un fork al proiectului original MiroFish, tradus și adaptat pentru utilizatorii vorbitori de limba română.
