@@ -3,7 +3,7 @@
     <!-- Top Control Bar -->
     <div class="control-bar">
       <div class="status-group">
-        <!-- Twitter 平台Progres -->
+        <!-- Twitter PlatformăProgres -->
         <div class="platform-status twitter" :class="{ active: runStatus.twitter_running, completed: runStatus.twitter_completed }">
           <div class="platform-header">
             <svg class="platform-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
@@ -44,7 +44,7 @@
           </div>
         </div>
         
-        <!-- Reddit 平台Progres -->
+        <!-- Reddit PlatformăProgres -->
         <div class="platform-status reddit" :class="{ active: runStatus.reddit_running, completed: runStatus.reddit_completed }">
           <div class="platform-header">
             <svg class="platform-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
@@ -157,7 +157,7 @@
               </div>
               
               <div class="card-body">
-                <!-- CREATE_POST: 发布帖子 -->
+                <!-- CREATE_POST: Publicare帖子 -->
                 <div v-if="action.action_type === 'CREATE_POST' && action.action_args?.content" class="content-text main-text">
                   {{ action.action_args.content }}
                 </div>
@@ -220,7 +220,7 @@
                   </div>
                 </template>
 
-                <!-- FOLLOW: 关注用户 -->
+                <!-- FOLLOW: 关注Utilizator -->
                 <template v-if="action.action_type === 'FOLLOW'">
                   <div class="follow-info">
                     <svg class="icon-small" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
@@ -248,7 +248,7 @@
                   </div>
                 </template>
 
-                <!-- 通用回退：未知类型或有 content 但未被上述处理 -->
+                <!-- 通用回退：未知类型sau有 content 但未被上述处理 -->
                 <div v-if="!['CREATE_POST', 'QUOTE_POST', 'REPOST', 'LIKE_POST', 'CREATE_COMMENT', 'SEARCH_POSTS', 'FOLLOW', 'UPVOTE_POST', 'DOWNVOTE_POST', 'DO_NOTHING'].includes(action.action_type) && action.action_args?.content" class="content-text">
                   {{ action.action_args.content }}
                 </div>
@@ -324,12 +324,12 @@ const actionIds = ref(new Set()) // 用于去重的动作ID集合
 const scrollContainer = ref(null)
 
 // Computed
-// 按时间顺序显示动作（最新的在最后面，即底部）
+// 按Timp顺序显示动作（最新的在最后面，即底部）
 const chronologicalActions = computed(() => {
   return allActions.value
 })
 
-// 各平台动作计数
+// 各Platformă动作计数
 const twitterActionsCount = computed(() => {
   return allActions.value.filter(a => a.platform === 'twitter').length
 })
@@ -338,7 +338,7 @@ const redditActionsCount = computed(() => {
   return allActions.value.filter(a => a.platform === 'reddit').length
 })
 
-// 格式化模拟流逝时间（根据轮次和每轮分钟数计算）
+// Format化模拟流逝Timp（根据轮次和每轮分钟数计算）
 const formatElapsedTime = (currentRound) => {
   if (!currentRound || currentRound <= 0) return '0h 0m'
   const totalMinutes = currentRound * props.minutesPerRound
@@ -347,12 +347,12 @@ const formatElapsedTime = (currentRound) => {
   return `${hours}h ${minutes}m`
 }
 
-// Twitter平台的模拟流逝时间
+// TwitterPlatformă的模拟流逝Timp
 const twitterElapsedTime = computed(() => {
   return formatElapsedTime(runStatus.value.twitter_current_round || 0)
 })
 
-// Reddit平台的模拟流逝时间
+// RedditPlatformă的模拟流逝Timp
 const redditElapsedTime = computed(() => {
   return formatElapsedTime(runStatus.value.reddit_current_round || 0)
 })
@@ -362,7 +362,7 @@ const addLog = (msg) => {
   emit('add-log', msg)
 }
 
-// 重置所有状态（用于重新启动模拟）
+// Resetare所有状态（用于重新启动模拟）
 const resetAllState = () => {
   phase.value = 0
   runStatus.value = {}
@@ -383,12 +383,12 @@ const doStartSimulation = async () => {
     return
   }
   
-  // 先重置所有状态，确保不会受到上一次模拟的影响
+  // 先Resetare所有状态，确保不会受到上一次模拟的影响
   resetAllState()
   
   isStarting.value = true
   startError.value = null
-  addLog('正在启动双平台并行模拟...')
+  addLog('正在启动双Platformă并行模拟...')
   emit('update-status', 'processing')
   
   try {
@@ -401,7 +401,7 @@ const doStartSimulation = async () => {
     
     if (props.maxRounds) {
       params.max_rounds = props.maxRounds
-      addLog(`设置最大模拟轮数: ${props.maxRounds}`)
+      addLog(`Setări最大模拟轮数: ${props.maxRounds}`)
     }
     
     addLog('已开启动态图谱更新模式')
@@ -482,7 +482,7 @@ const stopPolling = () => {
   }
 }
 
-// 追踪各平台的上一次轮次，用于检测变化并输出Jurnal
+// 追踪各Platformă的上一次轮次，用于检测变化并输出Jurnal
 const prevTwitterRound = ref(0)
 const prevRedditRound = ref(0)
 
@@ -497,7 +497,7 @@ const fetchRunStatus = async () => {
       
       runStatus.value = data
       
-      // 分别检测各平台的轮次变化并输出Jurnal
+      // 分别检测各Platformă的轮次变化并输出Jurnal
       if (data.twitter_current_round > prevTwitterRound.value) {
         addLog(`[Plaza] R${data.twitter_current_round}/${data.total_rounds} | T:${data.twitter_simulated_hours || 0}h | A:${data.twitter_actions_count}`)
         prevTwitterRound.value = data.twitter_current_round
@@ -508,16 +508,16 @@ const fetchRunStatus = async () => {
         prevRedditRound.value = data.reddit_current_round
       }
       
-      // 检测模拟是否Finalizat（通过 runner_status 或平台完成状态判断）
+      // 检测模拟是否Finalizat（通过 runner_status sauPlatformă完成状态判断）
       const isCompleted = data.runner_status === 'completed' || data.runner_status === 'stopped'
       
-      // 额外检查：如果后端还没来得及更新 runner_status，但平台已经报告完成
+      // 额外检查：如果后端还没来得及更新 runner_status，但Platformă已经报告完成
       // 通过检测 twitter_completed 和 reddit_completed 状态判断
       const platformsCompleted = checkPlatformsCompleted(data)
       
       if (isCompleted || platformsCompleted) {
         if (platformsCompleted && !isCompleted) {
-          addLog('✓ 检测到所有平台模拟已结束')
+          addLog('✓ 检测到所有Platformă模拟已结束')
         }
         addLog('✓ 模拟Finalizat')
         phase.value = 2
@@ -530,24 +530,24 @@ const fetchRunStatus = async () => {
   }
 }
 
-// 检查所有启用的平台是否Finalizat
+// 检查所有启用的Platformă是否Finalizat
 const checkPlatformsCompleted = (data) => {
-  // 如果没有任何平台数据，返回 false
+  // 如果没有任何Platformă数据，Înapoi false
   if (!data) return false
   
-  // 检查各平台的完成状态
+  // 检查各Platformă的完成状态
   const twitterCompleted = data.twitter_completed === true
   const redditCompleted = data.reddit_completed === true
   
-  // 如果至少有一个平台完成了，检查是否所有启用的平台都完成了
-  // 通过 actions_count 判断平台是否被启用（如果 count > 0 或 running 曾为 true）
+  // 如果至少有一个Platformă完成了，检查是否所有启用的Platformă都完成了
+  // 通过 actions_count 判断Platformă是否被启用（如果 count > 0 sau running 曾为 true）
   const twitterEnabled = (data.twitter_actions_count > 0) || data.twitter_running || twitterCompleted
   const redditEnabled = (data.reddit_actions_count > 0) || data.reddit_running || redditCompleted
   
-  // 如果没有任何平台被启用，返回 false
+  // 如果没有任何Platformă被启用，Înapoi false
   if (!twitterEnabled && !redditEnabled) return false
   
-  // 检查所有启用的平台是否都Finalizat
+  // 检查所有启用的Platformă是否都Finalizat
   if (twitterEnabled && !twitterCompleted) return false
   if (redditEnabled && !redditCompleted) return false
   
@@ -561,7 +561,7 @@ const fetchRunStatusDetail = async () => {
     const res = await getRunStatusDetail(props.simulationId)
     
     if (res.success && res.data) {
-      // 使用 all_actions 获取完整的动作列表
+      // Utilizare all_actions 获取完整的动作列表
       const serverActions = res.data.all_actions || []
       
       // 增量添加新动作（去重）
@@ -580,7 +580,7 @@ const fetchRunStatusDetail = async () => {
         }
       })
       
-      // 不Derulare automată，让用户自由查看时间轴
+      // 不Derulare automată，让Utilizator自由查看Timp轴
       // 新动作会在底部追加
     }
   } catch (err) {
@@ -645,7 +645,7 @@ const handleNextStep = async () => {
   }
   
   if (isGeneratingReport.value) {
-    addLog('报告生成请求已发送，请稍候...')
+    addLog('报告生成请求已Trimite，请稍候...')
     return
   }
   

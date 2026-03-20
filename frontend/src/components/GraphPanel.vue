@@ -39,7 +39,7 @@
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
           </div>
-          <span class="hint-text">还有少量内容处理中，建议稍后手动Reîmprospătare graf</span>
+          <span class="hint-text">还有少量Conținut处理中，建议稍后手动Reîmprospătare graf</span>
           <button class="hint-close-btn" @click="dismissFinishedHint" title="Închidere indicație">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -254,7 +254,7 @@ const selectedItem = ref(null)
 const showEdgeLabels = ref(true) // Afișare implicită etichete muchii
 const expandedSelfLoops = ref(new Set()) // Extindere的自环项
 const showSimulationFinishedHint = ref(false) // Indicație după finalizare simulare
-const wasSimulating = ref(false) // 追踪之前是否在模拟中
+const wasSimulating = ref(false) // 追踪之前是否在În simulare
 
 // Închidere模拟结束提示
 const dismissFinishedHint = () => {
@@ -264,7 +264,7 @@ const dismissFinishedHint = () => {
 // 监听 isSimulating 变化，检测模拟结束
 watch(() => props.isSimulating, (newValue, oldValue) => {
   if (wasSimulating.value && !newValue) {
-    // 从模拟中变为非模拟状态，显示结束提示
+    // 从În simulare变为非模拟状态，显示结束提示
     showSimulationFinishedHint.value = true
   }
   wasSimulating.value = newValue
@@ -493,7 +493,7 @@ const renderGraph = () => {
     g.attr('transform', event.transform)
   }))
 
-  // Links - 使用 path 支持曲线
+  // Links - Utilizare path Suportă曲线
   const linkGroup = g.append('g').attr('class', 'links')
   
   // 计算曲线路径
@@ -510,7 +510,7 @@ const renderGraph = () => {
       const y1 = sy - 4
       const x2 = sx + 8  // 终点偏移
       const y2 = sy + 4
-      // 使用圆弧绘制自环（sweep-flag=1 顺时针）
+      // Utilizare圆弧绘制自环（sweep-flag=1 顺时针）
       return `M${x1},${y1} A${loopRadius},${loopRadius} 0 1,1 ${x2},${y2}`
     }
     
@@ -643,7 +643,7 @@ const renderGraph = () => {
       }
     })
   
-  // 保存引用供外部控制显隐
+  // Salvare引用供外部控制显隐
   linkLabelsRef = linkLabels
   linkLabelBgRef = linkLabelBg
 

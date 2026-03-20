@@ -155,7 +155,7 @@
               <div class="tools-card-avatar">R</div>
               <div class="tools-card-info">
                 <div class="tools-card-name">Report Agent - Chat</div>
-                <div class="tools-card-subtitle">报告生成智能体的快速对话版本，可调用 4 种专业工具，拥有MiroFish的完整记忆</div>
+                <div class="tools-card-subtitle">报告生成智能体的快速对话Versiune，可调用 4 种专业工具，拥有MiroFish的完整记忆</div>
               </div>
               <button class="tools-card-toggle" @click="showToolsDetail = !showToolsDetail">
                 <svg :class="{ 'is-expanded': showToolsDetail }" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -196,7 +196,7 @@
                   </div>
                   <div class="tool-content">
                     <div class="tool-name">QuickSearch 快速检索</div>
-                    <div class="tool-desc">基于 GraphRAG 的即时查询接口，优化索引效率，用于快速提取具体的节点属性与离散事实</div>
+                    <div class="tool-desc">基于 GraphRAG 的即时查询接口，优化索引效率，用于快速提取具体的节点Proprietăți与离散事实</div>
                   </div>
                 </div>
                 <div class="tool-item tool-green">
@@ -484,7 +484,7 @@ const selectChatTarget = (target) => {
   }
 }
 
-// 保存当前对话记录到缓存
+// Salvare当前对话记录到缓存
 const saveChatHistory = () => {
   if (chatHistory.value.length === 0) return
   
@@ -496,7 +496,7 @@ const saveChatHistory = () => {
 }
 
 const selectReportAgentChat = () => {
-  // 保存当前对话记录
+  // Salvare当前对话记录
   saveChatHistory()
   
   activeTab.value = 'chat'
@@ -525,7 +525,7 @@ const toggleAgentDropdown = () => {
 }
 
 const selectAgent = (agent, idx) => {
-  // 保存当前对话记录
+  // Salvare当前对话记录
   saveChatHistory()
   
   selectedAgent.value = agent
@@ -563,7 +563,7 @@ const renderMarkdown = (content) => {
   html = html.replace(/^# (.+)$/gm, '<h2 class="md-h2">$1</h2>')
   html = html.replace(/^> (.+)$/gm, '<blockquote class="md-quote">$1</blockquote>')
   
-  // 处理列表 - 支持子列表
+  // 处理列表 - Suportă子列表
   html = html.replace(/^(\s*)- (.+)$/gm, (match, indent, text) => {
     const level = Math.floor(indent.length / 2)
     return `<li class="md-li" data-level="${level}">${text}</li>`
@@ -671,7 +671,7 @@ const sendMessage = async () => {
   } finally {
     isSending.value = false
     scrollToBottom()
-    // 自动保存对话记录到缓存
+    // 自动Salvare对话记录到缓存
     saveChatHistory()
   }
 }
@@ -734,7 +734,7 @@ const sendToAgent = async (message) => {
   
   if (res.success && res.data) {
     // 正确的数据路径: res.data.result.results 是一个对象字典
-    // 格式: {"twitter_0": {...}, "reddit_0": {...}} 或单Platformă {"reddit_0": {...}}
+    // Format: {"twitter_0": {...}, "reddit_0": {...}} sau单Platformă {"reddit_0": {...}}
     const resultData = res.data.result || res.data
     const resultsDict = resultData.results || resultData
     
@@ -743,7 +743,7 @@ const sendToAgent = async (message) => {
     const agentId = selectedAgentIndex.value
     
     if (typeof resultsDict === 'object' && !Array.isArray(resultsDict)) {
-      // 优先使用 reddit PlatformăRăspuns，其次 twitter
+      // 优先Utilizare reddit PlatformăRăspuns，其次 twitter
       const redditKey = `reddit_${agentId}`
       const twitterKey = `twitter_${agentId}`
       const agentResult = resultsDict[redditKey] || resultsDict[twitterKey] || Object.values(resultsDict)[0]
@@ -751,7 +751,7 @@ const sendToAgent = async (message) => {
         responseContent = agentResult.response || agentResult.answer
       }
     } else if (Array.isArray(resultsDict) && resultsDict.length > 0) {
-      // 兼容数组格式
+      // 兼容数组Format
       responseContent = resultsDict[0].response || resultsDict[0].answer
     }
     
@@ -818,18 +818,18 @@ const submitSurvey = async () => {
     
     if (res.success && res.data) {
       // 正确的数据路径: res.data.result.results 是一个对象字典
-      // 格式: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
+      // Format: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
       const resultData = res.data.result || res.data
       const resultsDict = resultData.results || resultData
       
-      // 将对象字典转换为数组格式
+      // 将对象字典转换为数组Format
       const surveyResultsList = []
       
       for (const interview of interviews) {
         const agentIdx = interview.agent_id
         const agent = profiles.value[agentIdx]
         
-        // 优先使用 reddit PlatformăRăspuns，其次 twitter
+        // 优先Utilizare reddit PlatformăRăspuns，其次 twitter
         let responseContent = '无响应'
         
         if (typeof resultsDict === 'object' && !Array.isArray(resultsDict)) {
@@ -840,7 +840,7 @@ const submitSurvey = async () => {
             responseContent = agentResult.response || agentResult.answer || '无响应'
           }
         } else if (Array.isArray(resultsDict)) {
-          // 兼容数组格式
+          // 兼容数组Format
           const matchedResult = resultsDict.find(r => r.agent_id === agentIdx)
           if (matchedResult) {
             responseContent = matchedResult.response || matchedResult.answer || '无响应'
@@ -907,7 +907,7 @@ const loadAgentLogs = async () => {
       addLog('报告数据加载完成')
     }
   } catch (err) {
-    addLog(`加载报告日志失败: ${err.message}`)
+    addLog(`加载报告Jurnal失败: ${err.message}`)
   }
 }
 
@@ -2028,7 +2028,7 @@ watch(() => props.simulationId, (newId) => {
   margin-bottom: 0;
 }
 
-/* 修复有序列表编号 - 使用 CSS 计数器让多个 ol 连续编号 */
+/* 修复有序列表编号 - Utilizare CSS 计数器让多个 ol 连续编号 */
 .message-text {
   counter-reset: list-counter;
 }

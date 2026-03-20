@@ -53,7 +53,7 @@
         <!-- 左栏：Stareși步骤 -->
         <div class="left-panel">
           <div class="panel-header">
-            <span class="status-dot">■</span> 系统Stare
+            <span class="status-dot">■</span> SistemStare
           </div>
           
           <h2 class="section-title">准备就绪</h2>
@@ -73,7 +73,7 @@
             </div>
           </div>
 
-          <!-- Proiect模拟步骤介绍 (新增区域) -->
+          <!-- ProiectPași simulare介绍 (新增区域) -->
           <div class="steps-container">
             <div class="steps-header">
                <span class="diamond-icon">◇</span> 工作流序列
@@ -90,14 +90,14 @@
                 <span class="step-num">02</span>
                 <div class="step-info">
                   <div class="step-title">环境搭建</div>
-                  <div class="step-desc">实体关系抽取 & 人设生成 & 环境配置Agent注入仿真参数</div>
+                  <div class="step-desc">EntitateRelație抽取 & 人设生成 & 环境配置Agent注入仿真参数</div>
                 </div>
               </div>
               <div class="workflow-item">
                 <span class="step-num">03</span>
                 <div class="step-info">
                   <div class="step-title">Start模拟</div>
-                  <div class="step-desc">双平台并行模拟 & 自动解析预测需求 & 动态Actualizare时序记忆</div>
+                  <div class="step-desc">双Platformă并行模拟 & 自动解析预测需求 & 动态Actualizare时序记忆</div>
                 </div>
               </div>
               <div class="workflow-item">
@@ -110,7 +110,7 @@
               <div class="workflow-item">
                 <span class="step-num">05</span>
                 <div class="step-info">
-                  <div class="step-title">深度互动</div>
+                  <div class="step-title">Interacțiune Avansată</div>
                   <div class="step-desc">și模拟世界中任意一位进行对话 & șiReportAgent进行对话</div>
                 </div>
               </div>
@@ -118,14 +118,14 @@
           </div>
         </div>
 
-        <!-- 右栏：交互控制台 -->
+        <!-- 右栏：交互Consolă -->
         <div class="right-panel">
           <div class="console-box">
             <!-- Încărcare区域 -->
             <div class="console-section">
               <div class="console-header">
                 <span class="console-label">01 / 现实种子</span>
-                <span class="console-meta">支持格式: PDF, MD, TXT</span>
+                <span class="console-meta">SuportăFormat: PDF, MD, TXT</span>
               </div>
               
               <div 
@@ -148,8 +148,8 @@
                 
                 <div v-if="files.length === 0" class="upload-placeholder">
                   <div class="upload-icon">↑</div>
-                  <div class="upload-title">拖拽文件Încărcare</div>
-                  <div class="upload-hint">sau点击浏览文件系统</div>
+                  <div class="upload-title">Trage fișierul aiciÎncărcare</div>
+                  <div class="upload-hint">sau点击浏览文件Sistem</div>
                 </div>
                 
                 <div v-else class="file-list">
@@ -176,7 +176,7 @@
                 <textarea
                   v-model="formData.simulationRequirement"
                   class="code-input"
-                  placeholder="// 用自然语言输入模拟sau预测需求（例.武大若发布撤销肖某处分公告，会引发什么舆情走向）"
+                  placeholder="// 用自然语言输入模拟sau预测需求（例.武大若Publicare撤销肖某处分公告，会引发什么舆情走向）"
                   rows="6"
                   :disabled="loading"
                 ></textarea>
@@ -192,7 +192,7 @@
                 :disabled="!canSubmit || loading"
               >
                 <span v-if="!loading">启动引擎</span>
-                <span v-else>初始化中...</span>
+                <span v-else>Inițializare...</span>
                 <span class="btn-arrow">→</span>
               </button>
             </div>
@@ -229,7 +229,7 @@ const isDragOver = ref(false)
 // 文件输入引用
 const fileInput = ref(null)
 
-// 计算属性:DaNu可以提交
+// 计算Proprietăți:DaNu可以提交
 const canSubmit = computed(() => {
   return formData.value.simulationRequirement.trim() !== '' && files.value.length > 0
 })
@@ -296,7 +296,7 @@ const startSimulation = () => {
   import('../store/pendingUpload.js').then(({ setPendingUpload }) => {
     setPendingUpload(files.value, formData.value.simulationRequirement)
     
-    // 立即跳转到Process页面（使用特殊标识表示新建Proiect）
+    // 立即跳转到Process页面（Utilizare特殊标识表示NouProiect）
     router.push({
       name: 'Process',
       params: { projectId: 'new' }
@@ -315,7 +315,7 @@ const startSimulation = () => {
   --gray-text: #666666;
   --border: #E5E5E5;
   /* 
-    使用 Space Grotesk 作为主要Titlu字体，JetBrains Mono 作为代码/标签字体
+    Utilizare Space Grotesk 作为主要Titlu字体，JetBrains Mono 作为代码/标签字体
     确保已在 index.html 引入这些 Google Fonts 
   */
   --font-mono: 'JetBrains Mono', monospace;
@@ -373,7 +373,7 @@ const startSimulation = () => {
   font-family: sans-serif;
 }
 
-/* 主要内容区 */
+/* 主要Conținut区 */
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
@@ -604,7 +604,7 @@ const startSimulation = () => {
   color: #999;
 }
 
-/* Proiect模拟步骤介绍 */
+/* ProiectPași simulare介绍 */
 .steps-container {
   border: 1px solid var(--border);
   padding: 30px;
@@ -660,7 +660,7 @@ const startSimulation = () => {
   color: var(--gray-text);
 }
 
-/* 右侧交互控制台 */
+/* 右侧交互Consolă */
 .right-panel {
   flex: 1.2;
 }
