@@ -1,6 +1,6 @@
 """
 ZepEntitate读取și过滤Serviciu
-de laZepGraf读取Nod，筛选出符合预定义EntitateTipNod
+de laZepGraf读取Nod，Filtrare出符合预定义EntitateTipNod
 """
 
 import time
@@ -74,7 +74,7 @@ class ZepEntityReader:
     
     主要Funcționalitate：
     1. de laZepGraf读取所有Nod
-    2. 筛选出符合预定义EntitateTipNod（Labels不只DaEntityNod）
+    2. Filtrare出符合预定义EntitateTipNod（Labels不只DaEntityNod）
     3. Obținere每个Entitate相关边și关联NodInformații
     """
     
@@ -190,7 +190,7 @@ class ZepEntityReader:
             边Listă
         """
         try:
-            # 使用Reîncercare机制调用Zep API
+            # UtilizareReîncercare机制调用Zep API
             edges = self._call_with_retry(
                 func=lambda: self.client.graph.node.get_entity_edges(node_uuid=node_uuid),
                 operation_name=f"ObținereNod边(node={node_uuid[:8]}...)"
@@ -219,9 +219,9 @@ class ZepEntityReader:
         enrich_with_edges: bool = True
     ) -> FilteredEntities:
         """
-        筛选出符合预定义EntitateTipNod
+        Filtrare出符合预定义EntitateTipNod
         
-        筛选逻辑：
+        Filtrare逻辑：
         - dacăNodLabels只有一个"Entity"，说明这个Entitate不符合我们预定义Tip，跳过
         - dacăNodLabels包含除"Entity"și"Node"之外标签，说明符合预定义Tip，保留
         
@@ -233,7 +233,7 @@ class ZepEntityReader:
         Returns:
             FilteredEntities: 过滤后EntitateSet
         """
-        logger.info(f"Start筛选Graf {graph_id} Entitate...")
+        logger.info(f"StartFiltrareGraf {graph_id} Entitate...")
         
         # Obținere所有Nod
         all_nodes = self.get_all_nodes(graph_id)
@@ -245,14 +245,14 @@ class ZepEntityReader:
         # ConstruireNodUUIDlaNodDate映射
         node_map = {n["uuid"]: n for n in all_nodes}
         
-        # 筛选符合CondițieEntitate
+        # Filtrare符合CondițieEntitate
         filtered_entities = []
         entity_types_found = set()
         
         for node in all_nodes:
             labels = node.get("labels", [])
             
-            # 筛选逻辑：Labels必须包含除"Entity"și"Node"之外标签
+            # Filtrare逻辑：Labels必须包含除"Entity"și"Node"之外标签
             custom_labels = [l for l in labels if l not in ["Entity", "Node"]]
             
             if not custom_labels:
@@ -320,7 +320,7 @@ class ZepEntityReader:
             
             filtered_entities.append(entity)
         
-        logger.info(f"筛选Finalizare: 总Nod {total_count}, 符合Condiție {len(filtered_entities)}, "
+        logger.info(f"FiltrareFinalizare: 总Nod {total_count}, 符合Condiție {len(filtered_entities)}, "
                    f"EntitateTip: {entity_types_found}")
         
         return FilteredEntities(
@@ -346,7 +346,7 @@ class ZepEntityReader:
             EntityNodesauNone
         """
         try:
-            # 使用Reîncercare机制ObținereNod
+            # UtilizareReîncercare机制ObținereNod
             node = self._call_with_retry(
                 func=lambda: self.client.graph.node.get(uuid_=entity_uuid),
                 operation_name=f"ObținereNod详情(uuid={entity_uuid[:8]}...)"

@@ -1,7 +1,7 @@
 import service, { requestWithRetry } from './index'
 
 /**
- * 生成本体（上传文档和Simulare需求）
+ * GenerareOntologie（传DocumentațieșiSimulareCerință）
  * @param {Object} data - 包含files, simulation_requirement, project_name等
  * @returns {Promise}
  */
@@ -19,7 +19,7 @@ export function generateOntology(formData) {
 }
 
 /**
- * 构建Graf
+ * ConstruireGraf
  * @param {Object} data - 包含project_id, graph_name等
  * @returns {Promise}
  */
@@ -34,8 +34,8 @@ export function buildGraph(data) {
 }
 
 /**
- * Interogare任务Stare
- * @param {String} taskId - 任务ID
+ * InterogareSarcinăStare
+ * @param {String} taskId - SarcinăID
  * @returns {Promise}
  */
 export function getTaskStatus(taskId) {
@@ -58,8 +58,8 @@ export function getGraphData(graphId) {
 }
 
 /**
- * Obținere项目Informații
- * @param {String} projectId - 项目ID
+ * ObținereProiectInformații
+ * @param {String} projectId - ProiectID
  * @returns {Promise}
  */
 export function getProject(projectId) {

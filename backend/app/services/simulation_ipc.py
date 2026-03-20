@@ -1,10 +1,10 @@
 """
 SimulareIPC通信Modul
-用于Flask后端șiSimulare脚本之间进程间通信
+用于Flask后端șiSimulareScript之间进程间通信
 
 通过FișierSistem实现Simplu命令/Răspuns模式：
 1. Flask写入命令la commands/ Director
-2. Simulare脚本轮询命令Director，执行命令并写入Răspunsla responses/ Director
+2. SimulareScript轮询命令Director，执行命令并写入Răspunsla responses/ Director
 3. Flask轮询RăspunsDirectorObținereRezultat
 """
 
@@ -94,9 +94,9 @@ class IPCResponse:
 
 class SimulationIPCClient:
     """
-    SimulareIPC客户端（Flask端使用）
+    SimulareIPC客户端（Flask端Utilizare）
     
-    用于cătreSimulare进程发送命令并等待Răspuns
+    用于cătreSimulare进程Trimite命令并等待Răspuns
     """
     
     def __init__(self, simulation_dir: str):
@@ -122,7 +122,7 @@ class SimulationIPCClient:
         poll_interval: float = 0.5
     ) -> IPCResponse:
         """
-        发送命令并等待Răspuns
+        Trimite命令并等待Răspuns
         
         Args:
             command_type: 命令Tip
@@ -148,7 +148,7 @@ class SimulationIPCClient:
         with open(command_file, 'w', encoding='utf-8') as f:
             json.dump(command.to_dict(), f, ensure_ascii=False, indent=2)
         
-        logger.info(f"发送IPC命令: {command_type.value}, command_id={command_id}")
+        logger.info(f"TrimiteIPC命令: {command_type.value}, command_id={command_id}")
         
         # 等待Răspuns
         response_file = os.path.join(self.responses_dir, f"{command_id}.json")
@@ -194,7 +194,7 @@ class SimulationIPCClient:
         timeout: float = 60.0
     ) -> IPCResponse:
         """
-        发送IndividualAgentInterviu命令
+        TrimiteIndividualAgentInterviu命令
         
         Args:
             agent_id: Agent ID
@@ -228,7 +228,7 @@ class SimulationIPCClient:
         timeout: float = 120.0
     ) -> IPCResponse:
         """
-        发送În lotInterviu命令
+        TrimiteÎn lotInterviu命令
         
         Args:
             interviews: InterviuListă，每个元素包含 {"agent_id": int, "prompt": str, "platform": str(可选)}
@@ -253,7 +253,7 @@ class SimulationIPCClient:
     
     def send_close_env(self, timeout: float = 30.0) -> IPCResponse:
         """
-        发送ÎnchidereMediu命令
+        TrimiteÎnchidereMediu命令
         
         Args:
             timeout: 超时Timp
@@ -287,7 +287,7 @@ class SimulationIPCClient:
 
 class SimulationIPCServer:
     """
-    SimulareIPCServiciu器（Simulare脚本端使用）
+    SimulareIPCServiciu器（SimulareScript端Utilizare）
     
     轮询命令Director，执行命令并ReturnareRăspuns
     """
@@ -361,7 +361,7 @@ class SimulationIPCServer:
     
     def send_response(self, response: IPCResponse):
         """
-        发送Răspuns
+        TrimiteRăspuns
         
         Args:
             response: IPCRăspuns
@@ -378,7 +378,7 @@ class SimulationIPCServer:
             pass
     
     def send_success(self, command_id: str, result: Dict[str, Any]):
-        """发送SuccesRăspuns"""
+        """TrimiteSuccesRăspuns"""
         self.send_response(IPCResponse(
             command_id=command_id,
             status=CommandStatus.COMPLETED,
@@ -386,7 +386,7 @@ class SimulationIPCServer:
         ))
     
     def send_error(self, command_id: str, error: str):
-        """发送EroareRăspuns"""
+        """TrimiteEroareRăspuns"""
         self.send_response(IPCResponse(
             command_id=command_id,
             status=CommandStatus.FAILED,

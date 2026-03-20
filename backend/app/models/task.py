@@ -1,6 +1,6 @@
 """
 SarcinăStare管理
-用于跟踪长时间Rulare的Sarcină（如GrafConstruire）
+用于跟踪长TimpRulareSarcină（如GrafConstruire）
 """
 
 import uuid
@@ -13,29 +13,29 @@ from dataclasses import dataclass, field
 
 class TaskStatus(str, Enum):
     """SarcinăStare枚举"""
-    PENDING = "pending"          # 等待中
-    PROCESSING = "processing"    # Procesare中
+    PENDING = "pending"          # 等待
+    PROCESSING = "processing"    # Procesare
     COMPLETED = "completed"      # 已Finalizare
     FAILED = "failed"            # Eșec
 
 
 @dataclass
 class Task:
-    """SarcinăDate类"""
+    """SarcinăDateClasă"""
     task_id: str
     task_type: str
     status: TaskStatus
     created_at: datetime
     updated_at: datetime
-    progress: int = 0              # 总进度百分比 0-100
+    progress: int = 0              # 总Progres百分比 0-100
     message: str = ""              # StareMesaj
     result: Optional[Dict] = None  # SarcinăRezultat
     error: Optional[str] = None    # EroareInformații
     metadata: Dict = field(default_factory=dict)  # 额外元Date
-    progress_detail: Dict = field(default_factory=dict)  # 详细进度Informații
+    progress_detail: Dict = field(default_factory=dict)  # 详细ProgresInformații
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典"""
+        """转换为Dicționar"""
         return {
             "task_id": self.task_id,
             "task_type": self.task_type,
@@ -54,7 +54,7 @@ class Task:
 class TaskManager:
     """
     Sarcină管理器
-    线程安全的SarcinăStare管理
+    线程安全SarcinăStare管理
     """
     
     _instance = None
@@ -119,11 +119,11 @@ class TaskManager:
         Args:
             task_id: SarcinăID
             status: 新Stare
-            progress: 进度
+            progress: Progres
             message: Mesaj
             result: Rezultat
             error: EroareInformații
-            progress_detail: 详细进度Informații
+            progress_detail: 详细ProgresInformații
         """
         with self._task_lock:
             task = self._tasks.get(task_id)

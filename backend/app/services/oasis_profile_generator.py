@@ -1,6 +1,6 @@
 """
 OASIS Agent ProfileGenerare器
-将ZepGrafEntitate转换为OASISSimularePlatformă所需Agent Profile格式
+将ZepGrafEntitate转换为OASISSimularePlatformă所需Agent ProfileFormat
 
 优化改进：
 1. 调用Zep检索Funcționalitate二次丰富NodInformații
@@ -58,7 +58,7 @@ class OasisAgentProfile:
     created_at: str = field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d"))
     
     def to_reddit_format(self) -> Dict[str, Any]:
-        """转换为RedditPlatformă格式"""
+        """转换为RedditPlatformăFormat"""
         profile = {
             "user_id": self.user_id,
             "username": self.user_name,  # OASIS 库要求字段名为 username（无划线）
@@ -86,7 +86,7 @@ class OasisAgentProfile:
         return profile
     
     def to_twitter_format(self) -> Dict[str, Any]:
-        """转换为TwitterPlatformă格式"""
+        """转换为TwitterPlatformăFormat"""
         profile = {
             "user_id": self.user_id,
             "username": self.user_name,  # OASIS 库要求字段名为 username（无划线）
@@ -116,7 +116,7 @@ class OasisAgentProfile:
         return profile
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为CompletDicționar格式"""
+        """转换为CompletDicționarFormat"""
         return {
             "user_id": self.user_id,
             "user_name": self.user_name,
@@ -147,7 +147,7 @@ class OasisProfileGenerator:
     
     优化特性：
     1. 调用ZepGraf检索FuncționalitateObținere更丰富文
-    2. Generarenu常详细人设（包括基本Informații、职业经历、性格特征、社交媒体Comportament等）
+    2. Generarenu常详细人设（包括基本Informații、Profesie经历、性格特征、社交媒体Comportament等）
     3. 区分个人Entitateși抽象群体Entitate
     """
     
@@ -220,7 +220,7 @@ class OasisProfileGenerator:
         Args:
             entity: ZepEntitateNod
             user_id: UtilizatorID（用于OASIS）
-            use_llm: DaNu使用LLMGenerare详细人设
+            use_llm: DaNuUtilizareLLMGenerare详细人设
             
         Returns:
             OasisAgentProfile
@@ -235,7 +235,7 @@ class OasisProfileGenerator:
         context = self._build_entity_context(entity)
         
         if use_llm:
-            # 使用LLMGenerare详细人设
+            # UtilizareLLMGenerare详细人设
             profile_data = self._generate_profile_with_llm(
                 entity_name=name,
                 entity_type=entity_type,
@@ -244,7 +244,7 @@ class OasisProfileGenerator:
                 context=context
             )
         else:
-            # 使用规则Generare基础人设
+            # Utilizare规则Generare基础人设
             profile_data = self._generate_profile_rule_based(
                 entity_name=name,
                 entity_type=entity_type,
@@ -284,10 +284,10 @@ class OasisProfileGenerator:
     
     def _search_zep_for_entity(self, entity: EntityNode) -> Dict[str, Any]:
         """
-        使用ZepGraf混合搜索FuncționalitateObținereEntitate相关丰富Informații
+        UtilizareZepGraf混合搜索FuncționalitateObținereEntitate相关丰富Informații
         
         Zep没有内置混合搜索Interfață，需要分别搜索edgesșinodes然后合并Rezultat。
-        使用并行Cerere同时搜索，提高效率。
+        UtilizareParalelCerere同时搜索，提高效率。
         
         Args:
             entity: EntitateNodObiect
@@ -310,10 +310,10 @@ class OasisProfileGenerator:
         
         # 必须有graph_id才能进行搜索
         if not self.graph_id:
-            logger.debug(f"跳过Zep检索：未设置graph_id")
+            logger.debug(f"跳过Zep检索：未Setărigraph_id")
             return results
         
-        comprehensive_query = f"关于{entity_name}所有Informații、活动、Eveniment、Relațieși背景"
+        comprehensive_query = f"Despre{entity_name}所有Informații、活动、Eveniment、Relațieși背景"
         
         def search_edges():
             """搜索边（事实/Relație）- 带Reîncercare机制"""
@@ -366,7 +366,7 @@ class OasisProfileGenerator:
             return None
         
         try:
-            # 并行执行edgesșinodes搜索
+            # Paralel执行edgesșinodes搜索
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 edge_future = executor.submit(search_edges)
                 node_future = executor.submit(search_nodes)
@@ -471,7 +471,7 @@ class OasisProfileGenerator:
             if related_info:
                 context_parts.append("### 关联EntitateInformații\n" + "\n".join(related_info))
         
-        # 4. 使用Zep混合检索Obținere更丰富Informații
+        # 4. UtilizareZep混合检索Obținere更丰富Informații
         zep_results = self._search_zep_for_entity(entity)
         
         if zep_results.get("facts"):
@@ -502,7 +502,7 @@ class OasisProfileGenerator:
         context: str
     ) -> Dict[str, Any]:
         """
-        使用LLMGenerarenu常详细人设
+        UtilizareLLMGenerarenu常详细人设
         
         根据EntitateTip区分：
         - 个人Entitate：Generare具体人物设定
@@ -534,7 +534,7 @@ class OasisProfileGenerator:
                     ],
                     response_format={"type": "json_object"},
                     temperature=0.7 - (attempt * 0.1)  # 每次Reîncercare降低温度
-                    # 不设置max_tokens，让LLM自由发挥
+                    # 不Setărimax_tokens，让LLM自由发挥
                 )
                 
                 content = response.choices[0].message.content
@@ -574,7 +574,7 @@ class OasisProfileGenerator:
                 import time
                 time.sleep(1 * (attempt + 1))  # 指数退避
         
-        logger.warning(f"LLMGenerare人设Eșec（{max_attempts}次尝试）: {last_error}, 使用规则Generare")
+        logger.warning(f"LLMGenerare人设Eșec（{max_attempts}次尝试）: {last_error}, Utilizare规则Generare")
         return self._generate_profile_rule_based(
             entity_name, entity_type, entity_summary, entity_attributes
         )
@@ -670,7 +670,7 @@ class OasisProfileGenerator:
     
     def _get_system_prompt(self, is_individual: bool) -> str:
         """ObținereSistemIndicație词"""
-        base_prompt = "你Da社交媒体Utilizator画像Generare专家。Generare详细、Adevărat实人设用于舆论Simulare,最大程度还原已有现实情况。必须ReturnareValidJSON格式，所有ȘirValoare不能包含未转义换行符。使用文。"
+        base_prompt = "你Da社交媒体Utilizator画像Generare专家。Generare详细、Adevărat实人设用于舆论Simulare,最大程度Restaurare已有现实情况。必须ReturnareValidJSONFormat，所有ȘirValoare不能包含未转义换行符。Utilizare文。"
         return base_prompt
     
     def _build_individual_persona_prompt(
@@ -686,7 +686,7 @@ class OasisProfileGenerator:
         attrs_str = json.dumps(entity_attributes, ensure_ascii=False) if entity_attributes else "无"
         context_str = context[:3000] if context else "无额外文"
         
-        return f"""为EntitateGenerare详细社交媒体Utilizator人设,最大程度还原已有现实情况。
+        return f"""为EntitateGenerare详细社交媒体Utilizator人设,最大程度Restaurare已有现实情况。
 
 EntitateNume: {entity_name}
 EntitateTip: {entity_type}
@@ -698,26 +698,26 @@ EntitateProprietate: {attrs_str}
 
 请GenerareJSON，包含以字段:
 
-1. bio: 社交媒体简介，200字
+1. bio: 社交媒体Descriere，200字
 2. persona: 详细人设Descriere（2000字纯文本），需包含:
-   - 基本Informații（年龄、职业、教育背景、所în地）
+   - 基本Informații（年龄、Profesie、教育背景、所în地）
    - 人物背景（重要经历、șiEveniment关联、社会Relație）
-   - 性格特征（MBTITip、核心性格、情绪表达方式）
+   - 性格特征（MBTITip、核心性格、Emoție表达方式）
    - 社交媒体Comportament（发帖频率、Conținut偏好、Interacțiune风格、语言特点）
-   - 立场观点（对Subiect态度、可能被激怒/感动Conținut）
+   - 立场Opinie（对SubiectAtitudine、可能被激怒/感动Conținut）
    - 独特特征（口头禅、特殊经历、个人爱好）
-   - 个人Memorie（人设重要Parțial，要介绍这个个体șiEveniment关联，以及这个个体înEveniment已有动作și反应）
+   - 个人Memorie（人设重要Parțial，要介绍这个个体șiEveniment关联，以及这个个体înEveniment已有Acțiuneși反应）
 3. age: 年龄Număr（必须Da整数）
 4. gender: 性别，必须Da英文: "male" sau "female"
 5. mbti: MBTITip（如INTJ、ENFP等）
-6. country: 国家（使用文，如"国"）
-7. profession: 职业
+6. country: 国家（Utilizare文，如"国"）
+7. profession: Profesie
 8. interested_topics: 感兴趣SubiectArray
 
 重要:
-- 所有字段Valoare必须DaȘirsauNumăr，不要使用换行符
+- 所有字段Valoare必须DaȘirsauNumăr，不要Utilizare换行符
 - persona必须Da一段连贯文字Descriere
-- 使用文（除gender字段必须用英文male/female）
+- Utilizare文（除gender字段必须用英文male/female）
 - Conținut要șiEntitateInformații保持一致
 - age必须DaValid整数，gender必须Da"male"sau"female"
 """
@@ -735,7 +735,7 @@ EntitateProprietate: {attrs_str}
         attrs_str = json.dumps(entity_attributes, ensure_ascii=False) if entity_attributes else "无"
         context_str = context[:3000] if context else "无额外文"
         
-        return f"""为机构/群体EntitateGenerare详细社交媒体账号设定,最大程度还原已有现实情况。
+        return f"""为机构/群体EntitateGenerare详细社交媒体账号设定,最大程度Restaurare已有现实情况。
 
 EntitateNume: {entity_name}
 EntitateTip: {entity_type}
@@ -747,26 +747,26 @@ EntitateProprietate: {attrs_str}
 
 请GenerareJSON，包含以字段:
 
-1. bio: 官方账号简介，200字，专业得体
+1. bio: 官方账号Descriere，200字，专业得体
 2. persona: 详细账号设定Descriere（2000字纯文本），需包含:
    - 机构基本Informații（正式Nume、机构性质、成立背景、主要职能）
    - 账号定位（账号Tip、目标受众、核心Funcționalitate）
    - 发言风格（语言特点、常用表达、禁忌Subiect）
-   - 发布Conținut特点（ConținutTip、发布频率、活跃Timp段）
-   - 立场态度（对核心Subiect官方立场、面对争议Procesare方式）
+   - PublicareConținut特点（ConținutTip、Publicare频率、活跃Timp段）
+   - 立场Atitudine（对核心Subiect官方立场、面对争议Procesare方式）
    - 特殊说明（代表群体画像、运营习惯）
-   - 机构Memorie（机构人设重要Parțial，要介绍这个机构șiEveniment关联，以及这个机构înEveniment已有动作și反应）
+   - 机构Memorie（机构人设重要Parțial，要介绍这个机构șiEveniment关联，以及这个机构înEveniment已有Acțiuneși反应）
 3. age: 固定填30（机构账号虚拟年龄）
-4. gender: 固定填"other"（机构账号使用other表示nu个人）
+4. gender: 固定填"other"（机构账号Utilizareother表示nu个人）
 5. mbti: MBTITip，用于Descriere账号风格，如ISTJ代表严谨保守
-6. country: 国家（使用文，如"国"）
+6. country: 国家（Utilizare文，如"国"）
 7. profession: 机构职能Descriere
 8. interested_topics: 关注领域Array
 
 重要:
 - 所有字段Valoare必须DaȘirsauNumăr，不允许nullValoare
-- persona必须Da一段连贯文字Descriere，不要使用换行符
-- 使用文（除gender字段必须用英文"other"）
+- persona必须Da一段连贯文字Descriere，不要Utilizare换行符
+- Utilizare文（除gender字段必须用英文"other"）
 - age必须Da整数30，gender必须DaȘir"other"
 - 机构账号发言要符合其身份定位"""
     
@@ -777,7 +777,7 @@ EntitateProprietate: {attrs_str}
         entity_summary: str,
         entity_attributes: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """使用规则Generare基础人设"""
+        """Utilizare规则Generare基础人设"""
         
         # 根据EntitateTipGenerare不同人设
         entity_type_lower = entity_type.lower()
@@ -811,7 +811,7 @@ EntitateProprietate: {attrs_str}
                 "bio": f"Official account for {entity_name}. News and updates.",
                 "persona": f"{entity_name} is a media entity that reports news and facilitates public discourse. The account shares timely updates and engages with the audience on current events.",
                 "age": 30,  # 机构虚拟年龄
-                "gender": "other",  # 机构使用other
+                "gender": "other",  # 机构Utilizareother
                 "mbti": "ISTJ",  # 机构风格：严谨保守
                 "country": "国",
                 "profession": "Media",
@@ -823,7 +823,7 @@ EntitateProprietate: {attrs_str}
                 "bio": f"Official account of {entity_name}.",
                 "persona": f"{entity_name} is an institutional entity that communicates official positions, announcements, and engages with stakeholders on relevant matters.",
                 "age": 30,  # 机构虚拟年龄
-                "gender": "other",  # 机构使用other
+                "gender": "other",  # 机构Utilizareother
                 "mbti": "ISTJ",  # 机构风格：严谨保守
                 "country": "国",
                 "profession": entity_type,
@@ -844,7 +844,7 @@ EntitateProprietate: {attrs_str}
             }
     
     def set_graph_id(self, graph_id: str):
-        """设置GrafID用于Zep检索"""
+        """SetăriGrafID用于Zep检索"""
         self.graph_id = graph_id
     
     def generate_profiles_from_entities(
@@ -858,16 +858,16 @@ EntitateProprietate: {attrs_str}
         output_platform: str = "reddit"
     ) -> List[OasisAgentProfile]:
         """
-        În lotde laEntitateGenerareAgent Profile（支持并行Generare）
+        În lotde laEntitateGenerareAgent Profile（SuportăParalelGenerare）
         
         Args:
             entities: EntitateListă
-            use_llm: DaNu使用LLMGenerare详细人设
-            progress_callback: 进度回调Funcție (current, total, message)
+            use_llm: DaNuUtilizareLLMGenerare详细人设
+            progress_callback: Progres回调Funcție (current, total, message)
             graph_id: GrafID，用于Zep检索Obținere更丰富文
-            parallel_count: 并行Generare数量，Implicit5
+            parallel_count: ParalelGenerare数量，Implicit5
             realtime_output_path: 实时写入FișierCale（dacă提供，每Generare一个就写入一次）
-            output_platform: OutputPlatformă格式 ("reddit" sau "twitter")
+            output_platform: OutputPlatformăFormat ("reddit" sau "twitter")
             
         Returns:
             Agent ProfileListă
@@ -875,13 +875,13 @@ EntitateProprietate: {attrs_str}
         import concurrent.futures
         from threading import Lock
         
-        # 设置graph_id用于Zep检索
+        # Setărigraph_id用于Zep检索
         if graph_id:
             self.graph_id = graph_id
         
         total = len(entities)
         profiles = [None] * total  # 预分配Listă保持顺序
-        completed_count = [0]  # 使用Listă以便în闭包修改
+        completed_count = [0]  # UtilizareListă以便în闭包修改
         lock = Lock()
         
         # 实时写入Fișier辅助Funcție
@@ -898,12 +898,12 @@ EntitateProprietate: {attrs_str}
                 
                 try:
                     if output_platform == "reddit":
-                        # Reddit JSON 格式
+                        # Reddit JSON Format
                         profiles_data = [p.to_reddit_format() for p in existing_profiles]
                         with open(realtime_output_path, 'w', encoding='utf-8') as f:
                             json.dump(profiles_data, f, ensure_ascii=False, indent=2)
                     else:
-                        # Twitter CSV 格式
+                        # Twitter CSV Format
                         import csv
                         profiles_data = [p.to_twitter_format() for p in existing_profiles]
                         if profiles_data:
@@ -926,7 +926,7 @@ EntitateProprietate: {attrs_str}
                     use_llm=use_llm
                 )
                 
-                # 实时OutputGenerare人设la控制台șiJurnal
+                # 实时OutputGenerare人设laConsolășiJurnal
                 self._print_generated_profile(entity.name, entity_type, profile)
                 
                 return idx, profile, None
@@ -945,14 +945,14 @@ EntitateProprietate: {attrs_str}
                 )
                 return idx, fallback_profile, str(e)
         
-        logger.info(f"Start并行Generare {total} 个Agent人设（并行数: {parallel_count}）...")
+        logger.info(f"StartParalelGenerare {total} 个Agent人设（Paralel数: {parallel_count}）...")
         print(f"\n{'='*60}")
-        print(f"StartGenerareAgent人设 - 共 {total} 个Entitate，并行数: {parallel_count}")
+        print(f"StartGenerareAgent人设 - 共 {total} 个Entitate，Paralel数: {parallel_count}")
         print(f"{'='*60}\n")
         
-        # 使用线程池并行执行
+        # Utilizare线程池Paralel执行
         with concurrent.futures.ThreadPoolExecutor(max_workers=parallel_count) as executor:
-            # 提交所有任务
+            # 提交所有Sarcină
             future_to_entity = {
                 executor.submit(generate_single_profile, idx, entity): (idx, entity)
                 for idx, entity in enumerate(entities)
@@ -982,7 +982,7 @@ EntitateProprietate: {attrs_str}
                         )
                     
                     if error:
-                        logger.warning(f"[{current}/{total}] {entity.name} 使用备用人设: {error}")
+                        logger.warning(f"[{current}/{total}] {entity.name} Utilizare备用人设: {error}")
                     else:
                         logger.info(f"[{current}/{total}] SuccesGenerare人设: {entity.name} ({entity_type})")
                         
@@ -1009,7 +1009,7 @@ EntitateProprietate: {attrs_str}
         return profiles
     
     def _print_generated_profile(self, entity_name: str, entity_type: str, profile: OasisAgentProfile):
-        """实时OutputGenerare人设la控制台（CompletConținut，不截断）"""
+        """实时OutputGenerare人设laConsolă（CompletConținut，不截断）"""
         separator = "-" * 70
         
         # ConstruireCompletOutputConținut（不截断）
@@ -1021,7 +1021,7 @@ EntitateProprietate: {attrs_str}
             f"{separator}",
             f"Utilizator名: {profile.user_name}",
             f"",
-            f"【简介】",
+            f"【Descriere】",
             f"{profile.bio}",
             f"",
             f"【详细人设】",
@@ -1029,14 +1029,14 @@ EntitateProprietate: {attrs_str}
             f"",
             f"【基本Proprietate】",
             f"年龄: {profile.age} | 性别: {profile.gender} | MBTI: {profile.mbti}",
-            f"职业: {profile.profession} | 国家: {profile.country}",
+            f"Profesie: {profile.profession} | 国家: {profile.country}",
             f"兴趣Subiect: {topics_str}",
             separator
         ]
         
         output = "\n".join(output_lines)
         
-        # 只Outputla控制台（避免重复，logger不再OutputCompletConținut）
+        # 只OutputlaConsolă（避免重复，logger不再OutputCompletConținut）
         print(output)
     
     def save_profiles(
@@ -1046,11 +1046,11 @@ EntitateProprietate: {attrs_str}
         platform: str = "reddit"
     ):
         """
-        SalvareProfilelaFișier（根据PlatformăSelectareCorect格式）
+        SalvareProfilelaFișier（根据PlatformăSelectareCorectFormat）
         
-        OASISPlatformă格式要求：
-        - Twitter: CSV格式
-        - Reddit: JSON格式
+        OASISPlatformăFormat要求：
+        - Twitter: CSVFormat
+        - Reddit: JSONFormat
         
         Args:
             profiles: ProfileListă
@@ -1064,18 +1064,18 @@ EntitateProprietate: {attrs_str}
     
     def _save_twitter_csv(self, profiles: List[OasisAgentProfile], file_path: str):
         """
-        SalvareTwitter Profile为CSV格式（符合OASIS官方要求）
+        SalvareTwitter Profile为CSVFormat（符合OASIS官方要求）
         
         OASIS Twitter要求CSV字段：
         - user_id: UtilizatorID（根据CSV顺序de la0Start）
         - name: UtilizatorAdevărat实姓名
         - username: SistemUtilizator名
         - user_char: 详细人设Descriere（注入laLLMSistemIndicație，指导AgentComportament）
-        - description: 简短公开简介（显示înUtilizator资料页面）
+        - description: 简短公开Descriere（显示înUtilizator资料页面）
         
         user_char vs description 区别：
-        - user_char: 内部使用，LLMSistemIndicație，决定Agent如何思考și行动
-        - description: 外部显示，其他Utilizator可见简介
+        - user_char: 内部Utilizare，LLMSistemIndicație，决定Agent如何思考și行动
+        - description: 外部显示，其他Utilizator可见Descriere
         """
         import csv
         
@@ -1099,23 +1099,23 @@ EntitateProprietate: {attrs_str}
                 # Procesare换行符（CSV用Gol格替代）
                 user_char = user_char.replace('\n', ' ').replace('\r', ' ')
                 
-                # description: 简短简介，用于外部显示
+                # description: 简短Descriere，用于外部显示
                 description = profile.bio.replace('\n', ' ').replace('\r', ' ')
                 
                 row = [
                     idx,                    # user_id: de la0Start顺序ID
                     profile.name,           # name: Adevărat实姓名
                     profile.user_name,      # username: Utilizator名
-                    user_char,              # user_char: Complet人设（内部LLM使用）
-                    description             # description: 简短简介（外部显示）
+                    user_char,              # user_char: Complet人设（内部LLMUtilizare）
+                    description             # description: 简短Descriere（外部显示）
                 ]
                 writer.writerow(row)
         
-        logger.info(f"已Salvare {len(profiles)} 个Twitter Profilela {file_path} (OASIS CSV格式)")
+        logger.info(f"已Salvare {len(profiles)} 个Twitter Profilela {file_path} (OASIS CSVFormat)")
     
     def _normalize_gender(self, gender: Optional[str]) -> str:
         """
-        标准化gender字段为OASIS要求英文格式
+        标准化gender字段为OASIS要求英文Format
         
         OASIS要求: male, female, other
         """
@@ -1140,16 +1140,16 @@ EntitateProprietate: {attrs_str}
     
     def _save_reddit_json(self, profiles: List[OasisAgentProfile], file_path: str):
         """
-        SalvareReddit Profile为JSON格式
+        SalvareReddit Profile为JSONFormat
         
-        使用și to_reddit_format() 一致格式，确保 OASIS 能Corect读取。
+        Utilizareși to_reddit_format() 一致Format，确保 OASIS 能Corect读取。
         必须包含 user_id 字段，这Da OASIS agent_graph.get_agent() 匹配关Cheie！
         
         必需字段：
         - user_id: UtilizatorID（整数，用于匹配 initial_posts  poster_agent_id）
         - username: Utilizator名
         - name: 显示Nume
-        - bio: 简介
+        - bio: Descriere
         - persona: 详细人设
         - age: 年龄（整数）
         - gender: "male", "female", sau "other"
@@ -1158,7 +1158,7 @@ EntitateProprietate: {attrs_str}
         """
         data = []
         for idx, profile in enumerate(profiles):
-            # 使用și to_reddit_format() 一致格式
+            # Utilizareși to_reddit_format() 一致Format
             item = {
                 "user_id": profile.user_id if profile.user_id is not None else idx,  # 关Cheie：必须包含 user_id
                 "username": profile.user_name,
@@ -1185,7 +1185,7 @@ EntitateProprietate: {attrs_str}
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"已Salvare {len(profiles)} 个Reddit Profilela {file_path} (JSON格式，包含user_id字段)")
+        logger.info(f"已Salvare {len(profiles)} 个Reddit Profilela {file_path} (JSONFormat，包含user_id字段)")
     
     # 保留旧Metodă名作为别名，保持către后兼容
     def save_profiles_to_json(
@@ -1194,7 +1194,7 @@ EntitateProprietate: {attrs_str}
         file_path: str,
         platform: str = "reddit"
     ):
-        """[已废弃] 请使用 save_profiles() Metodă"""
-        logger.warning("save_profiles_to_json已废弃，请使用save_profilesMetodă")
+        """[已废弃] 请Utilizare save_profiles() Metodă"""
+        logger.warning("save_profiles_to_json已废弃，请Utilizaresave_profilesMetodă")
         self.save_profiles(profiles, file_path, platform)
 

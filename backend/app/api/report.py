@@ -24,10 +24,10 @@ logger = get_logger('mirofish.api.report')
 @report_bp.route('/generate', methods=['POST'])
 def generate_report():
     """
-    GenerareSimulareAnalizăRaport（异步任务）
+    GenerareSimulareAnalizăRaport（异步Sarcină）
     
     这Da一个耗时操作，Interfață会ImediatReturnaretask_id，
-    使用 GET /api/report/generate/status Interogare进度
+    Utilizare GET /api/report/generate/status InterogareProgres
     
     Cerere（JSON）：
         {
@@ -42,7 +42,7 @@ def generate_report():
                 "simulation_id": "sim_xxxx",
                 "task_id": "task_xxxx",
                 "status": "generating",
-                "message": "RaportGenerare任务已启动"
+                "message": "RaportGenerareSarcină已启动"
             }
         }
     """
@@ -83,12 +83,12 @@ def generate_report():
                     }
                 })
         
-        # Obținere项目Informații
+        # ObținereProiectInformații
         project = ProjectManager.get_project(state.project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"项目Inexistent: {state.project_id}"
+                "error": f"ProiectInexistent: {state.project_id}"
             }), 404
         
         graph_id = state.graph_id or project.graph_id
@@ -109,7 +109,7 @@ def generate_report():
         import uuid
         report_id = f"report_{uuid.uuid4().hex[:12]}"
         
-        # Creare异步任务
+        # Creare异步Sarcină
         task_manager = TaskManager()
         task_id = task_manager.create_task(
             task_type="report_generate",
@@ -120,7 +120,7 @@ def generate_report():
             }
         )
         
-        # 定义后台任务
+        # 定义后台Sarcină
         def run_generate():
             try:
                 task_manager.update_task(
@@ -137,7 +137,7 @@ def generate_report():
                     simulation_requirement=simulation_requirement
                 )
                 
-                # 进度回调
+                # Progres回调
                 def progress_callback(stage, progress, message):
                     task_manager.update_task(
                         task_id,
@@ -181,13 +181,13 @@ def generate_report():
                 "report_id": report_id,
                 "task_id": task_id,
                 "status": "generating",
-                "message": "RaportGenerare任务已启动，请通过 /api/report/generate/status Interogare进度",
+                "message": "RaportGenerareSarcină已启动，请通过 /api/report/generate/status InterogareProgres",
                 "already_generated": False
             }
         })
         
     except Exception as e:
-        logger.error(f"启动RaportGenerare任务Eșec: {str(e)}")
+        logger.error(f"启动RaportGenerareSarcinăEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -198,7 +198,7 @@ def generate_report():
 @report_bp.route('/generate/status', methods=['POST'])
 def get_generate_status():
     """
-    InterogareRaportGenerare任务进度
+    InterogareRaportGenerareSarcinăProgres
     
     Cerere（JSON）：
         {
@@ -251,7 +251,7 @@ def get_generate_status():
         if not task:
             return jsonify({
                 "success": False,
-                "error": f"任务Inexistent: {task_id}"
+                "error": f"SarcinăInexistent: {task_id}"
             }), 404
         
         return jsonify({
@@ -260,7 +260,7 @@ def get_generate_status():
         })
         
     except Exception as e:
-        logger.error(f"Interogare任务StareEșec: {str(e)}")
+        logger.error(f"InterogareSarcinăStareEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e)
@@ -393,7 +393,7 @@ def list_reports():
 @report_bp.route('/<report_id>/download', methods=['GET'])
 def download_report(report_id: str):
     """
-    载Raport（Markdown格式）
+    载Raport（MarkdownFormat）
     
     ReturnareMarkdownFișier
     """
@@ -485,7 +485,7 @@ def chat_with_report_agent():
         {
             "success": true,
             "data": {
-                "response": "Agent回复...",
+                "response": "AgentRăspuns...",
                 "tool_calls": [调用InstrumentListă],
                 "sources": [Informații来源]
             }
@@ -510,7 +510,7 @@ def chat_with_report_agent():
                 "error": "请提供 message"
             }), 400
         
-        # ObținereSimulareși项目Informații
+        # ObținereSimulareșiProiectInformații
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
         
@@ -524,7 +524,7 @@ def chat_with_report_agent():
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"项目Inexistent: {state.project_id}"
+                "error": f"ProiectInexistent: {state.project_id}"
             }), 404
         
         graph_id = state.graph_id or project.graph_id
@@ -559,12 +559,12 @@ def chat_with_report_agent():
         }), 500
 
 
-# ============== Raport进度și分章节Interfață ==============
+# ============== RaportProgresși分章节Interfață ==============
 
 @report_bp.route('/<report_id>/progress', methods=['GET'])
 def get_report_progress(report_id: str):
     """
-    ObținereRaportGenerare进度（实时）
+    ObținereRaportGenerareProgres（实时）
     
     Returnare：
         {
@@ -585,7 +585,7 @@ def get_report_progress(report_id: str):
         if not progress:
             return jsonify({
                 "success": False,
-                "error": f"RaportInexistentsau进度Informații不可用: {report_id}"
+                "error": f"RaportInexistentsauProgresInformații不可用: {report_id}"
             }), 404
         
         return jsonify({
@@ -594,7 +594,7 @@ def get_report_progress(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"ObținereRaport进度Eșec: {str(e)}")
+        logger.error(f"ObținereRaportProgresEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -755,7 +755,7 @@ def get_agent_log(report_id: str):
     """
     Obținere Report Agent 详细执行Jurnal
     
-    实时ObținereRaportGenerare过程每一步动作，包括：
+    实时ObținereRaportGenerare过程每一步Acțiune，包括：
     - RaportStart、规划Start/Finalizare
     - 每个章节Start、Instrument调用、LLMRăspuns、Finalizare
     - RaportFinalizaresauEșec
@@ -843,16 +843,16 @@ def stream_agent_log(report_id: str):
         }), 500
 
 
-# ============== 控制台JurnalInterfață ==============
+# ============== ConsolăJurnalInterfață ==============
 
 @report_bp.route('/<report_id>/console-log', methods=['GET'])
 def get_console_log(report_id: str):
     """
-    Obținere Report Agent 控制台OutputJurnal
+    Obținere Report Agent ConsolăOutputJurnal
     
-    实时ObținereRaportGenerare过程控制台Output（INFO、WARNING等），
+    实时ObținereRaportGenerare过程ConsolăOutput（INFO、WARNING等），
     这și agent-log InterfațăReturnare结构化 JSON Jurnal不同，
-    Da纯文本格式控制台风格Jurnal。
+    Da纯文本FormatConsolă风格Jurnal。
     
     QueryParametru：
         from_line: de la第几行Start读取（可选，Implicit0，用于增量Obținere）
@@ -883,7 +883,7 @@ def get_console_log(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"Obținere控制台JurnalEșec: {str(e)}")
+        logger.error(f"ObținereConsolăJurnalEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -894,7 +894,7 @@ def get_console_log(report_id: str):
 @report_bp.route('/<report_id>/console-log/stream', methods=['GET'])
 def stream_console_log(report_id: str):
     """
-    ObținereComplet控制台Jurnal（一次性ObținereToate）
+    ObținereCompletConsolăJurnal（一次性ObținereToate）
     
     Returnare：
         {
@@ -917,7 +917,7 @@ def stream_console_log(report_id: str):
         })
         
     except Exception as e:
-        logger.error(f"Obținere控制台JurnalEșec: {str(e)}")
+        logger.error(f"ObținereConsolăJurnalEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -925,12 +925,12 @@ def stream_console_log(report_id: str):
         }), 500
 
 
-# ============== Instrument调用Interfață（供Depanare使用）==============
+# ============== Instrument调用Interfață（供DepanareUtilizare）==============
 
 @report_bp.route('/tools/search', methods=['POST'])
 def search_graph_tool():
     """
-    Graf搜索InstrumentInterfață（供Depanare使用）
+    Graf搜索InstrumentInterfață（供DepanareUtilizare）
     
     Cerere（JSON）：
         {
@@ -978,7 +978,7 @@ def search_graph_tool():
 @report_bp.route('/tools/statistics', methods=['POST'])
 def get_graph_statistics_tool():
     """
-    Graf统计InstrumentInterfață（供Depanare使用）
+    Graf统计InstrumentInterfață（供DepanareUtilizare）
     
     Cerere（JSON）：
         {

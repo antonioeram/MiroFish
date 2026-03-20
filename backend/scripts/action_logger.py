@@ -1,14 +1,14 @@
 """
-Acțiune日志Înregistrare器
-用于ÎnregistrareOASISSimulare中每个Agent的Acțiune，供后端监控使用
+AcțiuneJurnalÎnregistrare器
+用于ÎnregistrareOASISSimulare每个AgentAcțiune，供后端监控Utilizare
 
-日志结构:
+Jurnal结构:
     sim_xxx/
     ├── twitter/
-    │   └── actions.jsonl    # Twitter PlatformăAcțiune日志
+    │   └── actions.jsonl    # Twitter PlatformăAcțiuneJurnal
     ├── reddit/
-    │   └── actions.jsonl    # Reddit PlatformăAcțiune日志
-    ├── simulation.log       # 主Simulare进程日志
+    │   └── actions.jsonl    # Reddit PlatformăAcțiuneJurnal
+    ├── simulation.log       # 主Simulare进程Jurnal
     └── run_state.json       # RulareStare（API Interogare用）
 """
 
@@ -20,15 +20,15 @@ from typing import Dict, Any, Optional
 
 
 class PlatformActionLogger:
-    """单PlatformăAcțiune日志Înregistrare器"""
+    """单PlatformăAcțiuneJurnalÎnregistrare器"""
     
     def __init__(self, platform: str, base_dir: str):
         """
-        Inițializare日志Înregistrare器
+        InițializareJurnalÎnregistrare器
         
         Args:
             platform: PlatformăNume (twitter/reddit)
-            base_dir: Simulare目录的基础路径
+            base_dir: SimulareDirector基础Cale
         """
         self.platform = platform
         self.base_dir = base_dir
@@ -37,7 +37,7 @@ class PlatformActionLogger:
         self._ensure_dir()
     
     def _ensure_dir(self):
-        """确保目录存在"""
+        """确保Director存în"""
         os.makedirs(self.log_dir, exist_ok=True)
     
     def log_action(
@@ -118,27 +118,27 @@ class PlatformActionLogger:
 
 class SimulationLogManager:
     """
-    Simulare日志管理器
-    统一管理所有日志文件，按Platformă分离
+    SimulareJurnal管理器
+    统一管理所有JurnalFișier，按Platformă分离
     """
     
     def __init__(self, simulation_dir: str):
         """
-        Inițializare日志管理器
+        InițializareJurnal管理器
         
         Args:
-            simulation_dir: Simulare目录路径
+            simulation_dir: SimulareDirectorCale
         """
         self.simulation_dir = simulation_dir
         self.twitter_logger: Optional[PlatformActionLogger] = None
         self.reddit_logger: Optional[PlatformActionLogger] = None
         self._main_logger: Optional[logging.Logger] = None
         
-        # 设置主日志
+        # Setări主Jurnal
         self._setup_main_logger()
     
     def _setup_main_logger(self):
-        """设置主Simulare日志"""
+        """Setări主SimulareJurnal"""
         log_path = os.path.join(self.simulation_dir, "simulation.log")
         
         # Creare logger
@@ -146,7 +146,7 @@ class SimulationLogManager:
         self._main_logger.setLevel(logging.INFO)
         self._main_logger.handlers.clear()
         
-        # 文件Procesare器
+        # FișierProcesare器
         file_handler = logging.FileHandler(log_path, encoding='utf-8', mode='w')
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(logging.Formatter(
@@ -155,7 +155,7 @@ class SimulationLogManager:
         ))
         self._main_logger.addHandler(file_handler)
         
-        # 控制台Procesare器
+        # ConsolăProcesare器
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(logging.Formatter(
@@ -167,19 +167,19 @@ class SimulationLogManager:
         self._main_logger.propagate = False
     
     def get_twitter_logger(self) -> PlatformActionLogger:
-        """Obținere Twitter Platformă日志Înregistrare器"""
+        """Obținere Twitter PlatformăJurnalÎnregistrare器"""
         if self.twitter_logger is None:
             self.twitter_logger = PlatformActionLogger("twitter", self.simulation_dir)
         return self.twitter_logger
     
     def get_reddit_logger(self) -> PlatformActionLogger:
-        """Obținere Reddit Platformă日志Înregistrare器"""
+        """Obținere Reddit PlatformăJurnalÎnregistrare器"""
         if self.reddit_logger is None:
             self.reddit_logger = PlatformActionLogger("reddit", self.simulation_dir)
         return self.reddit_logger
     
     def log(self, message: str, level: str = "info"):
-        """Înregistrare主日志"""
+        """Înregistrare主Jurnal"""
         if self._main_logger:
             getattr(self._main_logger, level.lower(), self._main_logger.info)(message)
     
@@ -196,12 +196,12 @@ class SimulationLogManager:
         self.log(message, "debug")
 
 
-# ============ 兼容旧接口 ============
+# ============ 兼容旧Interfață ============
 
 class ActionLogger:
     """
-    Acțiune日志Înregistrare器（兼容旧接口）
-    建议使用 SimulationLogManager 代替
+    AcțiuneJurnalÎnregistrare器（兼容旧Interfață）
+    建议Utilizare SimulationLogManager 代替
     """
     
     def __init__(self, log_path: str):
@@ -288,12 +288,12 @@ class ActionLogger:
             f.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
 
-# 全局日志实例（兼容旧接口）
+# 全局Jurnal实例（兼容旧Interfață）
 _global_logger: Optional[ActionLogger] = None
 
 
 def get_logger(log_path: Optional[str] = None) -> ActionLogger:
-    """Obținere全局日志实例（兼容旧接口）"""
+    """Obținere全局Jurnal实例（兼容旧Interfață）"""
     global _global_logger
     
     if log_path:

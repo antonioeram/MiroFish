@@ -1,6 +1,6 @@
 """
 FișierAnalizăInstrument
-支持PDF、Markdown、TXTFișier的Text提取
+SuportăPDF、Markdown、TXTFișierText提取
 """
 
 import os
@@ -14,15 +14,15 @@ def _read_text_with_fallback(file_path: str) -> str:
     
     采用多级回退策略：
     1. 首先尝试 UTF-8 解码
-    2. 使用 charset_normalizer 检测编码
-    3. 回退到 chardet 检测编码
-    4. 最终使用 UTF-8 + errors='replace' 兜底
+    2. Utilizare charset_normalizer 检测编码
+    3. 回退la chardet 检测编码
+    4. 最终Utilizare UTF-8 + errors='replace' 兜底
     
     Args:
-        file_path: Fișier路径
+        file_path: FișierCale
         
     Returns:
-        解码后的TextConținut
+        解码后TextConținut
     """
     data = Path(file_path).read_bytes()
     
@@ -32,7 +32,7 @@ def _read_text_with_fallback(file_path: str) -> str:
     except UnicodeDecodeError:
         pass
     
-    # 尝试使用 charset_normalizer 检测编码
+    # 尝试Utilizare charset_normalizer 检测编码
     encoding = None
     try:
         from charset_normalizer import from_bytes
@@ -42,7 +42,7 @@ def _read_text_with_fallback(file_path: str) -> str:
     except Exception:
         pass
     
-    # 回退到 chardet
+    # 回退la chardet
     if not encoding:
         try:
             import chardet
@@ -51,7 +51,7 @@ def _read_text_with_fallback(file_path: str) -> str:
         except Exception:
             pass
     
-    # 最终兜底：使用 UTF-8 + replace
+    # 最终兜底：Utilizare UTF-8 + replace
     if not encoding:
         encoding = 'utf-8'
     
@@ -66,23 +66,23 @@ class FileParser:
     @classmethod
     def extract_text(cls, file_path: str) -> str:
         """
-        从Fișier中提取Text
+        de laFișier提取Text
         
         Args:
-            file_path: Fișier路径
+            file_path: FișierCale
             
         Returns:
-            提取的TextConținut
+            提取TextConținut
         """
         path = Path(file_path)
         
         if not path.exists():
-            raise FileNotFoundError(f"Fișier不存在: {file_path}")
+            raise FileNotFoundError(f"Fișier不存în: {file_path}")
         
         suffix = path.suffix.lower()
         
         if suffix not in cls.SUPPORTED_EXTENSIONS:
-            raise ValueError(f"不支持的Fișier格式: {suffix}")
+            raise ValueError(f"不SuportăFișierFormat: {suffix}")
         
         if suffix == '.pdf':
             return cls._extract_from_pdf(file_path)
@@ -91,11 +91,11 @@ class FileParser:
         elif suffix == '.txt':
             return cls._extract_from_txt(file_path)
         
-        raise ValueError(f"无法Procesare的Fișier格式: {suffix}")
+        raise ValueError(f"无法ProcesareFișierFormat: {suffix}")
     
     @staticmethod
     def _extract_from_pdf(file_path: str) -> str:
-        """从PDF提取Text"""
+        """de laPDF提取Text"""
         try:
             import fitz  # PyMuPDF
         except ImportError:
@@ -112,24 +112,24 @@ class FileParser:
     
     @staticmethod
     def _extract_from_md(file_path: str) -> str:
-        """从Markdown提取Text，支持自动编码检测"""
+        """de laMarkdown提取Text，Suportă自动编码检测"""
         return _read_text_with_fallback(file_path)
     
     @staticmethod
     def _extract_from_txt(file_path: str) -> str:
-        """从TXT提取Text，支持自动编码检测"""
+        """de laTXT提取Text，Suportă自动编码检测"""
         return _read_text_with_fallback(file_path)
     
     @classmethod
     def extract_from_multiple(cls, file_paths: List[str]) -> str:
         """
-        从多个Fișier提取Text并合并
+        de la多个Fișier提取Text并合并
         
         Args:
-            file_paths: Fișier路径列表
+            file_paths: FișierCaleListă
             
         Returns:
-            合并后的Text
+            合并后Text
         """
         all_texts = []
         
@@ -137,9 +137,9 @@ class FileParser:
             try:
                 text = cls.extract_text(file_path)
                 filename = Path(file_path).name
-                all_texts.append(f"=== 文档 {i}: {filename} ===\n{text}")
+                all_texts.append(f"=== Documentație {i}: {filename} ===\n{text}")
             except Exception as e:
-                all_texts.append(f"=== 文档 {i}: {file_path} (提取Eșec: {str(e)}) ===")
+                all_texts.append(f"=== Documentație {i}: {file_path} (提取Eșec: {str(e)}) ===")
         
         return "\n\n".join(all_texts)
 
@@ -154,11 +154,11 @@ def split_text_into_chunks(
     
     Args:
         text: 原始Text
-        chunk_size: 每块的字符数
+        chunk_size: 每块字符数
         overlap: 重叠字符数
         
     Returns:
-        Text块列表
+        Text块Listă
     """
     if len(text) <= chunk_size:
         return [text] if text.strip() else []
@@ -169,9 +169,9 @@ def split_text_into_chunks(
     while start < len(text):
         end = start + chunk_size
         
-        # 尝试在句子边界处分割
+        # 尝试în句子边界处分割
         if end < len(text):
-            # 查找最近的句子结束符
+            # 查找最近句子结束符
             for sep in ['。', '！', '？', '.\n', '!\n', '?\n', '\n\n', '. ', '! ', '? ']:
                 last_sep = text[start:end].rfind(sep)
                 if last_sep != -1 and last_sep > chunk_size * 0.3:
@@ -182,7 +182,7 @@ def split_text_into_chunks(
         if chunk:
             chunks.append(chunk)
         
-        # 下一个块从重叠位置Start
+        # 一个块de la重叠位置Start
         start = end - overlap if end < len(text) else len(text)
     
     return chunks

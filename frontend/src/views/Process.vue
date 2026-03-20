@@ -618,7 +618,7 @@ const handleNewProject = async () => {
   }
 }
 
-// Încărcare proiect existent数据
+// Încărcare proiect existentDate
 const loadProject = async () => {
   try {
     loading.value = true
@@ -803,7 +803,7 @@ const pollTaskStatus = async (taskId) => {
         stopGraphPolling()
         currentPhase.value = 2
         
-        // Actualizare afișare progres为完成状态
+        // Actualizare afișare progres为FinalizareStare
         buildProgress.value = {
           progress: 100,
           message: 'Construire finalizată, se încarcă graful...'

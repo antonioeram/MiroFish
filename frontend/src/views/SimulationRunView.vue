@@ -15,7 +15,7 @@
             :class="{ active: viewMode === mode }"
             @click="viewMode = mode"
           >
-            {{ { graph: '图谱', split: '双栏', workbench: '工作台' }[mode] }}
+            {{ { graph: 'Graf', split: '双栏', workbench: '工作台' }[mode] }}
           </button>
         </div>
       </div>
@@ -23,7 +23,7 @@
       <div class="header-right">
         <div class="workflow-step">
           <span class="step-num">Step 3/5</span>
-          <span class="step-name">Start模拟</span>
+          <span class="step-name">StartSimulare</span>
         </div>
         <div class="step-divider"></div>
         <span class="status-indicator" :class="statusClass">
@@ -47,7 +47,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step3 Start模拟 -->
+      <!-- Right Panel: Step3 StartSimulare -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step3Simulation
           :simulationId="currentSimulationId"
@@ -87,7 +87,7 @@ const viewMode = ref('split')
 
 // Data State
 const currentSimulationId = ref(route.params.simulationId)
-// 直接在初始化时从 query 参数获取 maxRounds，确保子组件能立即获取到值
+// 直接înInițializare时de la query ParametruObținere maxRounds，确保子组件能立即ObținerelaValoare
 const maxRounds = ref(route.query.maxRounds ? parseInt(route.query.maxRounds) : null)
 const minutesPerRound = ref(30) // 默认每轮30分钟
 const projectData = ref(null)
@@ -145,103 +145,103 @@ const toggleMaximize = (target) => {
 }
 
 const handleGoBack = async () => {
-  // 在返回 Step 2 之前，先Închidere正在运行模拟
-  addLog('准备返回 Step 2，正在Închidere模拟...')
+  // înÎnapoi Step 2 之前，先Închidere正înRulareSimulare
+  addLog('准备Înapoi Step 2，正înÎnchidereSimulare...')
   
   // Oprire轮询
   stopGraphRefresh()
   
   try {
-    // 先尝试优雅Închidere模拟环境
+    // 先尝试优雅ÎnchidereSimulareMediu
     const envStatusRes = await getEnvStatus({ simulation_id: currentSimulationId.value })
     
     if (envStatusRes.success && envStatusRes.data?.env_alive) {
-      addLog('正在Închidere模拟环境...')
+      addLog('正înÎnchidereSimulareMediu...')
       try {
         await closeSimulationEnv({ 
           simulation_id: currentSimulationId.value,
           timeout: 10
         })
-        addLog('✓ 模拟环境已Închidere')
+        addLog('✓ SimulareMediu已Închidere')
       } catch (closeErr) {
-        addLog(`Închidere模拟环境Eșec，尝试强制Oprire...`)
+        addLog(`ÎnchidereSimulareMediuEșec，尝试强制Oprire...`)
         try {
           await stopSimulation({ simulation_id: currentSimulationId.value })
-          addLog('✓ 模拟已强制Oprire')
+          addLog('✓ Simulare已强制Oprire')
         } catch (stopErr) {
           addLog(`强制OprireEșec: ${stopErr.message}`)
         }
       }
     } else {
-      // 环境未运行，检查DaNu需要Oprire进程
+      // Mediu未Rulare，VerificareDaNu需要Oprire进程
       if (isSimulating.value) {
-        addLog('正在Oprire模拟进程...')
+        addLog('正înOprireSimulare进程...')
         try {
           await stopSimulation({ simulation_id: currentSimulationId.value })
-          addLog('✓ 模拟已Oprire')
+          addLog('✓ Simulare已Oprire')
         } catch (err) {
-          addLog(`Oprire模拟Eșec: ${err.message}`)
+          addLog(`OprireSimulareEșec: ${err.message}`)
         }
       }
     }
   } catch (err) {
-    addLog(`检查模拟StareEșec: ${err.message}`)
+    addLog(`VerificareSimulareStareEșec: ${err.message}`)
   }
   
-  // 返回到 Step 2 (环境搭建)
+  // Înapoila Step 2 (Mediu搭建)
   router.push({ name: 'Simulation', params: { simulationId: currentSimulationId.value } })
 }
 
 const handleNextStep = () => {
-  // Step3Simulation 组件会直接处理报告生成和路由跳转
-  // 这个方法仅作为备用
-  addLog('进入 Step 4: 报告生成')
+  // Step3Simulation 组件会直接ProcesareRaportGenerareși路由跳转
+  // 这个Metodă仅作为备用
+  addLog('进入 Step 4: RaportGenerare')
 }
 
 // --- Data Logic ---
 const loadSimulationData = async () => {
   try {
-    addLog(`Încărcare模拟数据: ${currentSimulationId.value}`)
+    addLog(`ÎncărcareSimulareDate: ${currentSimulationId.value}`)
     
-    // 获取 simulation Informații
+    // Obținere simulation Informații
     const simRes = await getSimulation(currentSimulationId.value)
     if (simRes.success && simRes.data) {
       const simData = simRes.data
       
-      // 获取 simulation config 以获取 minutes_per_round
+      // Obținere simulation config 以Obținere minutes_per_round
       try {
         const configRes = await getSimulationConfig(currentSimulationId.value)
         if (configRes.success && configRes.data?.time_config?.minutes_per_round) {
           minutesPerRound.value = configRes.data.time_config.minutes_per_round
-          addLog(`Timp配置: 每轮 ${minutesPerRound.value} 分钟`)
+          addLog(`TimpConfigurare: 每轮 ${minutesPerRound.value} 分钟`)
         }
       } catch (configErr) {
-        addLog(`获取Timp配置Eșec，使用默认值: ${minutesPerRound.value}分钟/轮`)
+        addLog(`ObținereTimpConfigurareEșec，Utilizare默认Valoare: ${minutesPerRound.value}分钟/轮`)
       }
       
-      // 获取 project Informații
+      // Obținere project Informații
       if (simData.project_id) {
         const projRes = await getProject(simData.project_id)
         if (projRes.success && projRes.data) {
           projectData.value = projRes.data
           addLog(`ProiectÎncărcareSucces: ${projRes.data.project_id}`)
           
-          // 获取 graph 数据
+          // Obținere graph Date
           if (projRes.data.graph_id) {
             await loadGraph(projRes.data.graph_id)
           }
         }
       }
     } else {
-      addLog(`Încărcare模拟数据Eșec: ${simRes.error || '未知Eroare'}`)
+      addLog(`ÎncărcareSimulareDateEșec: ${simRes.error || '未知Eroare'}`)
     }
   } catch (err) {
-    addLog(`Încărcare异常: ${err.message}`)
+    addLog(`ÎncărcareExcepție: ${err.message}`)
   }
 }
 
 const loadGraph = async (graphId) => {
-  // 当正在模拟时，自动Reîmprospătare不显示全屏 loading，以免闪烁
+  // când正înSimulare时，自动Reîmprospătare不显示全屏 loading，以免闪烁
   // 手动Reîmprospătaresau初始Încărcare时显示 loading
   if (!isSimulating.value) {
     graphLoading.value = true
@@ -252,11 +252,11 @@ const loadGraph = async (graphId) => {
     if (res.success) {
       graphData.value = res.data
       if (!isSimulating.value) {
-        addLog('图谱数据ÎncărcareSucces')
+        addLog('GrafDateÎncărcareSucces')
       }
     }
   } catch (err) {
-    addLog(`图谱ÎncărcareEșec: ${err.message}`)
+    addLog(`GrafÎncărcareEșec: ${err.message}`)
   } finally {
     graphLoading.value = false
   }
@@ -273,7 +273,7 @@ let graphRefreshTimer = null
 
 const startGraphRefresh = () => {
   if (graphRefreshTimer) return
-  addLog('开启图谱实时Reîmprospătare (30s)')
+  addLog('开启Graf实时Reîmprospătare (30s)')
   // 立即Reîmprospătare一次，然后每30秒Reîmprospătare
   graphRefreshTimer = setInterval(refreshGraph, 30000)
 }
@@ -282,7 +282,7 @@ const stopGraphRefresh = () => {
   if (graphRefreshTimer) {
     clearInterval(graphRefreshTimer)
     graphRefreshTimer = null
-    addLog('Oprire图谱实时Reîmprospătare')
+    addLog('OprireGraf实时Reîmprospătare')
   }
 }
 
@@ -295,11 +295,11 @@ watch(isSimulating, (newValue) => {
 }, { immediate: true })
 
 onMounted(() => {
-  addLog('SimulationRunView 初始化')
+  addLog('SimulationRunView Inițializare')
   
-  // 记录 maxRounds 配置（值已在初始化时从 query 参数获取）
+  // Înregistrare maxRounds Configurare（Valoare已înInițializare时de la query ParametruObținere）
   if (maxRounds.value) {
-    addLog(`自定义模拟轮数: ${maxRounds.value}`)
+    addLog(`自定义Simulare轮数: ${maxRounds.value}`)
   }
   
   loadSimulationData()

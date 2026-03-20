@@ -39,7 +39,7 @@
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
           </div>
-          <span class="hint-text">还有少量Conținut处理中，建议稍后手动Reîmprospătare graf</span>
+          <span class="hint-text">还有少量ConținutProcesare，建议稍后手动Reîmprospătare graf</span>
           <button class="hint-close-btn" @click="dismissFinishedHint" title="Închidere indicație">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -252,25 +252,25 @@ const graphContainer = ref(null)
 const graphSvg = ref(null)
 const selectedItem = ref(null)
 const showEdgeLabels = ref(true) // Afișare implicită etichete muchii
-const expandedSelfLoops = ref(new Set()) // Extindere的自环项
+const expandedSelfLoops = ref(new Set()) // Extindere自环项
 const showSimulationFinishedHint = ref(false) // Indicație după finalizare simulare
-const wasSimulating = ref(false) // 追踪之前是否在În simulare
+const wasSimulating = ref(false) // 追踪之前DaNuînÎn simulare
 
-// Închidere模拟结束提示
+// ÎnchidereSimulare结束Indicație
 const dismissFinishedHint = () => {
   showSimulationFinishedHint.value = false
 }
 
-// 监听 isSimulating 变化，检测模拟结束
+// 监听 isSimulating 变化，检测Simulare结束
 watch(() => props.isSimulating, (newValue, oldValue) => {
   if (wasSimulating.value && !newValue) {
-    // 从În simulare变为非模拟状态，显示结束提示
+    // de laÎn simulare变为nuSimulareStare，显示结束Indicație
     showSimulationFinishedHint.value = true
   }
   wasSimulating.value = newValue
 }, { immediate: true })
 
-// 切换自环项Extindere/折叠状态
+// 切换自环项Extindere/折叠Stare
 const toggleSelfLoop = (id) => {
   const newSet = new Set(expandedSelfLoops.value)
   if (newSet.has(id)) {
@@ -281,11 +281,11 @@ const toggleSelfLoop = (id) => {
   expandedSelfLoops.value = newSet
 }
 
-// 计算Entitate类型用于图例
+// 计算EntitateTip用于图例
 const entityTypes = computed(() => {
   if (!props.graphData?.nodes) return []
   const typeMap = {}
-  // 美观的颜色调色板
+  // 美观颜色调色板
   const colors = ['#FF6B35', '#004E89', '#7B2D8E', '#1A936F', '#C5283D', '#E9724C', '#3498db', '#9b59b6', '#27ae60', '#f39c12']
   
   props.graphData.nodes.forEach(node => {
@@ -318,7 +318,7 @@ const formatDateTime = (dateStr) => {
 
 const closeDetailPanel = () => {
   selectedItem.value = null
-  expandedSelfLoops.value = new Set() // ResetareExtindere状态
+  expandedSelfLoops.value = new Set() // ResetareExtindereStare
 }
 
 let currentSimulation = null
@@ -328,7 +328,7 @@ let linkLabelBgRef = null
 const renderGraph = () => {
   if (!graphSvg.value || !props.graphData) return
   
-  // 停止之前的仿真
+  // Oprire之前仿Adevărat
   if (currentSimulation) {
     currentSimulation.stop()
   }
@@ -362,16 +362,16 @@ const renderGraph = () => {
   
   const nodeIds = new Set(nodes.map(n => n.id))
   
-  // 处理边数据，计算同一对节点间的边数量和索引
+  // Procesare边Date，计算同一对Nod间边数量șiIndex
   const edgePairCount = {}
-  const selfLoopEdges = {} // 按节点分组的自环边
+  const selfLoopEdges = {} // 按Nod分组自环边
   const tempEdges = edgesData
     .filter(e => nodeIds.has(e.source_node_uuid) && nodeIds.has(e.target_node_uuid))
   
-  // 统计每对节点之间的边数量，收集自环边
+  // 统计每对Nod之间边数量，收集自环边
   tempEdges.forEach(e => {
     if (e.source_node_uuid === e.target_node_uuid) {
-      // 自环 - 收集到数组中
+      // 自环 - 收集laArray
       if (!selfLoopEdges[e.source_node_uuid]) {
         selfLoopEdges[e.source_node_uuid] = []
       }
@@ -386,9 +386,9 @@ const renderGraph = () => {
     }
   })
   
-  // 记录当前处理到每对节点的第几条边
+  // Înregistrarecând前Procesarela每对Nod第几条边
   const edgePairIndex = {}
-  const processedSelfLoopNodes = new Set() // 已处理的自环节点
+  const processedSelfLoopNodes = new Set() // 已Procesare自环Nod
   
   const edges = []
   
@@ -396,9 +396,9 @@ const renderGraph = () => {
     const isSelfLoop = e.source_node_uuid === e.target_node_uuid
     
     if (isSelfLoop) {
-      // 自环边 - 每个节点只添加一条合并的自环
+      // 自环边 - 每个Nod只添加一条合并自环
       if (processedSelfLoopNodes.has(e.source_node_uuid)) {
-        return // 已处理过，跳过
+        return // 已Procesare过，跳过
       }
       processedSelfLoopNodes.add(e.source_node_uuid)
       
@@ -417,7 +417,7 @@ const renderGraph = () => {
           source_name: nodeName,
           target_name: nodeName,
           selfLoopCount: allSelfLoops.length,
-          selfLoopEdges: allSelfLoops // 存储所有自环边的详细信息
+          selfLoopEdges: allSelfLoops // 存储所有自环边详细Informații
         }
       })
       return
@@ -428,7 +428,7 @@ const renderGraph = () => {
     const currentIndex = edgePairIndex[pairKey] || 0
     edgePairIndex[pairKey] = currentIndex + 1
     
-    // 判断边的方向是否与标准化方向一致（源UUID < 目标UUID）
+    // 判断边方cătreDaNuși标准化方către一致（源UUID < 目标UUID）
     const isReversed = e.source_node_uuid > e.target_node_uuid
     
     // 计算曲率：多条边时分散开，单条边为直线
@@ -439,8 +439,8 @@ const renderGraph = () => {
       const curvatureRange = Math.min(1.2, 0.6 + totalCount * 0.15)
       curvature = ((currentIndex / (totalCount - 1)) - 0.5) * curvatureRange * 2
       
-      // 如果边的方向与标准化方向相反，翻转曲率
-      // 这样确保所有边在同一参考系下分布，不会因方向不同而重叠
+      // dacă边方cătreși标准化方către相反，翻转曲率
+      // 这样确保所有边în同一参考系分布，不会因方către不同而重叠
       if (isReversed) {
         curvature = -curvature
       }
@@ -468,10 +468,10 @@ const renderGraph = () => {
   entityTypes.value.forEach(t => colorMap[t.name] = t.color)
   const getColor = (type) => colorMap[type] || '#999'
 
-  // Simulation - 根据边数量动态调整节点间距
+  // Simulation - 根据边数量动态调整Nod间距
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(edges).id(d => d.id).distance(d => {
-      // 根据这对节点之间的边数量动态调整距离
+      // 根据这对Nod之间边数量动态调整距离
       // 基础距离 150，每多一条边增加 40
       const baseDistance = 150
       const edgeCount = d.pairTotal || 1
@@ -480,7 +480,7 @@ const renderGraph = () => {
     .force('charge', d3.forceManyBody().strength(-400))
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collide', d3.forceCollide(50))
-    // 添加向中心的引力，让独立的节点群聚集到中心区域
+    // 添加către心引力，让独立Nod群聚集la心区域
     .force('x', d3.forceX(width / 2).strength(0.04))
     .force('y', d3.forceY(height / 2).strength(0.04))
   
@@ -496,16 +496,16 @@ const renderGraph = () => {
   // Links - Utilizare path Suportă曲线
   const linkGroup = g.append('g').attr('class', 'links')
   
-  // 计算曲线路径
+  // 计算曲线Cale
   const getLinkPath = (d) => {
     const sx = d.source.x, sy = d.source.y
     const tx = d.target.x, ty = d.target.y
     
     // 检测自环
     if (d.isSelfLoop) {
-      // 自环：绘制一个圆弧从节点出发再Înapoi
+      // 自环：绘制一个圆弧de laNod出发再Înapoi
       const loopRadius = 30
-      // 从节点右侧出发，绕一圈回来
+      // de laNod右侧出发，绕一圈回来
       const x1 = sx + 8  // 起点偏移
       const y1 = sy - 4
       const x2 = sx + 8  // 终点偏移
@@ -519,11 +519,11 @@ const renderGraph = () => {
       return `M${sx},${sy} L${tx},${ty}`
     }
     
-    // 计算曲线控制点 - 根据边数量和距离动态调整
+    // 计算曲线控制点 - 根据边数量și距离动态调整
     const dx = tx - sx, dy = ty - sy
     const dist = Math.sqrt(dx * dx + dy * dy)
-    // 垂直于连线方向的偏移，根据距离比例计算，保证曲线明显可见
-    // 边越多，偏移量占距离的比例越大
+    // 垂直于连线方către偏移，根据距离比例计算，保证曲线明显可见
+    // 边越多，偏移量占距离比例越大
     const pairTotal = d.pairTotal || 1
     const offsetRatio = 0.25 + pairTotal * 0.05 // 基础25%，每多一条边增加5%
     const baseOffset = Math.max(35, dist * offsetRatio)
@@ -535,14 +535,14 @@ const renderGraph = () => {
     return `M${sx},${sy} Q${cx},${cy} ${tx},${ty}`
   }
   
-  // 计算曲线中点（用于标签定位）
+  // 计算曲线点（用于标签定位）
   const getLinkMidpoint = (d) => {
     const sx = d.source.x, sy = d.source.y
     const tx = d.target.x, ty = d.target.y
     
     // 检测自环
     if (d.isSelfLoop) {
-      // 自环标签位置：节点右侧
+      // 自环标签位置：Nod右侧
       return { x: sx + 70, y: sy }
     }
     
@@ -550,7 +550,7 @@ const renderGraph = () => {
       return { x: (sx + tx) / 2, y: (sy + ty) / 2 }
     }
     
-    // 二次贝塞尔曲线的中点 t=0.5
+    // 二次贝塞尔曲线点 t=0.5
     const dx = tx - sx, dy = ty - sy
     const dist = Math.sqrt(dx * dx + dy * dy)
     const pairTotal = d.pairTotal || 1
@@ -577,11 +577,11 @@ const renderGraph = () => {
     .style('cursor', 'pointer')
     .on('click', (event, d) => {
       event.stopPropagation()
-      // Resetare之前选中边的样式
+      // Resetare之前选边样式
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
       linkLabels.attr('fill', '#666')
-      // 高亮当前选中的边
+      // 高亮când前选边
       d3.select(event.target).attr('stroke', '#3498db').attr('stroke-width', 3)
       
       selectedItem.value = {
@@ -605,7 +605,7 @@ const renderGraph = () => {
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
       linkLabels.attr('fill', '#666')
-      // 高亮对应的边
+      // 高亮对应边
       link.filter(l => l === d).attr('stroke', '#3498db').attr('stroke-width', 3)
       d3.select(event.target).attr('fill', 'rgba(52, 152, 219, 0.1)')
       
@@ -633,7 +633,7 @@ const renderGraph = () => {
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
       linkLabelBg.attr('fill', 'rgba(255,255,255,0.95)')
       linkLabels.attr('fill', '#666')
-      // 高亮对应的边
+      // 高亮对应边
       link.filter(l => l === d).attr('stroke', '#3498db').attr('stroke-width', 3)
       d3.select(event.target).attr('fill', '#3498db')
       
@@ -661,7 +661,7 @@ const renderGraph = () => {
     .style('cursor', 'pointer')
     .call(d3.drag()
       .on('start', (event, d) => {
-        // 只记录位置，不重启仿真（区分点击和拖拽）
+        // 只Înregistrare位置，不重启仿Adevărat（区分点击și拖拽）
         d.fx = d.x
         d.fy = d.y
         d._dragStartX = event.x
@@ -669,13 +669,13 @@ const renderGraph = () => {
         d._isDragging = false
       })
       .on('drag', (event, d) => {
-        // 检测是否真正开始拖拽（移动超过阈Valoare）
+        // 检测DaNuAdevărat正Start拖拽（移动超过阈Valoare）
         const dx = event.x - d._dragStartX
         const dy = event.y - d._dragStartY
         const distance = Math.sqrt(dx * dx + dy * dy)
         
         if (!d._isDragging && distance > 3) {
-          // 首次检测到真正拖拽，才重启仿真
+          // 首次检测laAdevărat正拖拽，才重启仿Adevărat
           d._isDragging = true
           simulation.alphaTarget(0.3).restart()
         }
@@ -686,7 +686,7 @@ const renderGraph = () => {
         }
       })
       .on('end', (event, d) => {
-        // 只有真正拖拽过才让仿真逐渐停止
+        // 只有Adevărat正拖拽过才让仿Adevărat逐渐Oprire
         if (d._isDragging) {
           simulation.alphaTarget(0)
         }
@@ -697,12 +697,12 @@ const renderGraph = () => {
     )
     .on('click', (event, d) => {
       event.stopPropagation()
-      // Resetare所有节点样式
+      // Resetare所有Nod样式
       node.attr('stroke', '#fff').attr('stroke-width', 2.5)
       linkGroup.selectAll('path').attr('stroke', '#C0C0C0').attr('stroke-width', 1.5)
-      // 高亮选中节点
+      // 高亮选Nod
       d3.select(event.target).attr('stroke', '#E91E63').attr('stroke-width', 4)
-      // 高亮与此节点相连的边
+      // 高亮și此Nod相连边
       link.filter(l => l.source.id === d.id || l.target.id === d.id)
         .attr('stroke', '#E91E63')
         .attr('stroke-width', 2.5)
@@ -739,10 +739,10 @@ const renderGraph = () => {
     .style('font-family', 'system-ui, sans-serif')
 
   simulation.on('tick', () => {
-    // 更新曲线路径
+    // Actualizare曲线Cale
     link.attr('d', d => getLinkPath(d))
     
-    // 更新边标签位置（无旋转，水平显示更清晰）
+    // Actualizare边标签位置（无旋转，水平显示更清晰）
     linkLabels.each(function(d) {
       const mid = getLinkMidpoint(d)
       d3.select(this)
@@ -751,7 +751,7 @@ const renderGraph = () => {
         .attr('transform', '') // 移除旋转，保持水平
     })
     
-    // 更新边标签背景
+    // Actualizare边标签背景
     linkLabelBg.each(function(d, i) {
       const mid = getLinkMidpoint(d)
       const textEl = linkLabels.nodes()[i]
@@ -773,7 +773,7 @@ const renderGraph = () => {
       .attr('y', d => d.y)
   })
   
-  // 点击空白处Închidere详情面板
+  // 点击Gol白处Închidere详情面板
   svg.on('click', () => {
     selectedItem.value = null
     node.attr('stroke', '#fff').attr('stroke-width', 2.5)

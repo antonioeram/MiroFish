@@ -11,7 +11,7 @@
     </nav>
 
     <div class="main-content">
-      <!-- 上半部分：Hero 区域 -->
+      <!-- 半部分：Hero 区域 -->
       <section class="hero-section">
         <div class="hero-left">
           <div class="tag-row">
@@ -20,16 +20,16 @@
           </div>
           
           <h1 class="main-title">
-            Încărcare任意报告<br>
+            Încărcare任意Raport<br>
             <span class="gradient-text">即刻推演未来</span>
           </h1>
           
           <div class="hero-desc">
             <p>
-              即使只有一段文字，<span class="highlight-bold">MiroFish</span> 也能基于其中现实种子，全自动生成și之对应至多<span class="highlight-orange">百万级Agent</span>构成平行世界。通过上帝视角注入变量，在复杂群体交互中寻找动态环境下<span class="highlight-code">“局部最优解”</span>
+              即使只有一段文字，<span class="highlight-bold">MiroFish</span> 也能基于其现实种子，全自动Generareși之对应至多<span class="highlight-orange">百万级Agent</span>构成平行世界。通过帝视角注入Variabilă，în复杂群体交互寻找动态Mediu<span class="highlight-code">“局部最优解”</span>
             </p>
             <p class="slogan-text">
-              让未来在 Agent 群中预演，让决策在百战后胜出<span class="blinking-cursor">_</span>
+              让未来în Agent 群预演，让决策în百战后胜出<span class="blinking-cursor">_</span>
             </p>
           </div>
            
@@ -48,7 +48,7 @@
         </div>
       </section>
 
-      <!-- 下半部分：双栏布局 -->
+      <!-- 半部分：双栏布局 -->
       <section class="dashboard-section">
         <!-- 左栏：Stareși步骤 -->
         <div class="left-panel">
@@ -58,18 +58,18 @@
           
           <h2 class="section-title">准备就绪</h2>
           <p class="section-desc">
-            预测引擎待命中，可Încărcare多份非结构化数据以初始化模拟序列
+            预测引擎待命，可Încărcare多份nu结构化Date以InițializareSimulare序列
           </p>
           
-          <!-- 数据指标卡片 -->
+          <!-- Date指标卡片 -->
           <div class="metrics-row">
             <div class="metric-card">
               <div class="metric-value">低成本</div>
-              <div class="metric-label">常规模拟平均5$/次</div>
+              <div class="metric-label">常规Simulare平均5$/次</div>
             </div>
             <div class="metric-card">
               <div class="metric-value">高可用</div>
-              <div class="metric-label">最多百万级Agent模拟</div>
+              <div class="metric-label">最多百万级AgentSimulare</div>
             </div>
           </div>
 
@@ -82,36 +82,36 @@
               <div class="workflow-item">
                 <span class="step-num">01</span>
                 <div class="step-info">
-                  <div class="step-title">图谱构建</div>
-                  <div class="step-desc">现实种子提取 & 个体și群体记忆注入 & GraphRAG构建</div>
+                  <div class="step-title">GrafConstruire</div>
+                  <div class="step-desc">现实种子提取 & 个体și群体Memorie注入 & GraphRAGConstruire</div>
                 </div>
               </div>
               <div class="workflow-item">
                 <span class="step-num">02</span>
                 <div class="step-info">
-                  <div class="step-title">环境搭建</div>
-                  <div class="step-desc">EntitateRelație抽取 & 人设生成 & 环境配置Agent注入仿真参数</div>
+                  <div class="step-title">Mediu搭建</div>
+                  <div class="step-desc">EntitateRelație抽取 & 人设Generare & MediuConfigurareAgent注入仿AdevăratParametru</div>
                 </div>
               </div>
               <div class="workflow-item">
                 <span class="step-num">03</span>
                 <div class="step-info">
-                  <div class="step-title">Start模拟</div>
-                  <div class="step-desc">双Platformă并行模拟 & 自动解析预测需求 & 动态Actualizare时序记忆</div>
+                  <div class="step-title">StartSimulare</div>
+                  <div class="step-desc">双PlatformăParalelSimulare & 自动解析预测Cerință & 动态Actualizare时序Memorie</div>
                 </div>
               </div>
               <div class="workflow-item">
                 <span class="step-num">04</span>
                 <div class="step-info">
-                  <div class="step-title">报告生成</div>
-                  <div class="step-desc">ReportAgent拥有丰富工具集și模拟后环境进行深度交互</div>
+                  <div class="step-title">RaportGenerare</div>
+                  <div class="step-desc">ReportAgent拥有丰富Instrument集șiSimulare后Mediu进行深度交互</div>
                 </div>
               </div>
               <div class="workflow-item">
                 <span class="step-num">05</span>
                 <div class="step-info">
                   <div class="step-title">Interacțiune Avansată</div>
-                  <div class="step-desc">și模拟世界中任意一位进行对话 & șiReportAgent进行对话</div>
+                  <div class="step-desc">șiSimulare世界任意一位进行对话 & șiReportAgent进行对话</div>
                 </div>
               </div>
             </div>
@@ -149,7 +149,7 @@
                 <div v-if="files.length === 0" class="upload-placeholder">
                   <div class="upload-icon">↑</div>
                   <div class="upload-title">Trage fișierul aiciÎncărcare</div>
-                  <div class="upload-hint">sau点击浏览文件Sistem</div>
+                  <div class="upload-hint">sau点击浏览FișierSistem</div>
                 </div>
                 
                 <div v-else class="file-list">
@@ -164,19 +164,19 @@
 
             <!-- 分割线 -->
             <div class="console-divider">
-              <span>输入参数</span>
+              <span>InputParametru</span>
             </div>
 
-            <!-- 输入区域 -->
+            <!-- Input区域 -->
             <div class="console-section">
               <div class="console-header">
-                <span class="console-label">>_ 02 / 模拟Indicație词</span>
+                <span class="console-label">>_ 02 / SimulareIndicație词</span>
               </div>
               <div class="input-wrapper">
                 <textarea
                   v-model="formData.simulationRequirement"
                   class="code-input"
-                  placeholder="// 用自然语言输入模拟sau预测需求（例.武大若Publicare撤销肖某处分公告，会引发什么舆情走向）"
+                  placeholder="// 用自然语言InputSimularesau预测Cerință（例.武大若Publicare撤销肖某处分公告，会引发什么舆情走către）"
                   rows="6"
                   :disabled="loading"
                 ></textarea>
@@ -200,7 +200,7 @@
         </div>
       </section>
 
-      <!-- 历史Proiect数据库 -->
+      <!-- 历史ProiectDate库 -->
       <HistoryDatabase />
     </div>
   </div>
@@ -213,12 +213,12 @@ import HistoryDatabase from '../components/HistoryDatabase.vue'
 
 const router = useRouter()
 
-// 表单数据
+// 表单Date
 const formData = ref({
   simulationRequirement: ''
 })
 
-// 文件列表
+// FișierListă
 const files = ref([])
 
 // Stare
@@ -226,7 +226,7 @@ const loading = ref(false)
 const error = ref('')
 const isDragOver = ref(false)
 
-// 文件输入引用
+// FișierInput引用
 const fileInput = ref(null)
 
 // 计算Proprietăți:DaNu可以提交
@@ -234,20 +234,20 @@ const canSubmit = computed(() => {
   return formData.value.simulationRequirement.trim() !== '' && files.value.length > 0
 })
 
-// 触发文件选择
+// 触发FișierSelectare
 const triggerFileInput = () => {
   if (!loading.value) {
     fileInput.value?.click()
   }
 }
 
-// 处理文件选择
+// ProcesareFișierSelectare
 const handleFileSelect = (event) => {
   const selectedFiles = Array.from(event.target.files)
   addFiles(selectedFiles)
 }
 
-// 处理拖拽相关
+// Procesare拖拽相关
 const handleDragOver = (e) => {
   if (!loading.value) {
     isDragOver.value = true
@@ -266,7 +266,7 @@ const handleDrop = (e) => {
   addFiles(droppedFiles)
 }
 
-// Adăugare文件
+// AdăugareFișier
 const addFiles = (newFiles) => {
   const validFiles = newFiles.filter(file => {
     const ext = file.name.split('.').pop().toLowerCase()
@@ -275,12 +275,12 @@ const addFiles = (newFiles) => {
   files.value.push(...validFiles)
 }
 
-// Eliminare文件
+// EliminareFișier
 const removeFile = (index) => {
   files.value.splice(index, 1)
 }
 
-// 滚动到底部
+// 滚动la底部
 const scrollToBottom = () => {
   window.scrollTo({
     top: document.body.scrollHeight,
@@ -288,15 +288,15 @@ const scrollToBottom = () => {
   })
 }
 
-// Start模拟 - 立即跳转，API调用在Process页面进行
+// StartSimulare - 立即跳转，API调用înProcess页面进行
 const startSimulation = () => {
   if (!canSubmit.value || loading.value) return
   
-  // 存储待Încărcare数据
+  // 存储待ÎncărcareDate
   import('../store/pendingUpload.js').then(({ setPendingUpload }) => {
     setPendingUpload(files.value, formData.value.simulationRequirement)
     
-    // 立即跳转到Process页面（Utilizare特殊标识表示NouProiect）
+    // 立即跳转laProcess页面（Utilizare特殊标识表示NouProiect）
     router.push({
       name: 'Process',
       params: { projectId: 'new' }
@@ -306,7 +306,7 @@ const startSimulation = () => {
 </script>
 
 <style scoped>
-/* 全局变量șiResetare */
+/* 全局VariabilășiResetare */
 :root {
   --black: #000000;
   --white: #FFFFFF;
@@ -316,7 +316,7 @@ const startSimulation = () => {
   --border: #E5E5E5;
   /* 
     Utilizare Space Grotesk 作为主要Titlu字体，JetBrains Mono 作为代码/标签字体
-    确保已在 index.html 引入这些 Google Fonts 
+    确保已în index.html 引入这些 Google Fonts 
   */
   --font-mono: 'JetBrains Mono', monospace;
   --font-sans: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
@@ -835,7 +835,7 @@ const startSimulation = () => {
   overflow: hidden;
 }
 
-/* 可点击Stare（非禁用） */
+/* 可点击Stare（nu禁用） */
 .start-engine-btn:not(:disabled) {
   background: var(--black);
   border: 1px solid var(--black);
@@ -867,7 +867,7 @@ const startSimulation = () => {
   100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
 }
 
-/* 响应式适配 */
+/* Răspuns式适配 */
 @media (max-width: 1024px) {
   .dashboard-section {
     flex-direction: column;

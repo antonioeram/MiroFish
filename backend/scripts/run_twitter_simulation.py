@@ -1,16 +1,16 @@
 """
 OASIS TwitterSimulare预设Script
-此Script读取Configurare文件中的Parametru来执行Simulare，实现全程自动化
+此Script读取ConfigurareFișierParametru来执行Simulare，实现全程自动化
 
-功能特性:
-- FinalizareSimulare后不立即关闭Mediu，进入等待命令模式
-- 支持通过IPC接收Interview命令
-- 支持单个Agent采访和批量采访
-- 支持远程关闭Mediu命令
+Funcționalitate特性:
+- FinalizareSimulare后不立即ÎnchidereMediu，进入等待命令模式
+- Suportă通过IPC接收Interview命令
+- Suportă单个Agent采访și批量采访
+- Suportă远程ÎnchidereMediu命令
 
-使用方式:
+Utilizare方式:
     python run_twitter_simulation.py --config /path/to/simulation_config.json
-    python run_twitter_simulation.py --config /path/to/simulation_config.json --no-wait  # Finalizare后立即关闭
+    python run_twitter_simulation.py --config /path/to/simulation_config.json --no-wait  # Finalizare后立即Închidere
 """
 
 import argparse
@@ -29,14 +29,14 @@ from typing import Dict, Any, List, Optional
 _shutdown_event = None
 _cleanup_done = False
 
-# 添加项目路径
+# 添加ProiectCale
 _scripts_dir = os.path.dirname(os.path.abspath(__file__))
 _backend_dir = os.path.abspath(os.path.join(_scripts_dir, '..'))
 _project_root = os.path.abspath(os.path.join(_backend_dir, '..'))
 sys.path.insert(0, _scripts_dir)
 sys.path.insert(0, _backend_dir)
 
-# Încărcare项目根目录的 .env 文件（包含 LLM_API_KEY 等Configurare）
+# ÎncărcareProiect根Director .env Fișier（包含 LLM_API_KEY 等Configurare）
 from dotenv import load_dotenv
 _env_file = os.path.join(_project_root, '.env')
 if os.path.exists(_env_file):
@@ -68,24 +68,24 @@ class UnicodeFormatter(logging.Formatter):
 
 
 class MaxTokensWarningFilter(logging.Filter):
-    """过滤掉 camel-ai 关于 max_tokens 的Avertisment（我们故意不设置 max_tokens，让模型自行决定）"""
+    """过滤掉 camel-ai Despre max_tokens Avertisment（我们故意不Setări max_tokens，让Model自行决定）"""
     
     def filter(self, record):
-        # 过滤掉包含 max_tokens Avertisment的日志
+        # 过滤掉包含 max_tokens AvertismentJurnal
         if "max_tokens" in record.getMessage() and "Invalid or missing" in record.getMessage():
             return False
         return True
 
 
-# 在模块Încărcare时立即添加过滤器，确保在 camel 代码执行前生效
+# înModulÎncărcare时立即添加过滤器，确保în camel 代码执行前生效
 logging.getLogger().addFilter(MaxTokensWarningFilter())
 
 
 def setup_oasis_logging(log_dir: str):
-    """Configurare OASIS 的日志，使用固定Nume的日志文件"""
+    """Configurare OASIS Jurnal，Utilizare固定NumeJurnalFișier"""
     os.makedirs(log_dir, exist_ok=True)
     
-    # 清理旧的日志文件
+    # 清理旧JurnalFișier
     for f in os.listdir(log_dir):
         old_log = os.path.join(log_dir, f)
         if os.path.isfile(old_log) and f.endswith('.log'):
@@ -155,7 +155,7 @@ class IPCHandler:
         self.status_file = os.path.join(simulation_dir, ENV_STATUS_FILE)
         self._running = True
         
-        # 确保目录存在
+        # 确保Director存în
         os.makedirs(self.commands_dir, exist_ok=True)
         os.makedirs(self.responses_dir, exist_ok=True)
     
@@ -172,7 +172,7 @@ class IPCHandler:
         if not os.path.exists(self.commands_dir):
             return None
         
-        # Obținere命令文件（按时间排序）
+        # Obținere命令Fișier（按Timp排序）
         command_files = []
         for filename in os.listdir(self.commands_dir):
             if filename.endswith('.json'):
@@ -191,7 +191,7 @@ class IPCHandler:
         return None
     
     def send_response(self, command_id: str, status: str, result: Dict = None, error: str = None):
-        """发送Răspuns"""
+        """TrimiteRăspuns"""
         response = {
             "command_id": command_id,
             "status": status,
@@ -204,7 +204,7 @@ class IPCHandler:
         with open(response_file, 'w', encoding='utf-8') as f:
             json.dump(response, f, ensure_ascii=False, indent=2)
         
-        # Ștergere命令文件
+        # Ștergere命令Fișier
         command_file = os.path.join(self.commands_dir, f"{command_id}.json")
         try:
             os.remove(command_file)
@@ -232,7 +232,7 @@ class IPCHandler:
             actions = {agent: interview_action}
             await self.env.step(actions)
             
-            # 从Date库ObținereRezultat
+            # de laDate库ObținereRezultat
             result = self._get_interview_result(agent_id)
             
             self.send_response(command_id, "completed", result=result)
@@ -253,9 +253,9 @@ class IPCHandler:
             interviews: [{"agent_id": int, "prompt": str}, ...]
         """
         try:
-            # ConstruireAcțiune字典
+            # ConstruireAcțiuneDicționar
             actions = {}
-            agent_prompts = {}  # Înregistrare每个agent的prompt
+            agent_prompts = {}  # Înregistrare每个agentprompt
             
             for interview in interviews:
                 agent_id = interview.get("agent_id")
@@ -272,7 +272,7 @@ class IPCHandler:
                     print(f"  Avertisment: 无法ObținereAgent {agent_id}: {e}")
             
             if not actions:
-                self.send_response(command_id, "failed", error="没有有效的Agent")
+                self.send_response(command_id, "failed", error="没有有效Agent")
                 return False
             
             # 执行批量Interview
@@ -298,7 +298,7 @@ class IPCHandler:
             return False
     
     def _get_interview_result(self, agent_id: int) -> Dict[str, Any]:
-        """从Date库Obținere最新的InterviewRezultat"""
+        """de laDate库Obținere最新InterviewRezultat"""
         db_path = os.path.join(self.simulation_dir, "twitter_simulation.db")
         
         result = {
@@ -314,7 +314,7 @@ class IPCHandler:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
             
-            # Interogare最新的InterviewÎnregistrare
+            # Interogare最新InterviewÎnregistrare
             cursor.execute("""
                 SELECT user_id, info, created_at
                 FROM trace
@@ -345,7 +345,7 @@ class IPCHandler:
         Procesare所有待Procesare命令
         
         Returns:
-            True 表示ContinuareRulare，False 表示应该退出
+            True 表示ContinuareRulare，False 表示应该Ieșire
         """
         command = self.poll_command()
         if not command:
@@ -355,7 +355,7 @@ class IPCHandler:
         command_type = command.get("command_type")
         args = command.get("args", {})
         
-        print(f"\n收到IPC命令: {command_type}, id={command_id}")
+        print(f"\n收laIPC命令: {command_type}, id={command_id}")
         
         if command_type == CommandType.INTERVIEW:
             await self.handle_interview(
@@ -373,8 +373,8 @@ class IPCHandler:
             return True
             
         elif command_type == CommandType.CLOSE_ENV:
-            print("收到关闭Mediu命令")
-            self.send_response(command_id, "completed", result={"message": "Mediu即将关闭"})
+            print("收laÎnchidereMediu命令")
+            self.send_response(command_id, "completed", result={"message": "Mediu即将Închidere"})
             return False
         
         else:
@@ -400,8 +400,8 @@ class TwitterSimulationRunner:
         InițializareSimulareRulare器
         
         Args:
-            config_path: Configurare文件路径 (simulation_config.json)
-            wait_for_commands: SimulareFinalizare后是否等待命令（默认True）
+            config_path: ConfigurareFișierCale (simulation_config.json)
+            wait_for_commands: SimulareFinalizare后DaNu等待命令（默认True）
         """
         self.config_path = config_path
         self.config = self._load_config()
@@ -412,42 +412,42 @@ class TwitterSimulationRunner:
         self.ipc_handler = None
         
     def _load_config(self) -> Dict[str, Any]:
-        """ÎncărcareConfigurare文件"""
+        """ÎncărcareConfigurareFișier"""
         with open(self.config_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     
     def _get_profile_path(self) -> str:
-        """ObținereProfile文件路径（OASIS Twitter使用CSVFormat）"""
+        """ObținereProfileFișierCale（OASIS TwitterUtilizareCSVFormat）"""
         return os.path.join(self.simulation_dir, "twitter_profiles.csv")
     
     def _get_db_path(self) -> str:
-        """ObținereDate库路径"""
+        """ObținereDate库Cale"""
         return os.path.join(self.simulation_dir, "twitter_simulation.db")
     
     def _create_model(self):
         """
-        CreareLLM模型
+        CreareLLMModel
         
-        统一使用项目根目录 .env 文件中的Configurare（优先级最高）：
+        统一UtilizareProiect根Director .env FișierConfigurare（优先级最高）：
         - LLM_API_KEY: API密钥
         - LLM_BASE_URL: API基础URL
-        - LLM_MODEL_NAME: 模型Nume
+        - LLM_MODEL_NAME: ModelNume
         """
-        # 优先从 .env 读取Configurare
+        # 优先de la .env 读取Configurare
         llm_api_key = os.environ.get("LLM_API_KEY", "")
         llm_base_url = os.environ.get("LLM_BASE_URL", "")
         llm_model = os.environ.get("LLM_MODEL_NAME", "")
         
-        # 如果 .env 中没有，则使用 config 作为备用
+        # dacă .env 没有，则Utilizare config 作为备用
         if not llm_model:
             llm_model = self.config.get("llm_model", "gpt-4o-mini")
         
-        # 设置 camel-ai 所需的MediuVariabilă
+        # Setări camel-ai 所需MediuVariabilă
         if llm_api_key:
             os.environ["OPENAI_API_KEY"] = llm_api_key
         
         if not os.environ.get("OPENAI_API_KEY"):
-            raise ValueError("缺少 API Key Configurare，请在项目根目录 .env 文件中设置 LLM_API_KEY")
+            raise ValueError("缺少 API Key Configurare，请înProiect根Director .env FișierSetări LLM_API_KEY")
         
         if llm_base_url:
             os.environ["OPENAI_API_BASE_URL"] = llm_base_url
@@ -466,15 +466,15 @@ class TwitterSimulationRunner:
         round_num: int
     ) -> List:
         """
-        根据时间和Configurare决定本轮激活哪些Agent
+        根据TimpșiConfigurare决定本轮激活哪些Agent
         
         Args:
             env: OASISMediu
-            current_hour: 当前Simulare小时（0-23）
-            round_num: 当前轮数
+            current_hour: când前Simulare小时（0-23）
+            round_num: când前轮数
             
         Returns:
-            激活的Agent列表
+            激活AgentListă
         """
         time_config = self.config.get("time_config", {})
         agent_configs = self.config.get("agent_configs", [])
@@ -496,14 +496,14 @@ class TwitterSimulationRunner:
         
         target_count = int(random.uniform(base_min, base_max) * multiplier)
         
-        # 根据每个Agent的Configurare计算激活概率
+        # 根据每个AgentConfigurare计算激活概率
         candidates = []
         for cfg in agent_configs:
             agent_id = cfg.get("agent_id", 0)
             active_hours = cfg.get("active_hours", list(range(8, 23)))
             activity_level = cfg.get("activity_level", 0.5)
             
-            # 检查是否在活跃时间
+            # VerificareDaNuîn活跃Timp
             if current_hour not in active_hours:
                 continue
             
@@ -511,13 +511,13 @@ class TwitterSimulationRunner:
             if random.random() < activity_level:
                 candidates.append(agent_id)
         
-        # 随机选择
+        # 随机Selectare
         selected_ids = random.sample(
             candidates, 
             min(target_count, len(candidates))
         ) if candidates else []
         
-        # 转换为Agent对象
+        # 转换为AgentObiect
         active_agents = []
         for agent_id in selected_ids:
             try:
@@ -532,16 +532,16 @@ class TwitterSimulationRunner:
         """RulareTwitterSimulare
         
         Args:
-            max_rounds: 最大Simulare轮数（可选，用于截断过长的Simulare）
+            max_rounds: 最大Simulare轮数（可选，用于截断过长Simulare）
         """
         print("=" * 60)
         print("OASIS TwitterSimulare")
-        print(f"Configurare文件: {self.config_path}")
+        print(f"ConfigurareFișier: {self.config_path}")
         print(f"SimulareID: {self.config.get('simulation_id', 'unknown')}")
         print(f"等待命令模式: {'启用' if self.wait_for_commands else '禁用'}")
         print("=" * 60)
         
-        # Încărcare时间Configurare
+        # ÎncărcareTimpConfigurare
         time_config = self.config.get("time_config", {})
         total_hours = time_config.get("total_simulation_hours", 72)
         minutes_per_round = time_config.get("minutes_per_round", 30)
@@ -549,7 +549,7 @@ class TwitterSimulationRunner:
         # 计算总轮数
         total_rounds = (total_hours * 60) // minutes_per_round
         
-        # 如果指定了最大轮数，则截断
+        # dacă指定最大轮数，则截断
         if max_rounds is not None and max_rounds > 0:
             original_rounds = total_rounds
             total_rounds = min(total_rounds, max_rounds)
@@ -558,21 +558,21 @@ class TwitterSimulationRunner:
         
         print(f"\nSimulareParametru:")
         print(f"  - 总Simulare时长: {total_hours}小时")
-        print(f"  - 每轮时间: {minutes_per_round}分钟")
+        print(f"  - 每轮Timp: {minutes_per_round}分钟")
         print(f"  - 总轮数: {total_rounds}")
         if max_rounds:
             print(f"  - 最大轮数限制: {max_rounds}")
         print(f"  - Agent数量: {len(self.config.get('agent_configs', []))}")
         
-        # Creare模型
-        print("\nInițializareLLM模型...")
+        # CreareModel
+        print("\nInițializareLLMModel...")
         model = self._create_model()
         
         # ÎncărcareAgent图
         print("ÎncărcareAgent Profile...")
         profile_path = self._get_profile_path()
         if not os.path.exists(profile_path):
-            print(f"Eroare: Profile文件不存在: {profile_path}")
+            print(f"Eroare: ProfileFișier不存în: {profile_path}")
             return
         
         self.agent_graph = await generate_twitter_agent_graph(
@@ -581,7 +581,7 @@ class TwitterSimulationRunner:
             available_actions=self.AVAILABLE_ACTIONS,
         )
         
-        # Date库路径
+        # Date库Cale
         db_path = self._get_db_path()
         if os.path.exists(db_path):
             os.remove(db_path)
@@ -624,19 +624,19 @@ class TwitterSimulationRunner:
             
             if initial_actions:
                 await self.env.step(initial_actions)
-                print(f"  已发布 {len(initial_actions)} 条初始帖子")
+                print(f"  已Publicare {len(initial_actions)} 条初始帖子")
         
         # 主Simulare循环
         print("\nStartSimulare循环...")
         start_time = datetime.now()
         
         for round_num in range(total_rounds):
-            # 计算当前Simulare时间
+            # 计算când前SimulareTimp
             simulated_minutes = round_num * minutes_per_round
             simulated_hour = (simulated_minutes // 60) % 24
             simulated_day = simulated_minutes // (60 * 24) + 1
             
-            # Obținere本轮激活的Agent
+            # Obținere本轮激活Agent
             active_agents = self._get_active_agents_for_round(
                 self.env, simulated_hour, round_num
             )
@@ -653,7 +653,7 @@ class TwitterSimulationRunner:
             # 执行Acțiune
             await self.env.step(actions)
             
-            # 打印进度
+            # 打印Progres
             if (round_num + 1) % 10 == 0 or round_num == 0:
                 elapsed = (datetime.now() - start_time).total_seconds()
                 progress = (round_num + 1) / total_rounds * 100
@@ -667,16 +667,16 @@ class TwitterSimulationRunner:
         print(f"  - 总耗时: {total_elapsed:.1f}秒")
         print(f"  - Date库: {db_path}")
         
-        # 是否进入等待命令模式
+        # DaNu进入等待命令模式
         if self.wait_for_commands:
             print("\n" + "=" * 60)
             print("进入等待命令模式 - Mediu保持Rulare")
-            print("支持的命令: interview, batch_interview, close_env")
+            print("Suportă命令: interview, batch_interview, close_env")
             print("=" * 60)
             
             self.ipc_handler.update_status("alive")
             
-            # 等待命令循环（使用全局 _shutdown_event）
+            # 等待命令循环（Utilizare全局 _shutdown_event）
             try:
                 while not _shutdown_event.is_set():
                     should_continue = await self.ipc_handler.process_commands()
@@ -684,23 +684,23 @@ class TwitterSimulationRunner:
                         break
                     try:
                         await asyncio.wait_for(_shutdown_event.wait(), timeout=0.5)
-                        break  # 收到退出信号
+                        break  # 收laIeșire信号
                     except asyncio.TimeoutError:
                         pass
             except KeyboardInterrupt:
-                print("\n收到中断信号")
+                print("\n收la断信号")
             except asyncio.CancelledError:
-                print("\n任务被取消")
+                print("\nSarcină被Anulare")
             except Exception as e:
                 print(f"\n命令Procesare出错: {e}")
             
-            print("\n关闭Mediu...")
+            print("\nÎnchidereMediu...")
         
-        # 关闭Mediu
+        # ÎnchidereMediu
         self.ipc_handler.update_status("stopped")
         await self.env.close()
         
-        print("Mediu已关闭")
+        print("Mediu已Închidere")
         print("=" * 60)
 
 
@@ -710,32 +710,32 @@ async def main():
         '--config', 
         type=str, 
         required=True,
-        help='Configurare文件路径 (simulation_config.json)'
+        help='ConfigurareFișierCale (simulation_config.json)'
     )
     parser.add_argument(
         '--max-rounds',
         type=int,
         default=None,
-        help='最大Simulare轮数（可选，用于截断过长的Simulare）'
+        help='最大Simulare轮数（可选，用于截断过长Simulare）'
     )
     parser.add_argument(
         '--no-wait',
         action='store_true',
         default=False,
-        help='SimulareFinalizare后立即关闭Mediu，不进入等待命令模式'
+        help='SimulareFinalizare后立即ÎnchidereMediu，不进入等待命令模式'
     )
     
     args = parser.parse_args()
     
-    # 在 main 函数Start时Creare shutdown 事件
+    # în main FuncțieStart时Creare shutdown 事件
     global _shutdown_event
     _shutdown_event = asyncio.Event()
     
     if not os.path.exists(args.config):
-        print(f"Eroare: Configurare文件不存在: {args.config}")
+        print(f"Eroare: ConfigurareFișier不存în: {args.config}")
         sys.exit(1)
     
-    # Inițializare日志Configurare（使用固定文件名，清理旧日志）
+    # InițializareJurnalConfigurare（Utilizare固定Fișier名，清理旧Jurnal）
     simulation_dir = os.path.dirname(args.config) or "."
     setup_oasis_logging(os.path.join(simulation_dir, "log"))
     
@@ -748,20 +748,20 @@ async def main():
 
 def setup_signal_handlers():
     """
-    设置信号Procesare器，确保收到 SIGTERM/SIGINT 时能够正确退出
-    让程序有机会正常清理资源（关闭Date库、Mediu等）
+    Setări信号Procesare器，确保收la SIGTERM/SIGINT 时能够正确Ieșire
+    让程序有机会正常清理资源（ÎnchidereDate库、Mediu等）
     """
     def signal_handler(signum, frame):
         global _cleanup_done
         sig_name = "SIGTERM" if signum == signal.SIGTERM else "SIGINT"
-        print(f"\n收到 {sig_name} 信号，正在退出...")
+        print(f"\n收la {sig_name} 信号，正înIeșire...")
         if not _cleanup_done:
             _cleanup_done = True
             if _shutdown_event:
                 _shutdown_event.set()
         else:
-            # 重复收到信号才强制退出
-            print("强制退出...")
+            # 重复收la信号才强制Ieșire
+            print("强制Ieșire...")
             sys.exit(1)
     
     signal.signal(signal.SIGTERM, signal_handler)
@@ -773,8 +773,8 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\n程序被中断")
+        print("\n程序被断")
     except SystemExit:
         pass
     finally:
-        print("Simulare进程已退出")
+        print("Simulare进程已Ieșire")

@@ -1,7 +1,7 @@
 import service, { requestWithRetry } from './index'
 
 /**
- * 开始Raport生成
+ * StartRaportGenerare
  * @param {Object} data - { simulation_id, force_regenerate? }
  */
 export const generateReport = (data) => {
@@ -9,7 +9,7 @@ export const generateReport = (data) => {
 }
 
 /**
- * ObținereRaport生成Stare
+ * ObținereRaportGenerareStare
  * @param {string} reportId
  */
 export const getReportStatus = (reportId) => {
@@ -17,18 +17,18 @@ export const getReportStatus = (reportId) => {
 }
 
 /**
- * Obținere Agent 日志（增量）
+ * Obținere Agent Jurnal（增量）
  * @param {string} reportId
- * @param {number} fromLine - 从第几行开始Obținere
+ * @param {number} fromLine - de la第几行StartObținere
  */
 export const getAgentLog = (reportId, fromLine = 0) => {
   return service.get(`/api/report/${reportId}/agent-log`, { params: { from_line: fromLine } })
 }
 
 /**
- * Obținere控制台日志（增量）
+ * ObținereConsolăJurnal（增量）
  * @param {string} reportId
- * @param {number} fromLine - 从第几行开始Obținere
+ * @param {number} fromLine - de la第几行StartObținere
  */
 export const getConsoleLog = (reportId, fromLine = 0) => {
   return service.get(`/api/report/${reportId}/console-log`, { params: { from_line: fromLine } })
@@ -43,7 +43,7 @@ export const getReport = (reportId) => {
 }
 
 /**
- * 与 Report Agent 对话
+ * și Report Agent 对话
  * @param {Object} data - { simulation_id, message, chat_history? }
  */
 export const chatWithReport = (data) => {

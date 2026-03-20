@@ -1,6 +1,6 @@
 """
 LLMClient封装
-统一使用OpenAI格式调用
+统一UtilizareOpenAIFormat调用
 """
 
 import json
@@ -40,13 +40,13 @@ class LLMClient:
         response_format: Optional[Dict] = None
     ) -> str:
         """
-        发送聊天Cerere
+        Trimite聊天Cerere
         
         Args:
-            messages: Mesaj列表
-            temperature: 温度参数
+            messages: MesajListă
+            temperature: 温度Parametru
             max_tokens: 最大token数
-            response_format: Răspuns格式（如JSON模式）
+            response_format: RăspunsFormat（如JSON模式）
             
         Returns:
             ModelRăspunsText
@@ -63,7 +63,7 @@ class LLMClient:
         
         response = self.client.chat.completions.create(**kwargs)
         content = response.choices[0].message.content
-        # 部分Model（如MiniMax M2.5）会在content中包含<think>思考Conținut，需要移除
+        # 部分Model（如MiniMax M2.5）会încontent包含<think>思考Conținut，需要移除
         content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
         return content
     
@@ -74,15 +74,15 @@ class LLMClient:
         max_tokens: int = 4096
     ) -> Dict[str, Any]:
         """
-        发送聊天Cerere并ReturnareJSON
+        Trimite聊天Cerere并ReturnareJSON
         
         Args:
-            messages: Mesaj列表
-            temperature: 温度参数
+            messages: MesajListă
+            temperature: 温度Parametru
             max_tokens: 最大token数
             
         Returns:
-            Analiză后的JSON对象
+            Analiză后JSONObiect
         """
         response = self.chat(
             messages=messages,
@@ -99,5 +99,5 @@ class LLMClient:
         try:
             return json.loads(cleaned_response)
         except json.JSONDecodeError:
-            raise ValueError(f"LLMReturnare的JSON格式无效: {cleaned_response}")
+            raise ValueError(f"LLMReturnareJSONFormat无效: {cleaned_response}")
 

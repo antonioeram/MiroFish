@@ -1,6 +1,6 @@
 """
 GrafConstruireServiciu
-Interfață2：使用Zep APIConstruireStandalone Graph
+Interfață2：UtilizareZep APIConstruireStandalone Graph
 """
 
 import os
@@ -68,12 +68,12 @@ class GraphBuilderService:
             graph_name: GrafNume
             chunk_size: 文本块大小
             chunk_overlap: 块重叠大小
-            batch_size: 每批发送块数量
+            batch_size: 每批Trimite块数量
             
         Returns:
-            任务ID
+            SarcinăID
         """
-        # Creare任务
+        # CreareSarcină
         task_id = self.task_manager.create_task(
             task_type="graph_build",
             metadata={
@@ -120,12 +120,12 @@ class GraphBuilderService:
                 message=f"Graf已Creare: {graph_id}"
             )
             
-            # 2. 设置Ontologie
+            # 2. SetăriOntologie
             self.set_ontology(graph_id, ontology)
             self.task_manager.update_task(
                 task_id,
                 progress=15,
-                message="Ontologie已设置"
+                message="Ontologie已Setări"
             )
             
             # 3. 文本分块
@@ -137,7 +137,7 @@ class GraphBuilderService:
                 message=f"文本已分割为 {total_chunks} 个块"
             )
             
-            # 4. 分批发送Date
+            # 4. 分批TrimiteDate
             episode_uuids = self.add_text_batches(
                 graph_id, chunks, batch_size,
                 lambda msg, prog: self.task_manager.update_task(
@@ -197,13 +197,13 @@ class GraphBuilderService:
         return graph_id
     
     def set_ontology(self, graph_id: str, ontology: Dict[str, Any]):
-        """设置GrafOntologie（公开Metodă）"""
+        """SetăriGrafOntologie（公开Metodă）"""
         import warnings
         from typing import Optional
         from pydantic import Field
         from zep_cloud.external_clients.ontology import EntityModel, EntityText, EdgeModel
         
-        # 抑制 Pydantic v2 关于 Field(default=None) Avertisment
+        # 抑制 Pydantic v2 Despre Field(default=None) Avertisment
         # 这Da Zep SDK 要求用法，Avertisment来Automat态ClasăCreare，可以安全忽略
         warnings.filterwarnings('ignore', category=UserWarning, module='pydantic')
         
@@ -227,7 +227,7 @@ class GraphBuilderService:
             annotations = {}
             
             for attr_def in entity_def.get("attributes", []):
-                attr_name = safe_attr_name(attr_def["name"])  # 使用安全Nume
+                attr_name = safe_attr_name(attr_def["name"])  # Utilizare安全Nume
                 attr_desc = attr_def.get("description", attr_name)
                 # Zep API 需要 Field  description，这Da必需
                 attrs[attr_name] = Field(description=attr_desc, default=None)
@@ -251,7 +251,7 @@ class GraphBuilderService:
             annotations = {}
             
             for attr_def in edge_def.get("attributes", []):
-                attr_name = safe_attr_name(attr_def["name"])  # 使用安全Nume
+                attr_name = safe_attr_name(attr_def["name"])  # Utilizare安全Nume
                 attr_desc = attr_def.get("description", attr_name)
                 # Zep API 需要 Field  description，这Da必需
                 attrs[attr_name] = Field(description=attr_desc, default=None)
@@ -277,7 +277,7 @@ class GraphBuilderService:
             if source_targets:
                 edge_definitions[name] = (edge_class, source_targets)
         
-        # 调用Zep API设置Ontologie
+        # 调用Zep APISetăriOntologie
         if entity_types or edge_definitions:
             self.client.graph.set_ontology(
                 graph_ids=[graph_id],
@@ -304,7 +304,7 @@ class GraphBuilderService:
             if progress_callback:
                 progress = (i + len(batch_chunks)) / total_chunks
                 progress_callback(
-                    f"发送第 {batch_num}/{total_batches} 批Date ({len(batch_chunks)} 块)...",
+                    f"Trimite第 {batch_num}/{total_batches} 批Date ({len(batch_chunks)} 块)...",
                     progress
                 )
             
@@ -314,7 +314,7 @@ class GraphBuilderService:
                 for chunk in batch_chunks
             ]
             
-            # 发送laZep
+            # TrimitelaZep
             try:
                 batch_result = self.client.graph.add_batch(
                     graph_id=graph_id,
@@ -333,7 +333,7 @@ class GraphBuilderService:
                 
             except Exception as e:
                 if progress_callback:
-                    progress_callback(f"批次 {batch_num} 发送Eșec: {str(e)}", 0)
+                    progress_callback(f"批次 {batch_num} TrimiteEșec: {str(e)}", 0)
                 raise
         
         return episode_uuids

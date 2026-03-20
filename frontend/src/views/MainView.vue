@@ -15,7 +15,7 @@
             :class="{ active: viewMode === mode }"
             @click="viewMode = mode"
           >
-            {{ { graph: '图谱', split: '双栏', workbench: '工作台' }[mode] }}
+            {{ { graph: 'Graf', split: '双栏', workbench: '工作台' }[mode] }}
           </button>
         </div>
       </div>
@@ -48,7 +48,7 @@
 
       <!-- Right Panel: Step Components -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
-        <!-- Step 1: 图谱构建 -->
+        <!-- Step 1: GrafConstruire -->
         <Step1GraphBuild 
           v-if="currentStep === 1"
           :currentPhase="currentPhase"
@@ -59,7 +59,7 @@
           :systemLogs="systemLogs"
           @next-step="handleNextStep"
         />
-        <!-- Step 2: 环境搭建 -->
+        <!-- Step 2: Mediu搭建 -->
         <Step2EnvSetup
           v-else-if="currentStep === 2"
           :projectData="projectData"
@@ -90,8 +90,8 @@ const router = useRouter()
 const viewMode = ref('split') // graph | split | workbench
 
 // Step State
-const currentStep = ref(1) // 1: 图谱构建, 2: 环境搭建, 3: Start模拟, 4: 报告生成, 5: 深度互动
-const stepNames = ['图谱构建', '环境搭建', 'Start模拟', '报告生成', '深度互动']
+const currentStep = ref(1) // 1: GrafConstruire, 2: Mediu搭建, 3: StartSimulare, 4: RaportGenerare, 5: Interacțiune Avansată
+const stepNames = ['GrafConstruire', 'Mediu搭建', 'StartSimulare', 'RaportGenerare', 'Interacțiune Avansată']
 
 // Data State
 const currentProjectId = ref(route.params.projectId)
@@ -161,9 +161,9 @@ const handleNextStep = (params = {}) => {
     currentStep.value++
     addLog(`进入 Step ${currentStep.value}: ${stepNames[currentStep.value - 1]}`)
     
-    // 如果Da从 Step 2 进入 Step 3，记录模拟轮数配置
+    // dacăDade la Step 2 进入 Step 3，ÎnregistrareSimulare轮数Configurare
     if (currentStep.value === 3 && params.maxRounds) {
-      addLog(`自定义模拟轮数: ${params.maxRounds} 轮`)
+      addLog(`自定义Simulare轮数: ${params.maxRounds} 轮`)
     }
   }
 }
@@ -171,7 +171,7 @@ const handleNextStep = (params = {}) => {
 const handleGoBack = () => {
   if (currentStep.value > 1) {
     currentStep.value--
-    addLog(`返回 Step ${currentStep.value}: ${stepNames[currentStep.value - 1]}`)
+    addLog(`Înapoi Step ${currentStep.value}: ${stepNames[currentStep.value - 1]}`)
   }
 }
 

@@ -1,5 +1,5 @@
 """
-Instrument模块
+InstrumentModul
 """
 
 from .file_parser import FileParser

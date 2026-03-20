@@ -1,6 +1,6 @@
 """
-JurnalConfigurare模块
-提供统一的Jurnal管理，同时输出到控制台和Fișier
+JurnalConfigurareModul
+提供统一Jurnal管理，同时OutputlaConsolășiFișier
 """
 
 import os
@@ -12,47 +12,47 @@ from logging.handlers import RotatingFileHandler
 
 def _ensure_utf8_stdout():
     """
-    确保 stdout/stderr 使用 UTF-8 编码
-    解决 Windows 控制台中文乱码问题
+    确保 stdout/stderr Utilizare UTF-8 编码
+    解决 Windows Consolă文乱码问题
     """
     if sys.platform == 'win32':
-        # Windows 下重新Configurare标准输出为 UTF-8
+        # Windows 重新Configurare标准Output为 UTF-8
         if hasattr(sys.stdout, 'reconfigure'):
             sys.stdout.reconfigure(encoding='utf-8', errors='replace')
         if hasattr(sys.stderr, 'reconfigure'):
             sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 
-# Jurnal目录
+# JurnalDirector
 LOG_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'logs')
 
 
 def setup_logger(name: str = 'mirofish', level: int = logging.DEBUG) -> logging.Logger:
     """
-    设置Jurnal器
+    SetăriJurnal器
     
     Args:
         name: Jurnal器Nume
         level: Jurnal级别
         
     Returns:
-        Configurare好的Jurnal器
+        Configurare好Jurnal器
     """
-    # 确保Jurnal目录存在
+    # 确保JurnalDirector存în
     os.makedirs(LOG_DIR, exist_ok=True)
     
     # CreareJurnal器
     logger = logging.getLogger(name)
     logger.setLevel(level)
     
-    # 阻止Jurnal向上传播到根 logger，避免重复输出
+    # 阻止Jurnalcătre传播la根 logger，避免重复Output
     logger.propagate = False
     
-    # 如果已经有Procesare器，不重复添加
+    # dacă已经有Procesare器，不重复添加
     if logger.handlers:
         return logger
     
-    # Jurnal格式
+    # JurnalFormat
     detailed_formatter = logging.Formatter(
         '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
@@ -63,7 +63,7 @@ def setup_logger(name: str = 'mirofish', level: int = logging.DEBUG) -> logging.
         datefmt='%H:%M:%S'
     )
     
-    # 1. FișierProcesare器 - 详细Jurnal（按日期命名，带轮转）
+    # 1. FișierProcesare器 - 详细Jurnal（按Dată命名，带轮转）
     log_filename = datetime.now().strftime('%Y-%m-%d') + '.log'
     file_handler = RotatingFileHandler(
         os.path.join(LOG_DIR, log_filename),
@@ -74,8 +74,8 @@ def setup_logger(name: str = 'mirofish', level: int = logging.DEBUG) -> logging.
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(detailed_formatter)
     
-    # 2. 控制台Procesare器 - 简洁Jurnal（INFO及以上）
-    # 确保 Windows 下使用 UTF-8 编码，避免中文乱码
+    # 2. ConsolăProcesare器 - 简洁Jurnal（INFO及以）
+    # 确保 Windows Utilizare UTF-8 编码，避免文乱码
     _ensure_utf8_stdout()
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.INFO)
@@ -90,7 +90,7 @@ def setup_logger(name: str = 'mirofish', level: int = logging.DEBUG) -> logging.
 
 def get_logger(name: str = 'mirofish') -> logging.Logger:
     """
-    ObținereJurnal器（如果不存在则Creare）
+    ObținereJurnal器（dacă不存în则Creare）
     
     Args:
         name: Jurnal器Nume
@@ -108,7 +108,7 @@ def get_logger(name: str = 'mirofish') -> logging.Logger:
 logger = setup_logger()
 
 
-# 便捷方法
+# 便捷Metodă
 def debug(msg, *args, **kwargs):
     logger.debug(msg, *args, **kwargs)
 

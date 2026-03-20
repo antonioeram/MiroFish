@@ -1,7 +1,7 @@
 """Zep Graph Paginare读取Instrument。
 
-Zep 的 node/edge 列表接口使用 UUID cursor Paginare，
-本模块封装自动翻页逻辑（含单页Reîncercare），对调用方透明地Returnare完整列表。
+Zep  node/edge ListăInterfațăUtilizare UUID cursor Paginare，
+本Modul封装自动翻页逻辑（含单页Reîncercare），对调用方透明地Returnare完整Listă。
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ def _fetch_page_with_retry(
     page_description: str = "page",
     **kwargs: Any,
 ) -> list[Any]:
-    """单页Cerere，Eșec时指数退避Reîncercare。仅Reîncercare网络/IO类瞬态Eroare。"""
+    """单页Cerere，Eșec时指数退避Reîncercare。仅Reîncercare网络/IOClasă瞬态Eroare。"""
     if max_retries < 1:
         raise ValueError("max_retries must be >= 1")
 
@@ -109,7 +109,7 @@ def fetch_all_edges(
     max_retries: int = _DEFAULT_MAX_RETRIES,
     retry_delay: float = _DEFAULT_RETRY_DELAY,
 ) -> list[Any]:
-    """PaginareObținereGraf所有边，Returnare完整列表。每页Cerere自带Reîncercare。"""
+    """PaginareObținereGraf所有边，Returnare完整Listă。每页Cerere自带Reîncercare。"""
     all_edges: list[Any] = []
     cursor: str | None = None
     page_num = 0

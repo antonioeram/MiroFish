@@ -20,8 +20,8 @@ logger = get_logger('mirofish.api.simulation')
 
 
 # Interview prompt 优化前缀
-# 添加此前缀可以避免Agent调用Instrument，直接用文本回复
-INTERVIEW_PROMPT_PREFIX = "结合你人设、所有过往Memorieși行动，不调用任何Instrument直接用文本回复我："
+# 添加此前缀可以避免Agent调用Instrument，直接用文本Răspuns
+INTERVIEW_PROMPT_PREFIX = "结合你人设、所有过往Memorieși行动，不调用任何Instrument直接用文本Răspuns我："
 
 
 def optimize_interview_prompt(prompt: str) -> str:
@@ -166,7 +166,7 @@ def create_simulation():
     """
     Creare新Simulare
     
-    注意：max_rounds等Parametru由LLM智能Generare，无需Manual设置
+    注意：max_rounds等Parametru由LLM智能Generare，无需ManualSetări
     
     Cerere（JSON）：
         {
@@ -204,14 +204,14 @@ def create_simulation():
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"项目Inexistent: {project_id}"
+                "error": f"ProiectInexistent: {project_id}"
             }), 404
         
         graph_id = data.get('graph_id') or project.graph_id
         if not graph_id:
             return jsonify({
                 "success": False,
-                "error": "项目尚未ConstruireGraf，请先调用 /api/graph/build"
+                "error": "Proiect尚未ConstruireGraf，请先调用 /api/graph/build"
             }), 400
         
         manager = SimulationManager()
@@ -244,7 +244,7 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
     1. state.json 存în且 status 为 "ready"
     2. 必要Fișier存în：reddit_profiles.json, twitter_profiles.csv, simulation_config.json
     
-    注意：Rulare脚本(run_*.py)保留în backend/scripts/ Director，不再复制laSimulareDirector
+    注意：RulareScript(run_*.py)保留în backend/scripts/ Director，不再CopierelaSimulareDirector
     
     Args:
         simulation_id: SimulareID
@@ -261,7 +261,7 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
     if not os.path.exists(simulation_dir):
         return False, {"reason": "SimulareDirectorInexistent"}
     
-    # 必要FișierListă（不包括脚本，脚本位于 backend/scripts/）
+    # 必要FișierListă（不包括Script，Script位于 backend/scripts/）
     required_files = [
         "state.json",
         "simulation_config.json",
@@ -358,29 +358,29 @@ def _check_simulation_prepared(simulation_id: str) -> tuple:
 @simulation_bp.route('/prepare', methods=['POST'])
 def prepare_simulation():
     """
-    准备SimulareMediu（异步任务，LLM智能Generare所有Parametru）
+    准备SimulareMediu（异步Sarcină，LLM智能Generare所有Parametru）
     
     这Da一个耗时操作，Interfață会ImediatReturnaretask_id，
-    使用 GET /api/simulation/prepare/status Interogare进度
+    Utilizare GET /api/simulation/prepare/status InterogareProgres
     
     特性：
     - Automat检测已Finalizare准备工作，避免重复Generare
     - dacă已准备Finalizare，直接Returnare已有Rezultat
-    - 支持强制重新Generare（force_regenerate=true）
+    - Suportă强制重新Generare（force_regenerate=true）
     
     步骤：
     1. VerificareDaNu已有Finalizare准备工作
     2. de laZepGraf读取并过滤Entitate
     3. 为每个EntitateGenerareOASIS Agent Profile（带Reîncercare机制）
     4. LLM智能GenerareSimulareConfigurare（带Reîncercare机制）
-    5. SalvareConfigurareFișierși预设脚本
+    5. SalvareConfigurareFișierși预设Script
     
     Cerere（JSON）：
         {
             "simulation_id": "sim_xxxx",                   // 必填，SimulareID
             "entity_types": ["Student", "PublicFigure"],  // 可选，指定EntitateTip
             "use_llm_for_profiles": true,                 // 可选，DaNu用LLMGenerare人设
-            "parallel_profile_count": 5,                  // 可选，并行Generare人设数量，Implicit5
+            "parallel_profile_count": 5,                  // 可选，ParalelGenerare人设数量，Implicit5
             "force_regenerate": false                     // 可选，强制重新Generare，Implicitfalse
         }
     
@@ -389,9 +389,9 @@ def prepare_simulation():
             "success": true,
             "data": {
                 "simulation_id": "sim_xxxx",
-                "task_id": "task_xxxx",           // 新任务时Returnare
+                "task_id": "task_xxxx",           // 新Sarcină时Returnare
                 "status": "preparing|ready",
-                "message": "准备任务已启动|已有Finalizare准备工作",
+                "message": "准备Sarcină已启动|已有Finalizare准备工作",
                 "already_prepared": true|false    // DaNu已准备Finalizare
             }
         }
@@ -442,14 +442,14 @@ def prepare_simulation():
                     }
                 })
             else:
-                logger.info(f"Simulare {simulation_id} 未准备Finalizare，将启动准备任务")
+                logger.info(f"Simulare {simulation_id} 未准备Finalizare，将启动准备Sarcină")
         
-        # de la项目Obținere必要Informații
+        # de laProiectObținere必要Informații
         project = ProjectManager.get_project(state.project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"项目Inexistent: {state.project_id}"
+                "error": f"ProiectInexistent: {state.project_id}"
             }), 404
         
         # ObținereSimulareCerință
@@ -457,17 +457,17 @@ def prepare_simulation():
         if not simulation_requirement:
             return jsonify({
                 "success": False,
-                "error": "项目缺少SimulareCerințăDescriere (simulation_requirement)"
+                "error": "Proiect缺少SimulareCerințăDescriere (simulation_requirement)"
             }), 400
         
-        # Obținere文档文本
+        # ObținereDocumentație文本
         document_text = ProjectManager.get_extracted_text(state.project_id) or ""
         
         entity_types_list = data.get('entity_types')
         use_llm_for_profiles = data.get('use_llm_for_profiles', True)
         parallel_profile_count = data.get('parallel_profile_count', 5)
         
-        # ========== 同步ObținereEntitate数量（în后台任务启动前） ==========
+        # ========== 同步ObținereEntitate数量（în后台Sarcină启动前） ==========
         # 这样前端în调用prepare后Imediat就能Obținerela预期Agent总数
         try:
             logger.info(f"同步ObținereEntitate数量: graph_id={state.graph_id}")
@@ -483,10 +483,10 @@ def prepare_simulation():
             state.entity_types = list(filtered_preview.entity_types)
             logger.info(f"预期Entitate数量: {filtered_preview.filtered_count}, Tip: {filtered_preview.entity_types}")
         except Exception as e:
-            logger.warning(f"同步ObținereEntitate数量Eșec（将în后台任务Reîncercare）: {e}")
-            # Eșec不Impact后续流程，后台任务会重新Obținere
+            logger.warning(f"同步ObținereEntitate数量Eșec（将în后台SarcinăReîncercare）: {e}")
+            # Eșec不Impact后续流程，后台Sarcină会重新Obținere
         
-        # Creare异步任务
+        # Creare异步Sarcină
         task_manager = TaskManager()
         task_id = task_manager.create_task(
             task_type="simulation_prepare",
@@ -500,7 +500,7 @@ def prepare_simulation():
         state.status = SimulationStatus.PREPARING
         manager._save_simulation_state(state)
         
-        # 定义后台任务
+        # 定义后台Sarcină
         def run_prepare():
             try:
                 task_manager.update_task(
@@ -510,12 +510,12 @@ def prepare_simulation():
                     message="Start准备SimulareMediu..."
                 )
                 
-                # 准备Simulare（带进度回调）
-                # 存储阶段进度详情
+                # 准备Simulare（带Progres回调）
+                # 存储阶段Progres详情
                 stage_details = {}
                 
                 def progress_callback(stage, progress, message, **kwargs):
-                    # 计算总进度
+                    # 计算总Progres
                     stage_weights = {
                         "reading": (0, 20),           # 0-20%
                         "generating_profiles": (20, 70),  # 20-70%
@@ -526,12 +526,12 @@ def prepare_simulation():
                     start, end = stage_weights.get(stage, (0, 100))
                     current_progress = int(start + (end - start) * progress / 100)
                     
-                    # Construire详细进度Informații
+                    # Construire详细ProgresInformații
                     stage_names = {
                         "reading": "读取GrafEntitate",
                         "generating_profiles": "GenerareAgent人设",
                         "generating_config": "GenerareSimulareConfigurare",
-                        "copying_scripts": "准备Simulare脚本"
+                        "copying_scripts": "准备SimulareScript"
                     }
                     
                     stage_index = list(stage_weights.keys()).index(stage) + 1 if stage in stage_weights else 1
@@ -546,7 +546,7 @@ def prepare_simulation():
                         "item_name": kwargs.get("item_name", "")
                     }
                     
-                    # Construire详细进度Informații
+                    # Construire详细ProgresInformații
                     detail = stage_details[stage]
                     progress_detail_data = {
                         "current_stage": stage,
@@ -585,7 +585,7 @@ def prepare_simulation():
                     parallel_profile_count=parallel_profile_count
                 )
                 
-                # 任务Finalizare
+                # SarcinăFinalizare
                 task_manager.complete_task(
                     task_id,
                     result=result_state.to_simple_dict()
@@ -612,7 +612,7 @@ def prepare_simulation():
                 "simulation_id": simulation_id,
                 "task_id": task_id,
                 "status": "preparing",
-                "message": "准备任务已启动，请通过 /api/simulation/prepare/status Interogare进度",
+                "message": "准备Sarcină已启动，请通过 /api/simulation/prepare/status InterogareProgres",
                 "already_prepared": False,
                 "expected_entities_count": state.entities_count,  # 预期Agent总数
                 "entity_types": state.entity_types  # EntitateTipListă
@@ -626,7 +626,7 @@ def prepare_simulation():
         }), 404
         
     except Exception as e:
-        logger.error(f"启动准备任务Eșec: {str(e)}")
+        logger.error(f"启动准备SarcinăEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -637,10 +637,10 @@ def prepare_simulation():
 @simulation_bp.route('/prepare/status', methods=['POST'])
 def get_prepare_status():
     """
-    Interogare准备任务进度
+    Interogare准备SarcinăProgres
     
-    支持两种Interogare方式：
-    1. 通过task_idInterogare正în进行任务进度
+    Suportă两种Interogare方式：
+    1. 通过task_idInterogare正în进行SarcinăProgres
     2. 通过simulation_idVerificareDaNu已有Finalizare准备工作
     
     Cerere（JSON）：
@@ -709,7 +709,7 @@ def get_prepare_status():
         task = task_manager.get_task(task_id)
         
         if not task:
-            # 任务Inexistent，但dacă有simulation_id，VerificareDaNu已准备Finalizare
+            # SarcinăInexistent，但dacă有simulation_id，VerificareDaNu已准备Finalizare
             if simulation_id:
                 is_prepared, prepare_info = _check_simulation_prepared(simulation_id)
                 if is_prepared:
@@ -720,7 +720,7 @@ def get_prepare_status():
                             "task_id": task_id,
                             "status": "ready",
                             "progress": 100,
-                            "message": "任务已Finalizare（准备工作已存în）",
+                            "message": "Sarcină已Finalizare（准备工作已存în）",
                             "already_prepared": True,
                             "prepare_info": prepare_info
                         }
@@ -728,7 +728,7 @@ def get_prepare_status():
             
             return jsonify({
                 "success": False,
-                "error": f"任务Inexistent: {task_id}"
+                "error": f"SarcinăInexistent: {task_id}"
             }), 404
         
         task_dict = task.to_dict()
@@ -740,7 +740,7 @@ def get_prepare_status():
         })
         
     except Exception as e:
-        logger.error(f"Interogare任务StareEșec: {str(e)}")
+        logger.error(f"InterogareSarcinăStareEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e)
@@ -786,7 +786,7 @@ def list_simulations():
     列出所有Simulare
     
     QueryParametru：
-        project_id: 按项目ID过滤（可选）
+        project_id: 按ProiectID过滤（可选）
     """
     try:
         project_id = request.args.get('project_id')
@@ -871,9 +871,9 @@ def _get_report_id_for_simulation(simulation_id: str) -> str:
 @simulation_bp.route('/history', methods=['GET'])
 def get_simulation_history():
     """
-    ObținereIstoricSimulareListă（带项目详情）
+    ObținereIstoricSimulareListă（带Proiect详情）
     
-    用于首页Istoric项目展示，Returnare包含项目Nume、Descriere等丰富InformațiiSimulareListă
+    用于AcasăIstoricProiect展示，Returnare包含ProiectNume、Descriere等丰富InformațiiSimulareListă
     
     QueryParametru：
         limit: Returnare数量限制（Implicit20）
@@ -886,7 +886,7 @@ def get_simulation_history():
                     "simulation_id": "sim_xxxx",
                     "project_id": "proj_xxxx",
                     "project_name": "武大Opinie publicăAnaliză",
-                    "simulation_requirement": "dacă武汉大学发布...",
+                    "simulation_requirement": "dacă武汉大学Publicare...",
                     "status": "completed",
                     "entities_count": 68,
                     "profiles_count": 68,
@@ -930,19 +930,19 @@ def get_simulation_history():
                 sim_dict["total_simulation_hours"] = 0
                 recommended_rounds = 0
             
-            # ObținereRulareStare（de la run_state.json 读取Utilizator设置实际轮数）
+            # ObținereRulareStare（de la run_state.json 读取UtilizatorSetări实际轮数）
             run_state = SimulationRunner.get_run_state(sim.simulation_id)
             if run_state:
                 sim_dict["current_round"] = run_state.current_round
                 sim_dict["runner_status"] = run_state.runner_status.value
-                # 使用Utilizator设置 total_rounds，若无则使用推荐轮数
+                # UtilizareUtilizatorSetări total_rounds，若无则Utilizare推荐轮数
                 sim_dict["total_rounds"] = run_state.total_rounds if run_state.total_rounds > 0 else recommended_rounds
             else:
                 sim_dict["current_round"] = 0
                 sim_dict["runner_status"] = "idle"
                 sim_dict["total_rounds"] = recommended_rounds
             
-            # Obținere关联项目FișierListă（最多3个）
+            # Obținere关联ProiectFișierListă（最多3个）
             project = ProjectManager.get_project(sim.project_id)
             if project and hasattr(project, 'files') and project.files:
                 sim_dict["files"] = [
@@ -955,10 +955,10 @@ def get_simulation_history():
             # Obținere关联 report_id（查找该 simulation 最新 report）
             sim_dict["report_id"] = _get_report_id_for_simulation(sim.simulation_id)
             
-            # 添加版本号
+            # 添加Versiune号
             sim_dict["version"] = "v1.0.2"
             
-            # 格式化Dată
+            # Format化Dată
             try:
                 created_date = sim_dict.get("created_at", "")[:10]
                 sim_dict["created_date"] = created_date
@@ -1023,7 +1023,7 @@ def get_simulation_profiles(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/profiles/realtime', methods=['GET'])
 def get_simulation_profiles_realtime(simulation_id: str):
     """
-    实时ObținereSimulareAgent Profile（用于înGenerare过程实时查看进度）
+    实时ObținereSimulareAgent Profile（用于înGenerare过程实时查看Progres）
     
     și /profiles Interfață区别：
     - 直接读取Fișier，不经过 SimulationManager
@@ -1133,7 +1133,7 @@ def get_simulation_profiles_realtime(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/config/realtime', methods=['GET'])
 def get_simulation_config_realtime(simulation_id: str):
     """
-    实时ObținereSimulareConfigurare（用于înGenerare过程实时查看进度）
+    实时ObținereSimulareConfigurare（用于înGenerare过程实时查看Progres）
     
     și /config Interfață区别：
     - 直接读取Fișier，不经过 SimulationManager
@@ -1318,7 +1318,7 @@ def download_simulation_config(simulation_id: str):
 @simulation_bp.route('/script/<script_name>/download', methods=['GET'])
 def download_simulation_script(script_name: str):
     """
-    载SimulareRulare脚本Fișier（通用脚本，位于 backend/scripts/）
+    载SimulareRulareScriptFișier（通用Script，位于 backend/scripts/）
     
     script_name可选Valoare：
         - run_twitter_simulation.py
@@ -1327,10 +1327,10 @@ def download_simulation_script(script_name: str):
         - action_logger.py
     """
     try:
-        # 脚本位于 backend/scripts/ Director
+        # Script位于 backend/scripts/ Director
         scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../scripts'))
         
-        # Verificare脚本Nume
+        # VerificareScriptNume
         allowed_scripts = [
             "run_twitter_simulation.py",
             "run_reddit_simulation.py", 
@@ -1341,7 +1341,7 @@ def download_simulation_script(script_name: str):
         if script_name not in allowed_scripts:
             return jsonify({
                 "success": False,
-                "error": f"Necunoscut脚本: {script_name}，可选: {allowed_scripts}"
+                "error": f"NecunoscutScript: {script_name}，可选: {allowed_scripts}"
             }), 400
         
         script_path = os.path.join(scripts_dir, script_name)
@@ -1349,7 +1349,7 @@ def download_simulation_script(script_name: str):
         if not os.path.exists(script_path):
             return jsonify({
                 "success": False,
-                "error": f"脚本FișierInexistent: {script_name}"
+                "error": f"ScriptFișierInexistent: {script_name}"
             }), 404
         
         return send_file(
@@ -1359,7 +1359,7 @@ def download_simulation_script(script_name: str):
         )
         
     except Exception as e:
-        logger.error(f"载脚本Eșec: {str(e)}")
+        logger.error(f"载ScriptEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1367,7 +1367,7 @@ def download_simulation_script(script_name: str):
         }), 500
 
 
-# ============== ProfileGenerareInterfață（独立使用） ==============
+# ============== ProfileGenerareInterfață（独立Utilizare） ==============
 
 @simulation_bp.route('/generate-profiles', methods=['POST'])
 def generate_profiles():
@@ -1457,16 +1457,16 @@ def start_simulation():
             "force": false                         // 可选: 强制重新Start（会OprireRulareSimulare并清理Jurnal）
         }
 
-    关于 force Parametru：
+    Despre force Parametru：
         - 启用后，dacăSimulare正înRularesau已Finalizare，会先Oprire并清理RulareJurnal
         - 清理Conținut包括：run_state.json, actions.jsonl, simulation.log 等
         - 不会清理ConfigurareFișier（simulation_config.json）și profile Fișier
         - 适用于需要重新RulareSimulare场景
 
-    关于 enable_graph_memory_update：
+    Despre enable_graph_memory_update：
         - 启用后，Simulare所有Agent活动（发帖、评论、点赞等）都会实时ActualizarelaZepGraf
         - 这可以让Graf"记住"Simulare过程，用于后续AnalizăsauAIConversație
-        - 需要Simulare关联项目有Valid graph_id
+        - 需要Simulare关联Proiect有Valid graph_id
         - 采用În lotActualizare机制，减少API调用次数
 
     Returnare：
@@ -1554,7 +1554,7 @@ def start_simulation():
                         else:
                             return jsonify({
                                 "success": False,
-                                "error": f"Simulare正înRulare，请先调用 /stop InterfațăOprire，sau使用 force=true 强制重新Start"
+                                "error": f"Simulare正înRulare，请先调用 /stop InterfațăOprire，sauUtilizare force=true 强制重新Start"
                             }), 400
 
                 # dacăDa强制模式，清理RulareJurnal
@@ -1565,8 +1565,8 @@ def start_simulation():
                         logger.warning(f"清理Jurnal时出现Avertisment: {cleanup_result.get('errors')}")
                     force_restarted = True
 
-                # 进程Inexistentsau已结束，重置Stare为 ready
-                logger.info(f"Simulare {simulation_id} 准备工作已Finalizare，重置Stare为 ready（原Stare: {state.status.value}）")
+                # 进程Inexistentsau已结束，ResetareStare为 ready
+                logger.info(f"Simulare {simulation_id} 准备工作已Finalizare，ResetareStare为 ready（原Stare: {state.status.value}）")
                 state.status = SimulationStatus.READY
                 manager._save_simulation_state(state)
             else:
@@ -1579,10 +1579,10 @@ def start_simulation():
         # ObținereGrafID（用于GrafMemorieActualizare）
         graph_id = None
         if enable_graph_memory_update:
-            # de laSimulareStaresau项目Obținere graph_id
+            # de laSimulareStaresauProiectObținere graph_id
             graph_id = state.graph_id
             if not graph_id:
-                # 尝试de la项目Obținere
+                # 尝试de laProiectObținere
                 project = ProjectManager.get_project(state.project_id)
                 if project:
                     graph_id = project.graph_id
@@ -1590,7 +1590,7 @@ def start_simulation():
             if not graph_id:
                 return jsonify({
                     "success": False,
-                    "error": "启用GrafMemorieActualizare需要Valid graph_id，请确保项目已ConstruireGraf"
+                    "error": "启用GrafMemorieActualizare需要Valid graph_id，请确保Proiect已ConstruireGraf"
                 }), 400
             
             logger.info(f"启用GrafMemorieActualizare: simulation_id={simulation_id}, graph_id={graph_id}")
@@ -1758,7 +1758,7 @@ def get_run_status(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/run-status/detail', methods=['GET'])
 def get_run_status_detail(simulation_id: str):
     """
-    ObținereSimulareRulare详细Stare（包含所有动作）
+    ObținereSimulareRulare详细Stare（包含所有Acțiune）
     
     用于前端展示实时动态
     
@@ -1787,8 +1787,8 @@ def get_run_status_detail(simulation_id: str):
                     },
                     ...
                 ],
-                "twitter_actions": [...],  # Twitter Platformă所有动作
-                "reddit_actions": [...]    # Reddit Platformă所有动作
+                "twitter_actions": [...],  # Twitter Platformă所有Acțiune
+                "reddit_actions": [...]    # Reddit Platformă所有Acțiune
             }
         }
     """
@@ -1808,13 +1808,13 @@ def get_run_status_detail(simulation_id: str):
                 }
             })
         
-        # ObținereComplet动作Listă
+        # ObținereCompletAcțiuneListă
         all_actions = SimulationRunner.get_all_actions(
             simulation_id=simulation_id,
             platform=platform_filter
         )
         
-        # 分PlatformăObținere动作
+        # 分PlatformăObținereAcțiune
         twitter_actions = SimulationRunner.get_all_actions(
             simulation_id=simulation_id,
             platform="twitter"
@@ -1825,7 +1825,7 @@ def get_run_status_detail(simulation_id: str):
             platform="reddit"
         ) if not platform_filter or platform_filter == "reddit" else []
         
-        # ObținereCurent轮次动作（recent_actions 只展示最新一轮）
+        # ObținereCurent轮次Acțiune（recent_actions 只展示最新一轮）
         current_round = run_state.current_round
         recent_actions = SimulationRunner.get_all_actions(
             simulation_id=simulation_id,
@@ -1859,7 +1859,7 @@ def get_run_status_detail(simulation_id: str):
 @simulation_bp.route('/<simulation_id>/actions', methods=['GET'])
 def get_simulation_actions(simulation_id: str):
     """
-    ObținereSimulareAgent动作Istoric
+    ObținereSimulareAgentAcțiuneIstoric
     
     QueryParametru：
         limit: Returnare数量（Implicit100）
@@ -1902,7 +1902,7 @@ def get_simulation_actions(simulation_id: str):
         })
         
     except Exception as e:
-        logger.error(f"Obținere动作IstoricEșec: {str(e)}")
+        logger.error(f"ObținereAcțiuneIstoricEșec: {str(e)}")
         return jsonify({
             "success": False,
             "error": str(e),
@@ -1915,7 +1915,7 @@ def get_simulation_timeline(simulation_id: str):
     """
     ObținereSimulareTimp线（按轮次汇总）
     
-    用于前端展示进度条șiTimp线视图
+    用于前端展示Progres条șiTimp线视图
     
     QueryParametru：
         start_round: 起始轮次（Implicit0）
@@ -1955,7 +1955,7 @@ def get_agent_stats(simulation_id: str):
     """
     Obținere每个Agent统计Informații
     
-    用于前端展示Agent活跃度排行、动作分布等
+    用于前端展示Agent活跃度排行、Acțiune分布等
     """
     try:
         stats = SimulationRunner.get_agent_stats(simulation_id)
@@ -2281,7 +2281,7 @@ def interview_agents_batch():
                 },
                 {
                     "agent_id": 1,
-                    "prompt": "你对B有什么看法？"  // 不指定platform则使用ImplicitValoare
+                    "prompt": "你对B有什么看法？"  // 不指定platform则UtilizareImplicitValoare
                 }
             ],
             "platform": "reddit",              // 可选，ImplicitPlatformă（被每项platform覆盖）
@@ -2404,14 +2404,14 @@ def interview_agents_batch():
 @simulation_bp.route('/interview/all', methods=['POST'])
 def interview_all_agents():
     """
-    全局Interviu - 使用相同问题Interviu所有Agent
+    全局Interviu - Utilizare相同问题Interviu所有Agent
 
     注意：此Funcționalitate需要SimulareMediu处于RulareStare
 
     Cerere（JSON）：
         {
             "simulation_id": "sim_xxxx",            // 必填，SimulareID
-            "prompt": "你对这件事整体有什么看法？",  // 必填，Interviu问题（所有Agent使用相同问题）
+            "prompt": "你对这件事整体有什么看法？",  // 必填，Interviu问题（所有AgentUtilizare相同问题）
             "platform": "reddit",                   // 可选，指定Platformă（twitter/reddit）
                                                     // 不指定时：双PlatformăSimulare每个Agent同时Interviu两个Platformă
             "timeout": 180                          // 可选，超时Timp（秒），Implicit180
@@ -2646,10 +2646,10 @@ def close_simulation_env():
     """
     ÎnchidereSimulareMediu
     
-    cătreSimulare发送ÎnchidereMediu命令，使其优雅退出等待命令模式。
+    cătreSimulareTrimiteÎnchidereMediu命令，使其优雅Ieșire等待命令模式。
     
     注意：这不同于 /stop Interfață，/stop 会强制终止进程，
-    而此Interfață会让Simulare优雅地ÎnchidereMediu并退出。
+    而此Interfață会让Simulare优雅地ÎnchidereMediu并Ieșire。
     
     Cerere（JSON）：
         {
@@ -2661,7 +2661,7 @@ def close_simulation_env():
         {
             "success": true,
             "data": {
-                "message": "MediuÎnchidere命令已发送",
+                "message": "MediuÎnchidere命令已Trimite",
                 "result": {...},
                 "timestamp": "2025-12-08T10:00:01"
             }

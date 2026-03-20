@@ -1,6 +1,6 @@
 """
 Graf相关API路由
-采用项目文机制，Serviciu端持久化Stare
+采用Proiect文机制，Serviciu端持久化Stare
 """
 
 import os
@@ -30,19 +30,19 @@ def allowed_file(filename: str) -> bool:
     return ext in Config.ALLOWED_EXTENSIONS
 
 
-# ============== 项目管理Interfață ==============
+# ============== Proiect管理Interfață ==============
 
 @graph_bp.route('/project/<project_id>', methods=['GET'])
 def get_project(project_id: str):
     """
-    Obținere项目详情
+    ObținereProiect详情
     """
     project = ProjectManager.get_project(project_id)
     
     if not project:
         return jsonify({
             "success": False,
-            "error": f"项目Inexistent: {project_id}"
+            "error": f"ProiectInexistent: {project_id}"
         }), 404
     
     return jsonify({
@@ -54,7 +54,7 @@ def get_project(project_id: str):
 @graph_bp.route('/project/list', methods=['GET'])
 def list_projects():
     """
-    列出所有项目
+    列出所有Proiect
     """
     limit = request.args.get('limit', 50, type=int)
     projects = ProjectManager.list_projects(limit=limit)
@@ -69,36 +69,36 @@ def list_projects():
 @graph_bp.route('/project/<project_id>', methods=['DELETE'])
 def delete_project(project_id: str):
     """
-    Ștergere项目
+    ȘtergereProiect
     """
     success = ProjectManager.delete_project(project_id)
     
     if not success:
         return jsonify({
             "success": False,
-            "error": f"项目InexistentsauȘtergereEșec: {project_id}"
+            "error": f"ProiectInexistentsauȘtergereEșec: {project_id}"
         }), 404
     
     return jsonify({
         "success": True,
-        "message": f"项目已Ștergere: {project_id}"
+        "message": f"Proiect已Ștergere: {project_id}"
     })
 
 
 @graph_bp.route('/project/<project_id>/reset', methods=['POST'])
 def reset_project(project_id: str):
     """
-    重置项目Stare（用于重新ConstruireGraf）
+    ResetareProiectStare（用于重新ConstruireGraf）
     """
     project = ProjectManager.get_project(project_id)
     
     if not project:
         return jsonify({
             "success": False,
-            "error": f"项目Inexistent: {project_id}"
+            "error": f"ProiectInexistent: {project_id}"
         }), 404
     
-    # 重置laOntologie已GenerareStare
+    # ResetarelaOntologie已GenerareStare
     if project.ontology:
         project.status = ProjectStatus.ONTOLOGY_GENERATED
     else:
@@ -111,7 +111,7 @@ def reset_project(project_id: str):
     
     return jsonify({
         "success": True,
-        "message": f"项目已重置: {project_id}",
+        "message": f"Proiect已Resetare: {project_id}",
         "data": project.to_dict()
     })
 
@@ -128,7 +128,7 @@ def generate_ontology():
     Parametru：
         files: 传Fișier（PDF/MD/TXT），可多个
         simulation_requirement: SimulareCerințăDescriere（必填）
-        project_name: 项目Nume（可选）
+        project_name: ProiectNume（可选）
         additional_context: 额外说明（可选）
         
     Returnare：
@@ -154,7 +154,7 @@ def generate_ontology():
         project_name = request.form.get('project_name', 'Unnamed Project')
         additional_context = request.form.get('additional_context', '')
         
-        logger.debug(f"项目Nume: {project_name}")
+        logger.debug(f"ProiectNume: {project_name}")
         logger.debug(f"SimulareCerință: {simulation_requirement[:100]}...")
         
         if not simulation_requirement:
@@ -168,13 +168,13 @@ def generate_ontology():
         if not uploaded_files or all(not f.filename for f in uploaded_files):
             return jsonify({
                 "success": False,
-                "error": "请至少传一个文档Fișier"
+                "error": "请至少传一个DocumentațieFișier"
             }), 400
         
-        # Creare项目
+        # CreareProiect
         project = ProjectManager.create_project(name=project_name)
         project.simulation_requirement = simulation_requirement
-        logger.info(f"Creare项目: {project.project_id}")
+        logger.info(f"CreareProiect: {project.project_id}")
         
         # SalvareFișier并提取文本
         document_texts = []
@@ -182,7 +182,7 @@ def generate_ontology():
         
         for file in uploaded_files:
             if file and file.filename and allowed_file(file.filename):
-                # SalvareFișierla项目Director
+                # SalvareFișierlaProiectDirector
                 file_info = ProjectManager.save_file_to_project(
                     project.project_id, 
                     file, 
@@ -203,7 +203,7 @@ def generate_ontology():
             ProjectManager.delete_project(project.project_id)
             return jsonify({
                 "success": False,
-                "error": "没有SuccesProcesare任何文档，请VerificareFișier格式"
+                "error": "没有SuccesProcesare任何Documentație，请VerificareFișierFormat"
             }), 400
         
         # Salvare提取文本
@@ -220,7 +220,7 @@ def generate_ontology():
             additional_context=additional_context if additional_context else None
         )
         
-        # SalvareOntologiela项目
+        # SalvareOntologielaProiect
         entity_count = len(ontology.get("entity_types", []))
         edge_count = len(ontology.get("edge_types", []))
         logger.info(f"OntologieGenerareFinalizare: {entity_count} 个EntitateTip, {edge_count} 个RelațieTip")
@@ -232,7 +232,7 @@ def generate_ontology():
         project.analysis_summary = ontology.get("analysis_summary", "")
         project.status = ProjectStatus.ONTOLOGY_GENERATED
         ProjectManager.save_project(project)
-        logger.info(f"=== OntologieGenerareFinalizare === 项目ID: {project.project_id}")
+        logger.info(f"=== OntologieGenerareFinalizare === ProiectID: {project.project_id}")
         
         return jsonify({
             "success": True,
@@ -275,7 +275,7 @@ def build_graph():
             "data": {
                 "project_id": "proj_xxxx",
                 "task_id": "task_xxxx",
-                "message": "GrafConstruire任务已启动"
+                "message": "GrafConstruireSarcină已启动"
             }
         }
     """
@@ -304,21 +304,21 @@ def build_graph():
                 "error": "请提供 project_id"
             }), 400
         
-        # Obținere项目
+        # ObținereProiect
         project = ProjectManager.get_project(project_id)
         if not project:
             return jsonify({
                 "success": False,
-                "error": f"项目Inexistent: {project_id}"
+                "error": f"ProiectInexistent: {project_id}"
             }), 404
         
-        # Verificare项目Stare
+        # VerificareProiectStare
         force = data.get('force', False)  # 强制重新Construire
         
         if project.status == ProjectStatus.CREATED:
             return jsonify({
                 "success": False,
-                "error": "项目尚未GenerareOntologie，请先调用 /ontology/generate"
+                "error": "Proiect尚未GenerareOntologie，请先调用 /ontology/generate"
             }), 400
         
         if project.status == ProjectStatus.GRAPH_BUILDING and not force:
@@ -328,7 +328,7 @@ def build_graph():
                 "task_id": project.graph_build_task_id
             }), 400
         
-        # dacă强制重建，重置Stare
+        # dacă强制重建，ResetareStare
         if force and project.status in [ProjectStatus.GRAPH_BUILDING, ProjectStatus.FAILED, ProjectStatus.GRAPH_COMPLETED]:
             project.status = ProjectStatus.ONTOLOGY_GENERATED
             project.graph_id = None
@@ -340,7 +340,7 @@ def build_graph():
         chunk_size = data.get('chunk_size', project.chunk_size or Config.DEFAULT_CHUNK_SIZE)
         chunk_overlap = data.get('chunk_overlap', project.chunk_overlap or Config.DEFAULT_CHUNK_OVERLAP)
         
-        # Actualizare项目Configurare
+        # ActualizareProiectConfigurare
         project.chunk_size = chunk_size
         project.chunk_overlap = chunk_overlap
         
@@ -360,17 +360,17 @@ def build_graph():
                 "error": "NegăsitOntologie定义"
             }), 400
         
-        # Creare异步任务
+        # Creare异步Sarcină
         task_manager = TaskManager()
         task_id = task_manager.create_task(f"ConstruireGraf: {graph_name}")
-        logger.info(f"CreareGrafConstruire任务: task_id={task_id}, project_id={project_id}")
+        logger.info(f"CreareGrafConstruireSarcină: task_id={task_id}, project_id={project_id}")
         
-        # Actualizare项目Stare
+        # ActualizareProiectStare
         project.status = ProjectStatus.GRAPH_BUILDING
         project.graph_build_task_id = task_id
         ProjectManager.save_project(project)
         
-        # 启动后台任务
+        # 启动后台Sarcină
         def build_task():
             build_logger = get_logger('mirofish.build')
             try:
@@ -405,14 +405,14 @@ def build_graph():
                 )
                 graph_id = builder.create_graph(name=graph_name)
                 
-                # Actualizare项目graph_id
+                # ActualizareProiectgraph_id
                 project.graph_id = graph_id
                 ProjectManager.save_project(project)
                 
-                # 设置Ontologie
+                # SetăriOntologie
                 task_manager.update_task(
                     task_id,
-                    message="设置Ontologie定义...",
+                    message="SetăriOntologie定义...",
                     progress=15
                 )
                 builder.set_ontology(graph_id, ontology)
@@ -464,7 +464,7 @@ def build_graph():
                 )
                 graph_data = builder.get_graph_data(graph_id)
                 
-                # Actualizare项目Stare
+                # ActualizareProiectStare
                 project.status = ProjectStatus.GRAPH_COMPLETED
                 ProjectManager.save_project(project)
                 
@@ -488,7 +488,7 @@ def build_graph():
                 )
                 
             except Exception as e:
-                # Actualizare项目Stare为Eșec
+                # ActualizareProiectStare为Eșec
                 build_logger.error(f"[{task_id}] GrafConstruireEșec: {str(e)}")
                 build_logger.debug(traceback.format_exc())
                 
@@ -512,7 +512,7 @@ def build_graph():
             "data": {
                 "project_id": project_id,
                 "task_id": task_id,
-                "message": "GrafConstruire任务已启动，请通过 /task/{task_id} Interogare进度"
+                "message": "GrafConstruireSarcină已启动，请通过 /task/{task_id} InterogareProgres"
             }
         })
         
@@ -524,19 +524,19 @@ def build_graph():
         }), 500
 
 
-# ============== 任务InterogareInterfață ==============
+# ============== SarcinăInterogareInterfață ==============
 
 @graph_bp.route('/task/<task_id>', methods=['GET'])
 def get_task(task_id: str):
     """
-    Interogare任务Stare
+    InterogareSarcinăStare
     """
     task = TaskManager().get_task(task_id)
     
     if not task:
         return jsonify({
             "success": False,
-            "error": f"任务Inexistent: {task_id}"
+            "error": f"SarcinăInexistent: {task_id}"
         }), 404
     
     return jsonify({
@@ -548,7 +548,7 @@ def get_task(task_id: str):
 @graph_bp.route('/tasks', methods=['GET'])
 def list_tasks():
     """
-    列出所有任务
+    列出所有Sarcină
     """
     tasks = TaskManager().list_tasks()
     

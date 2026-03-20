@@ -30,7 +30,7 @@
               <span class="stat-value mono">{{ runStatus.twitter_actions_count || 0 }}</span>
             </span>
           </div>
-          <!-- 可用动作提示 -->
+          <!-- 可用AcțiuneIndicație -->
           <div class="actions-tooltip">
             <div class="tooltip-title">Available Actions</div>
             <div class="tooltip-actions">
@@ -71,7 +71,7 @@
               <span class="stat-value mono">{{ runStatus.reddit_actions_count || 0 }}</span>
             </span>
           </div>
-          <!-- 可用动作提示 -->
+          <!-- 可用AcțiuneIndicație -->
           <div class="actions-tooltip">
             <div class="tooltip-title">Available Actions</div>
             <div class="tooltip-actions">
@@ -97,7 +97,7 @@
           @click="handleNextStep"
         >
           <span v-if="isGeneratingReport" class="loading-spinner-small"></span>
-          {{ isGeneratingReport ? '启动中...' : '开始生成结果报告' }} 
+          {{ isGeneratingReport ? '启动...' : 'StartGenerareRezultatRaport' }} 
           <span v-if="!isGeneratingReport" class="arrow-icon">→</span>
         </button>
       </div>
@@ -248,7 +248,7 @@
                   </div>
                 </template>
 
-                <!-- 通用回退：未知类型sau有 content 但未被上述处理 -->
+                <!-- 通用回退：未知Tipsau有 content 但未被述Procesare -->
                 <div v-if="!['CREATE_POST', 'QUOTE_POST', 'REPOST', 'LIKE_POST', 'CREATE_COMMENT', 'SEARCH_POSTS', 'FOLLOW', 'UPVOTE_POST', 'DOWNVOTE_POST', 'DO_NOTHING'].includes(action.action_type) && action.action_args?.content" class="content-text">
                   {{ action.action_args.content }}
                 </div>
@@ -298,7 +298,7 @@ import { generateReport } from '../api/report'
 
 const props = defineProps({
   simulationId: String,
-  maxRounds: Number, // 从Step2传入的最大轮数
+  maxRounds: Number, // de laStep2传入最大轮数
   minutesPerRound: {
     type: Number,
     default: 30 // 默认每轮30分钟
@@ -314,22 +314,22 @@ const router = useRouter()
 
 // State
 const isGeneratingReport = ref(false)
-const phase = ref(0) // 0: 未开始, 1: În rulare, 2: Finalizat
+const phase = ref(0) // 0: 未Start, 1: În rulare, 2: Finalizat
 const isStarting = ref(false)
 const isStopping = ref(false)
 const startError = ref(null)
 const runStatus = ref({})
-const allActions = ref([]) // 所有动作（增量累积）
-const actionIds = ref(new Set()) // 用于去重的动作ID集合
+const allActions = ref([]) // 所有Acțiune（增量累积）
+const actionIds = ref(new Set()) // 用于去重AcțiuneIDSet
 const scrollContainer = ref(null)
 
 // Computed
-// 按Timp顺序显示动作（最新的在最后面，即底部）
+// 按Timp顺序显示Acțiune（最新în最后面，即底部）
 const chronologicalActions = computed(() => {
   return allActions.value
 })
 
-// 各Platformă动作计数
+// 各PlatformăAcțiune计数
 const twitterActionsCount = computed(() => {
   return allActions.value.filter(a => a.platform === 'twitter').length
 })
@@ -338,7 +338,7 @@ const redditActionsCount = computed(() => {
   return allActions.value.filter(a => a.platform === 'reddit').length
 })
 
-// Format化模拟流逝Timp（根据轮次和每轮分钟数计算）
+// Format化Simulare流逝Timp（根据轮次și每轮分钟数计算）
 const formatElapsedTime = (currentRound) => {
   if (!currentRound || currentRound <= 0) return '0h 0m'
   const totalMinutes = currentRound * props.minutesPerRound
@@ -347,12 +347,12 @@ const formatElapsedTime = (currentRound) => {
   return `${hours}h ${minutes}m`
 }
 
-// TwitterPlatformă的模拟流逝Timp
+// TwitterPlatformăSimulare流逝Timp
 const twitterElapsedTime = computed(() => {
   return formatElapsedTime(runStatus.value.twitter_current_round || 0)
 })
 
-// RedditPlatformă的模拟流逝Timp
+// RedditPlatformăSimulare流逝Timp
 const redditElapsedTime = computed(() => {
   return formatElapsedTime(runStatus.value.reddit_current_round || 0)
 })
@@ -362,7 +362,7 @@ const addLog = (msg) => {
   emit('add-log', msg)
 }
 
-// Resetare所有状态（用于重新启动模拟）
+// Resetare所有Stare（用于重新启动Simulare）
 const resetAllState = () => {
   phase.value = 0
   runStatus.value = {}
@@ -373,46 +373,46 @@ const resetAllState = () => {
   startError.value = null
   isStarting.value = false
   isStopping.value = false
-  stopPolling()  // 停止之前可能存在的轮询
+  stopPolling()  // Oprire之前可能存în轮询
 }
 
-// 启动模拟
+// 启动Simulare
 const doStartSimulation = async () => {
   if (!props.simulationId) {
-    addLog('错误：缺少 simulationId')
+    addLog('Eroare：缺少 simulationId')
     return
   }
   
-  // 先Resetare所有状态，确保不会受到上一次模拟的影响
+  // 先Resetare所有Stare，确保不会受la一次Simulare影响
   resetAllState()
   
   isStarting.value = true
   startError.value = null
-  addLog('正在启动双Platformă并行模拟...')
+  addLog('正în启动双PlatformăParalelSimulare...')
   emit('update-status', 'processing')
   
   try {
     const params = {
       simulation_id: props.simulationId,
       platform: 'parallel',
-      force: true,  // 强制重新开始
-      enable_graph_memory_update: true  // 开启动态图谱更新
+      force: true,  // 强制重新Start
+      enable_graph_memory_update: true  // 开启动态GrafActualizare
     }
     
     if (props.maxRounds) {
       params.max_rounds = props.maxRounds
-      addLog(`Setări最大模拟轮数: ${props.maxRounds}`)
+      addLog(`Setări最大Simulare轮数: ${props.maxRounds}`)
     }
     
-    addLog('已开启动态图谱更新模式')
+    addLog('已开启动态GrafActualizare模式')
     
     const res = await startSimulation(params)
     
     if (res.success && res.data) {
       if (res.data.force_restarted) {
-        addLog('✓ 已清理旧的模拟Jurnal，重新开始模拟')
+        addLog('✓ 已清理旧SimulareJurnal，重新StartSimulare')
       }
-      addLog('✓ 模拟引擎启动成功')
+      addLog('✓ Simulare引擎启动Succes')
       addLog(`  ├─ PID: ${res.data.process_pid || '-'}`)
       
       phase.value = 1
@@ -421,45 +421,45 @@ const doStartSimulation = async () => {
       startStatusPolling()
       startDetailPolling()
     } else {
-      startError.value = res.error || '启动失败'
-      addLog(`✗ 启动失败: ${res.error || '未知错误'}`)
+      startError.value = res.error || '启动Eșec'
+      addLog(`✗ 启动Eșec: ${res.error || '未知Eroare'}`)
       emit('update-status', 'error')
     }
   } catch (err) {
     startError.value = err.message
-    addLog(`✗ 启动异常: ${err.message}`)
+    addLog(`✗ 启动Excepție: ${err.message}`)
     emit('update-status', 'error')
   } finally {
     isStarting.value = false
   }
 }
 
-// 停止模拟
+// OprireSimulare
 const handleStopSimulation = async () => {
   if (!props.simulationId) return
   
   isStopping.value = true
-  addLog('正在停止模拟...')
+  addLog('正înOprireSimulare...')
   
   try {
     const res = await stopSimulation({ simulation_id: props.simulationId })
     
     if (res.success) {
-      addLog('✓ 模拟Oprit')
+      addLog('✓ SimulareOprit')
       phase.value = 2
       stopPolling()
       emit('update-status', 'completed')
     } else {
-      addLog(`停止失败: ${res.error || '未知错误'}`)
+      addLog(`OprireEșec: ${res.error || '未知Eroare'}`)
     }
   } catch (err) {
-    addLog(`停止异常: ${err.message}`)
+    addLog(`OprireExcepție: ${err.message}`)
   } finally {
     isStopping.value = false
   }
 }
 
-// 轮询状态
+// 轮询Stare
 let statusTimer = null
 let detailTimer = null
 
@@ -482,7 +482,7 @@ const stopPolling = () => {
   }
 }
 
-// 追踪各Platformă的上一次轮次，用于检测变化并输出Jurnal
+// 追踪各Platformă一次轮次，用于检测变化并OutputJurnal
 const prevTwitterRound = ref(0)
 const prevRedditRound = ref(0)
 
@@ -497,7 +497,7 @@ const fetchRunStatus = async () => {
       
       runStatus.value = data
       
-      // 分别检测各Platformă的轮次变化并输出Jurnal
+      // 分别检测各Platformă轮次变化并OutputJurnal
       if (data.twitter_current_round > prevTwitterRound.value) {
         addLog(`[Plaza] R${data.twitter_current_round}/${data.total_rounds} | T:${data.twitter_simulated_hours || 0}h | A:${data.twitter_actions_count}`)
         prevTwitterRound.value = data.twitter_current_round
@@ -508,46 +508,46 @@ const fetchRunStatus = async () => {
         prevRedditRound.value = data.reddit_current_round
       }
       
-      // 检测模拟是否Finalizat（通过 runner_status sauPlatformă完成状态判断）
+      // 检测SimulareDaNuFinalizat（通过 runner_status sauPlatformăFinalizareStare判断）
       const isCompleted = data.runner_status === 'completed' || data.runner_status === 'stopped'
       
-      // 额外检查：如果后端还没来得及更新 runner_status，但Platformă已经报告完成
-      // 通过检测 twitter_completed 和 reddit_completed 状态判断
+      // 额外Verificare：dacă后端还没来得及Actualizare runner_status，但Platformă已经RaportFinalizare
+      // 通过检测 twitter_completed și reddit_completed Stare判断
       const platformsCompleted = checkPlatformsCompleted(data)
       
       if (isCompleted || platformsCompleted) {
         if (platformsCompleted && !isCompleted) {
-          addLog('✓ 检测到所有Platformă模拟已结束')
+          addLog('✓ 检测la所有PlatformăSimulare已结束')
         }
-        addLog('✓ 模拟Finalizat')
+        addLog('✓ SimulareFinalizat')
         phase.value = 2
         stopPolling()
         emit('update-status', 'completed')
       }
     }
   } catch (err) {
-    console.warn('获取Stare rulare失败:', err)
+    console.warn('ObținereStare rulareEșec:', err)
   }
 }
 
-// 检查所有启用的Platformă是否Finalizat
+// Verificare所有启用PlatformăDaNuFinalizat
 const checkPlatformsCompleted = (data) => {
-  // 如果没有任何Platformă数据，Înapoi false
+  // dacă没有任何PlatformăDate，Înapoi false
   if (!data) return false
   
-  // 检查各Platformă的完成状态
+  // Verificare各PlatformăFinalizareStare
   const twitterCompleted = data.twitter_completed === true
   const redditCompleted = data.reddit_completed === true
   
-  // 如果至少有一个Platformă完成了，检查是否所有启用的Platformă都完成了
-  // 通过 actions_count 判断Platformă是否被启用（如果 count > 0 sau running 曾为 true）
+  // dacă至少有一个PlatformăFinalizare，VerificareDaNu所有启用Platformă都Finalizare
+  // 通过 actions_count 判断PlatformăDaNu被启用（dacă count > 0 sau running 曾为 true）
   const twitterEnabled = (data.twitter_actions_count > 0) || data.twitter_running || twitterCompleted
   const redditEnabled = (data.reddit_actions_count > 0) || data.reddit_running || redditCompleted
   
-  // 如果没有任何Platformă被启用，Înapoi false
+  // dacă没有任何Platformă被启用，Înapoi false
   if (!twitterEnabled && !redditEnabled) return false
   
-  // 检查所有启用的Platformă是否都Finalizat
+  // Verificare所有启用PlatformăDaNu都Finalizat
   if (twitterEnabled && !twitterCompleted) return false
   if (redditEnabled && !redditCompleted) return false
   
@@ -561,13 +561,13 @@ const fetchRunStatusDetail = async () => {
     const res = await getRunStatusDetail(props.simulationId)
     
     if (res.success && res.data) {
-      // Utilizare all_actions 获取完整的动作列表
+      // Utilizare all_actions Obținere完整AcțiuneListă
       const serverActions = res.data.all_actions || []
       
-      // 增量添加新动作（去重）
+      // 增量添加新Acțiune（去重）
       let newActionsAdded = 0
       serverActions.forEach(action => {
-        // 生成唯一ID
+        // Generare唯一ID
         const actionId = action.id || `${action.timestamp}-${action.platform}-${action.agent_id}-${action.action_type}`
         
         if (!actionIds.value.has(actionId)) {
@@ -581,10 +581,10 @@ const fetchRunStatusDetail = async () => {
       })
       
       // 不Derulare automată，让Utilizator自由查看Timp轴
-      // 新动作会在底部追加
+      // 新Acțiune会în底部追加
     }
   } catch (err) {
-    console.warn('获取详细状态失败:', err)
+    console.warn('Obținere详细StareEșec:', err)
   }
 }
 
@@ -640,17 +640,17 @@ const formatActionTime = (timestamp) => {
 
 const handleNextStep = async () => {
   if (!props.simulationId) {
-    addLog('错误：缺少 simulationId')
+    addLog('Eroare：缺少 simulationId')
     return
   }
   
   if (isGeneratingReport.value) {
-    addLog('报告生成请求已Trimite，请稍候...')
+    addLog('RaportGenerareCerere已Trimite，请稍候...')
     return
   }
   
   isGeneratingReport.value = true
-  addLog('正在启动报告生成...')
+  addLog('正în启动RaportGenerare...')
   
   try {
     const res = await generateReport({
@@ -660,16 +660,16 @@ const handleNextStep = async () => {
     
     if (res.success && res.data) {
       const reportId = res.data.report_id
-      addLog(`✓ 报告生成任务已启动: ${reportId}`)
+      addLog(`✓ RaportGenerareSarcină已启动: ${reportId}`)
       
-      // 跳转到报告页面
+      // 跳转laRaport页面
       router.push({ name: 'Report', params: { reportId } })
     } else {
-      addLog(`✗ 启动报告生成失败: ${res.error || '未知错误'}`)
+      addLog(`✗ 启动RaportGenerareEșec: ${res.error || '未知Eroare'}`)
       isGeneratingReport.value = false
     }
   } catch (err) {
-    addLog(`✗ 启动报告生成异常: ${err.message}`)
+    addLog(`✗ 启动RaportGenerareExcepție: ${err.message}`)
     isGeneratingReport.value = false
   }
 }
@@ -685,7 +685,7 @@ watch(() => props.systemLogs?.length, () => {
 })
 
 onMounted(() => {
-  addLog('Step3 Rulare simulare初始化')
+  addLog('Step3 Rulare simulareInițializare')
   if (props.simulationId) {
     doStartSimulation()
   }

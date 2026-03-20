@@ -15,7 +15,7 @@
             :class="{ active: viewMode === mode }"
             @click="viewMode = mode"
           >
-            {{ { graph: '图谱', split: '双栏', workbench: '工作台' }[mode] }}
+            {{ { graph: 'Graf', split: '双栏', workbench: '工作台' }[mode] }}
           </button>
         </div>
       </div>
@@ -23,7 +23,7 @@
       <div class="header-right">
         <div class="workflow-step">
           <span class="step-num">Step 2/5</span>
-          <span class="step-name">环境搭建</span>
+          <span class="step-name">Mediu搭建</span>
         </div>
         <div class="step-divider"></div>
         <span class="status-indicator" :class="statusClass">
@@ -46,7 +46,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step2 环境搭建 -->
+      <!-- Right Panel: Step2 Mediu搭建 -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step2EnvSetup
           :simulationId="currentSimulationId"
@@ -137,7 +137,7 @@ const toggleMaximize = (target) => {
 }
 
 const handleGoBack = () => {
-  // 返回到 process 页面
+  // Înapoila process 页面
   if (projectData.value?.project_id) {
     router.push({ name: 'Process', params: { projectId: projectData.value.project_id } })
   } else {
@@ -146,47 +146,47 @@ const handleGoBack = () => {
 }
 
 const handleNextStep = (params = {}) => {
-  addLog('进入 Step 3: Start模拟')
+  addLog('进入 Step 3: StartSimulare')
   
-  // 记录模拟轮数配置
+  // ÎnregistrareSimulare轮数Configurare
   if (params.maxRounds) {
-    addLog(`自定义模拟轮数: ${params.maxRounds} 轮`)
+    addLog(`自定义Simulare轮数: ${params.maxRounds} 轮`)
   } else {
-    addLog('使用自动配置模拟轮数')
+    addLog('Utilizare自动ConfigurareSimulare轮数')
   }
   
-  // 构建路由参数
+  // Construire路由Parametru
   const routeParams = {
     name: 'SimulationRun',
     params: { simulationId: currentSimulationId.value }
   }
   
-  // 如果有自定义轮数，通过 query 参数传递
+  // dacă有自定义轮数，通过 query Parametru传递
   if (params.maxRounds) {
     routeParams.query = { maxRounds: params.maxRounds }
   }
   
-  // 跳转到 Step 3 页面
+  // 跳转la Step 3 页面
   router.push(routeParams)
 }
 
 // --- Data Logic ---
 
 /**
- * 检查并Închidere正在运行模拟
- * 当用户从 Step 3 返回到 Step 2 时，默认用户要退出模拟
+ * Verificare并Închidere正înRulareSimulare
+ * cândUtilizatorde la Step 3 Înapoila Step 2 时，默认Utilizator要IeșireSimulare
  */
 const checkAndStopRunningSimulation = async () => {
   if (!currentSimulationId.value) return
   
   try {
-    // 先检查模拟环境DaNu存活
+    // 先VerificareSimulareMediuDaNu存活
     const envStatusRes = await getEnvStatus({ simulation_id: currentSimulationId.value })
     
     if (envStatusRes.success && envStatusRes.data?.env_alive) {
-      addLog('检测到模拟环境正在运行，正在Închidere...')
+      addLog('检测laSimulareMediu正înRulare，正înÎnchidere...')
       
-      // 尝试优雅Închidere模拟环境
+      // 尝试优雅ÎnchidereSimulareMediu
       try {
         const closeRes = await closeSimulationEnv({ 
           simulation_id: currentSimulationId.value,
@@ -194,74 +194,74 @@ const checkAndStopRunningSimulation = async () => {
         })
         
         if (closeRes.success) {
-          addLog('✓ 模拟环境已Închidere')
+          addLog('✓ SimulareMediu已Închidere')
         } else {
-          addLog(`Închidere模拟环境Eșec: ${closeRes.error || '未知Eroare'}`)
-          // 如果优雅ÎnchidereEșec，尝试强制Oprire
+          addLog(`ÎnchidereSimulareMediuEșec: ${closeRes.error || '未知Eroare'}`)
+          // dacă优雅ÎnchidereEșec，尝试强制Oprire
           await forceStopSimulation()
         }
       } catch (closeErr) {
-        addLog(`Închidere模拟环境异常: ${closeErr.message}`)
-        // 如果优雅Închidere异常，尝试强制Oprire
+        addLog(`ÎnchidereSimulareMediuExcepție: ${closeErr.message}`)
+        // dacă优雅ÎnchidereExcepție，尝试强制Oprire
         await forceStopSimulation()
       }
     } else {
-      // 环境未运行，但可能进程还在，检查模拟Stare
+      // Mediu未Rulare，但可能进程还în，VerificareSimulareStare
       const simRes = await getSimulation(currentSimulationId.value)
       if (simRes.success && simRes.data?.status === 'running') {
-        addLog('检测到模拟Stare为În rulare，正在Oprire...')
+        addLog('检测laSimulareStare为În rulare，正înOprire...')
         await forceStopSimulation()
       }
     }
   } catch (err) {
-    // 检查环境StareEșec不影响后续流程
-    console.warn('检查模拟StareEșec:', err)
+    // VerificareMediuStareEșec不影响后续流程
+    console.warn('VerificareSimulareStareEșec:', err)
   }
 }
 
 /**
- * 强制Oprire模拟
+ * 强制OprireSimulare
  */
 const forceStopSimulation = async () => {
   try {
     const stopRes = await stopSimulation({ simulation_id: currentSimulationId.value })
     if (stopRes.success) {
-      addLog('✓ 模拟已强制Oprire')
+      addLog('✓ Simulare已强制Oprire')
     } else {
-      addLog(`强制Oprire模拟Eșec: ${stopRes.error || '未知Eroare'}`)
+      addLog(`强制OprireSimulareEșec: ${stopRes.error || '未知Eroare'}`)
     }
   } catch (err) {
-    addLog(`强制Oprire模拟异常: ${err.message}`)
+    addLog(`强制OprireSimulareExcepție: ${err.message}`)
   }
 }
 
 const loadSimulationData = async () => {
   try {
-    addLog(`Încărcare模拟数据: ${currentSimulationId.value}`)
+    addLog(`ÎncărcareSimulareDate: ${currentSimulationId.value}`)
     
-    // 获取 simulation Informații
+    // Obținere simulation Informații
     const simRes = await getSimulation(currentSimulationId.value)
     if (simRes.success && simRes.data) {
       const simData = simRes.data
       
-      // 获取 project Informații
+      // Obținere project Informații
       if (simData.project_id) {
         const projRes = await getProject(simData.project_id)
         if (projRes.success && projRes.data) {
           projectData.value = projRes.data
           addLog(`ProiectÎncărcareSucces: ${projRes.data.project_id}`)
           
-          // 获取 graph 数据
+          // Obținere graph Date
           if (projRes.data.graph_id) {
             await loadGraph(projRes.data.graph_id)
           }
         }
       }
     } else {
-      addLog(`Încărcare模拟数据Eșec: ${simRes.error || '未知Eroare'}`)
+      addLog(`ÎncărcareSimulareDateEșec: ${simRes.error || '未知Eroare'}`)
     }
   } catch (err) {
-    addLog(`Încărcare异常: ${err.message}`)
+    addLog(`ÎncărcareExcepție: ${err.message}`)
   }
 }
 
@@ -271,10 +271,10 @@ const loadGraph = async (graphId) => {
     const res = await getGraphData(graphId)
     if (res.success) {
       graphData.value = res.data
-      addLog('图谱数据ÎncărcareSucces')
+      addLog('GrafDateÎncărcareSucces')
     }
   } catch (err) {
-    addLog(`图谱ÎncărcareEșec: ${err.message}`)
+    addLog(`GrafÎncărcareEșec: ${err.message}`)
   } finally {
     graphLoading.value = false
   }
@@ -287,12 +287,12 @@ const refreshGraph = () => {
 }
 
 onMounted(async () => {
-  addLog('SimulationView 初始化')
+  addLog('SimulationView Inițializare')
   
-  // 检查并Închidere正在运行模拟（用户从 Step 3 返回时）
+  // Verificare并Închidere正înRulareSimulare（Utilizatorde la Step 3 Înapoi时）
   await checkAndStopRunningSimulation()
   
-  // Încărcare模拟数据
+  // ÎncărcareSimulareDate
   loadSimulationData()
 })
 </script>

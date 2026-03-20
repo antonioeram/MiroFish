@@ -1,7 +1,7 @@
 """
 OASISSimulare管理器
-管理TwitterșiReddit双Platformă并行Simulare
-使用预设脚本 + LLM智能GenerareConfigurareParametru
+管理TwitterșiReddit双PlatformăParalelSimulare
+Utilizare预设Script + LLM智能GenerareConfigurareParametru
 """
 
 import os
@@ -75,7 +75,7 @@ class SimulationState:
     error: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """CompletStareDicționar（内部使用）"""
+        """CompletStareDicționar（内部Utilizare）"""
         return {
             "simulation_id": self.simulation_id,
             "project_id": self.project_id,
@@ -97,7 +97,7 @@ class SimulationState:
         }
     
     def to_simple_dict(self) -> Dict[str, Any]:
-        """简化StareDicționar（APIReturnare使用）"""
+        """简化StareDicționar（APIReturnareUtilizare）"""
         return {
             "simulation_id": self.simulation_id,
             "project_id": self.project_id,
@@ -118,8 +118,8 @@ class SimulationManager:
     核心Funcționalitate：
     1. de laZepGraf读取Entitate并过滤
     2. GenerareOASIS Agent Profile
-    3. 使用LLM智能GenerareSimulareConfigurareParametru
-    4. 准备预设脚本所需所有Fișier
+    3. UtilizareLLM智能GenerareSimulareConfigurareParametru
+    4. 准备预设Script所需所有Fișier
     """
     
     # SimulareDate存储Director
@@ -201,7 +201,7 @@ class SimulationManager:
         Creare新Simulare
         
         Args:
-            project_id: 项目ID
+            project_id: ProiectID
             graph_id: ZepGrafID
             enable_twitter: DaNu启用TwitterSimulare
             enable_reddit: DaNu启用RedditSimulare
@@ -241,19 +241,19 @@ class SimulationManager:
         
         步骤：
         1. de laZepGraf读取并过滤Entitate
-        2. 为每个EntitateGenerareOASIS Agent Profile（可选LLM增强，支持并行）
-        3. 使用LLM智能GenerareSimulareConfigurareParametru（Timp、活跃度、发言频率等）
+        2. 为每个EntitateGenerareOASIS Agent Profile（可选LLM增强，SuportăParalel）
+        3. UtilizareLLM智能GenerareSimulareConfigurareParametru（Timp、活跃度、发言频率等）
         4. SalvareConfigurareFișierșiProfileFișier
-        5. 复制预设脚本laSimulareDirector
+        5. Copiere预设ScriptlaSimulareDirector
         
         Args:
             simulation_id: SimulareID
             simulation_requirement: SimulareCerințăDescriere（用于LLMGenerareConfigurare）
-            document_text: 原始文档Conținut（用于LLM理解背景）
+            document_text: 原始DocumentațieConținut（用于LLM理解背景）
             defined_entity_types: 预定义EntitateTip（可选）
-            use_llm_for_profiles: DaNu使用LLMGenerare详细人设
-            progress_callback: 进度回调Funcție (stage, progress, message)
-            parallel_profile_count: 并行Generare人设数量，Implicit3
+            use_llm_for_profiles: DaNuUtilizareLLMGenerare详细人设
+            progress_callback: Progres回调Funcție (stage, progress, message)
+            parallel_profile_count: ParalelGenerare人设数量，Implicit3
             
         Returns:
             SimulationState
@@ -325,7 +325,7 @@ class SimulationManager:
                         item_name=msg
                     )
             
-            # 设置实时SalvareFișierCale（优先使用 Reddit JSON 格式）
+            # Setări实时SalvareFișierCale（优先Utilizare Reddit JSON Format）
             realtime_output_path = None
             realtime_platform = "reddit"
             if state.enable_reddit:
@@ -340,14 +340,14 @@ class SimulationManager:
                 use_llm=use_llm_for_profiles,
                 progress_callback=profile_progress,
                 graph_id=state.graph_id,  # 传入graph_id用于Zep检索
-                parallel_count=parallel_profile_count,  # 并行Generare数量
+                parallel_count=parallel_profile_count,  # ParalelGenerare数量
                 realtime_output_path=realtime_output_path,  # 实时SalvareCale
-                output_platform=realtime_platform  # Output格式
+                output_platform=realtime_platform  # OutputFormat
             )
             
             state.profiles_count = len(profiles)
             
-            # SalvareProfileFișier（注意：Twitter使用CSV格式，Reddit使用JSON格式）
+            # SalvareProfileFișier（注意：TwitterUtilizareCSVFormat，RedditUtilizareJSONFormat）
             # Reddit 已经înGenerare过程实时Salvare，这里再Salvare一次确保Complet性
             if progress_callback:
                 progress_callback(
@@ -365,7 +365,7 @@ class SimulationManager:
                 )
             
             if state.enable_twitter:
-                # Twitter使用CSV格式！这DaOASIS要求
+                # TwitterUtilizareCSVFormat！这DaOASIS要求
                 generator.save_profiles(
                     profiles=profiles,
                     file_path=os.path.join(sim_dir, "twitter_profiles.csv"),
@@ -434,8 +434,8 @@ class SimulationManager:
                     total=3
                 )
             
-            # 注意：Rulare脚本保留în backend/scripts/ Director，不再复制laSimulareDirector
-            # 启动Simulare时，simulation_runner 会de la scripts/ DirectorRulare脚本
+            # 注意：RulareScript保留în backend/scripts/ Director，不再CopierelaSimulareDirector
+            # 启动Simulare时，simulation_runner 会de la scripts/ DirectorRulareScript
             
             # ActualizareStare
             state.status = SimulationStatus.READY
@@ -520,9 +520,9 @@ class SimulationManager:
             },
             "instructions": (
                 f"1. 激活condaMediu: conda activate MiroFish\n"
-                f"2. RulareSimulare (脚本位于 {scripts_dir}):\n"
+                f"2. RulareSimulare (Script位于 {scripts_dir}):\n"
                 f"   - 单独RulareTwitter: python {scripts_dir}/run_twitter_simulation.py --config {config_path}\n"
                 f"   - 单独RulareReddit: python {scripts_dir}/run_reddit_simulation.py --config {config_path}\n"
-                f"   - 并行Rulare双Platformă: python {scripts_dir}/run_parallel_simulation.py --config {config_path}"
+                f"   - ParalelRulare双Platformă: python {scripts_dir}/run_parallel_simulation.py --config {config_path}"
             )
         }

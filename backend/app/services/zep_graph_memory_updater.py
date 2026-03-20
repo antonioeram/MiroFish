@@ -33,12 +33,12 @@ class AgentActivity:
     
     def to_episode_text(self) -> str:
         """
-        将活动转换为可以发送给Zep文本Descriere
+        将活动转换为可以Trimite给Zep文本Descriere
         
-        采用自然语言Descriere格式，让Zep能够de la提取EntitateșiRelație
+        采用自然语言DescriereFormat，让Zep能够de la提取EntitateșiRelație
         不添加Simulare相关前缀，避免误导GrafActualizare
         """
-        # 根据不同动作TipGenerare不同Descriere
+        # 根据不同AcțiuneTipGenerare不同Descriere
         action_descriptions = {
             "CREATE_POST": self._describe_create_post,
             "LIKE_POST": self._describe_like_post,
@@ -57,17 +57,17 @@ class AgentActivity:
         describe_func = action_descriptions.get(self.action_type, self._describe_generic)
         description = describe_func()
         
-        # 直接Returnare "agentNume: 活动Descriere" 格式，不添加Simulare前缀
+        # 直接Returnare "agentNume: 活动Descriere" Format，不添加Simulare前缀
         return f"{self.agent_name}: {description}"
     
     def _describe_create_post(self) -> str:
         content = self.action_args.get("content", "")
         if content:
-            return f"发布一条帖子：「{content}」"
-        return "发布一条帖子"
+            return f"Publicare一条帖子：「{content}」"
+        return "Publicare一条帖子"
     
     def _describe_like_post(self) -> str:
-        """点赞帖子 - 包含帖子原文și作者Informații"""
+        """点赞帖子 - 包含帖子原文șiAutorInformații"""
         post_content = self.action_args.get("post_content", "")
         post_author = self.action_args.get("post_author_name", "")
         
@@ -80,7 +80,7 @@ class AgentActivity:
         return "点赞一条帖子"
     
     def _describe_dislike_post(self) -> str:
-        """踩帖子 - 包含帖子原文și作者Informații"""
+        """踩帖子 - 包含帖子原文șiAutorInformații"""
         post_content = self.action_args.get("post_content", "")
         post_author = self.action_args.get("post_author_name", "")
         
@@ -93,7 +93,7 @@ class AgentActivity:
         return "踩一条帖子"
     
     def _describe_repost(self) -> str:
-        """转发帖子 - 包含原帖Conținutși作者Informații"""
+        """转发帖子 - 包含原帖ConținutșiAutorInformații"""
         original_content = self.action_args.get("original_content", "")
         original_author = self.action_args.get("original_author_name", "")
         
@@ -106,7 +106,7 @@ class AgentActivity:
         return "转发一条帖子"
     
     def _describe_quote_post(self) -> str:
-        """引用帖子 - 包含原帖Conținut、作者Informațiiși引用评论"""
+        """引用帖子 - 包含原帖Conținut、AutorInformațiiși引用评论"""
         original_content = self.action_args.get("original_content", "")
         original_author = self.action_args.get("original_author_name", "")
         quote_content = self.action_args.get("quote_content", "") or self.action_args.get("content", "")
@@ -150,7 +150,7 @@ class AgentActivity:
         return "发表评论"
     
     def _describe_like_comment(self) -> str:
-        """点赞评论 - 包含评论Conținutși作者Informații"""
+        """点赞评论 - 包含评论ConținutșiAutorInformații"""
         comment_content = self.action_args.get("comment_content", "")
         comment_author = self.action_args.get("comment_author_name", "")
         
@@ -163,7 +163,7 @@ class AgentActivity:
         return "点赞一条评论"
     
     def _describe_dislike_comment(self) -> str:
-        """踩评论 - 包含评论Conținutși作者Informații"""
+        """踩评论 - 包含评论ConținutșiAutorInformații"""
         comment_content = self.action_args.get("comment_content", "")
         comment_author = self.action_args.get("comment_author_name", "")
         
@@ -194,7 +194,7 @@ class AgentActivity:
         return "屏蔽一个Utilizator"
     
     def _describe_generic(self) -> str:
-        # pentruNecunoscut动作Tip，Generare通用Descriere
+        # pentruNecunoscutAcțiuneTip，Generare通用Descriere
         return f"执行{self.action_type}操作"
 
 
@@ -203,7 +203,7 @@ class ZepGraphMemoryUpdater:
     ZepGrafMemorieActualizare器
     
     监控SimulareactionsJurnalFișier，将新agent活动实时ActualizarelaZepGraf。
-    按Platformă分组，每累积BATCH_SIZE条活动后În lot发送laZep。
+    按Platformă分组，每累积BATCH_SIZE条活动后În lotTrimitelaZep。
     
     所有有意义Comportament都会被ActualizarelaZep，action_args会包含Complet文Informații：
     - 点赞/踩帖子原文
@@ -212,16 +212,16 @@ class ZepGraphMemoryUpdater:
     - 点赞/踩评论原文
     """
     
-    # În lot发送大小（每个Platformă累积多少条后发送）
+    # În lotTrimite大小（每个Platformă累积多少条后Trimite）
     BATCH_SIZE = 5
     
-    # PlatformăNume映射（用于控制台显示）
+    # PlatformăNume映射（用于Consolă显示）
     PLATFORM_DISPLAY_NAMES = {
         'twitter': '世界1',
         'reddit': '世界2',
     }
     
-    # 发送间隔（秒），避免Cerere过快
+    # Trimite间隔（秒），避免Cerere过快
     SEND_INTERVAL = 0.5
     
     # ReîncercareConfigurare
@@ -247,7 +247,7 @@ class ZepGraphMemoryUpdater:
         # 活动队列
         self._activity_queue: Queue = Queue()
         
-        # 按Platformă分组活动缓冲区（每个Platformă各自累积laBATCH_SIZE后În lot发送）
+        # 按Platformă分组活动缓冲区（每个Platformă各自累积laBATCH_SIZE后În lotTrimite）
         self._platform_buffers: Dict[str, List[AgentActivity]] = {
             'twitter': [],
             'reddit': [],
@@ -260,9 +260,9 @@ class ZepGraphMemoryUpdater:
         
         # 统计
         self._total_activities = 0  # 实际添加la队列活动数
-        self._total_sent = 0        # Succes发送laZep批次数
-        self._total_items_sent = 0  # Succes发送laZep活动条数
-        self._failed_count = 0      # 发送Eșec批次数
+        self._total_sent = 0        # SuccesTrimitelaZep批次数
+        self._total_items_sent = 0  # SuccesTrimitelaZep活动条数
+        self._failed_count = 0      # TrimiteEșec批次数
         self._skipped_count = 0     # 被过滤跳过活动数（DO_NOTHING）
         
         logger.info(f"ZepGraphMemoryUpdater InițializareFinalizare: graph_id={graph_id}, batch_size={self.BATCH_SIZE}")
@@ -289,7 +289,7 @@ class ZepGraphMemoryUpdater:
         """Oprire后台工作线程"""
         self._running = False
         
-        # 发送剩余活动
+        # Trimite剩余活动
         self._flush_remaining()
         
         if self._worker_thread and self._worker_thread.is_alive():
@@ -357,7 +357,7 @@ class ZepGraphMemoryUpdater:
         self.add_activity(activity)
     
     def _worker_loop(self):
-        """后台工作循环 - 按PlatformăÎn lot发送活动laZep"""
+        """后台工作循环 - 按PlatformăÎn lotTrimite活动laZep"""
         while self._running or not self._activity_queue.empty():
             try:
                 # 尝试de la队列Obținere活动（超时1秒）
@@ -375,9 +375,9 @@ class ZepGraphMemoryUpdater:
                         if len(self._platform_buffers[platform]) >= self.BATCH_SIZE:
                             batch = self._platform_buffers[platform][:self.BATCH_SIZE]
                             self._platform_buffers[platform] = self._platform_buffers[platform][self.BATCH_SIZE:]
-                            # 释放锁后再发送
+                            # 释放锁后再Trimite
                             self._send_batch_activities(batch, platform)
-                            # 发送间隔，避免Cerere过快
+                            # Trimite间隔，避免Cerere过快
                             time.sleep(self.SEND_INTERVAL)
                     
                 except Empty:
@@ -389,7 +389,7 @@ class ZepGraphMemoryUpdater:
     
     def _send_batch_activities(self, activities: List[AgentActivity], platform: str):
         """
-        În lot发送活动laZepGraf（合并为一条文本）
+        În lotTrimite活动laZepGraf（合并为一条文本）
         
         Args:
             activities: Agent活动Listă
@@ -402,7 +402,7 @@ class ZepGraphMemoryUpdater:
         episode_texts = [activity.to_episode_text() for activity in activities]
         combined_text = "\n".join(episode_texts)
         
-        # 带Reîncercare发送
+        # 带ReîncercareTrimite
         for attempt in range(self.MAX_RETRIES):
             try:
                 self.client.graph.add(
@@ -414,20 +414,20 @@ class ZepGraphMemoryUpdater:
                 self._total_sent += 1
                 self._total_items_sent += len(activities)
                 display_name = self._get_platform_display_name(platform)
-                logger.info(f"SuccesÎn lot发送 {len(activities)} 条{display_name}活动laGraf {self.graph_id}")
+                logger.info(f"SuccesÎn lotTrimite {len(activities)} 条{display_name}活动laGraf {self.graph_id}")
                 logger.debug(f"În lotConținut预览: {combined_text[:200]}...")
                 return
                 
             except Exception as e:
                 if attempt < self.MAX_RETRIES - 1:
-                    logger.warning(f"În lot发送laZepEșec (尝试 {attempt + 1}/{self.MAX_RETRIES}): {e}")
+                    logger.warning(f"În lotTrimitelaZepEșec (尝试 {attempt + 1}/{self.MAX_RETRIES}): {e}")
                     time.sleep(self.RETRY_DELAY * (attempt + 1))
                 else:
-                    logger.error(f"În lot发送laZepEșec，已Reîncercare{self.MAX_RETRIES}次: {e}")
+                    logger.error(f"În lotTrimitelaZepEșec，已Reîncercare{self.MAX_RETRIES}次: {e}")
                     self._failed_count += 1
     
     def _flush_remaining(self):
-        """发送队列și缓冲区剩余活动"""
+        """Trimite队列și缓冲区剩余活动"""
         # 首先Procesare队列剩余活动，添加la缓冲区
         while not self._activity_queue.empty():
             try:
@@ -440,12 +440,12 @@ class ZepGraphMemoryUpdater:
             except Empty:
                 break
         
-        # 然后发送各Platformă缓冲区剩余活动（即使不足BATCH_SIZE条）
+        # 然后Trimite各Platformă缓冲区剩余活动（即使不足BATCH_SIZE条）
         with self._buffer_lock:
             for platform, buffer in self._platform_buffers.items():
                 if buffer:
                     display_name = self._get_platform_display_name(platform)
-                    logger.info(f"发送{display_name}Platformă剩余 {len(buffer)} 条活动")
+                    logger.info(f"Trimite{display_name}Platformă剩余 {len(buffer)} 条活动")
                     self._send_batch_activities(buffer, platform)
             # 清Gol所有缓冲区
             for platform in self._platform_buffers:
@@ -460,9 +460,9 @@ class ZepGraphMemoryUpdater:
             "graph_id": self.graph_id,
             "batch_size": self.BATCH_SIZE,
             "total_activities": self._total_activities,  # 添加la队列活动总数
-            "batches_sent": self._total_sent,            # Succes发送批次数
-            "items_sent": self._total_items_sent,        # Succes发送活动条数
-            "failed_count": self._failed_count,          # 发送Eșec批次数
+            "batches_sent": self._total_sent,            # SuccesTrimite批次数
+            "items_sent": self._total_items_sent,        # SuccesTrimite活动条数
+            "failed_count": self._failed_count,          # TrimiteEșec批次数
             "skipped_count": self._skipped_count,        # 被过滤跳过活动数（DO_NOTHING）
             "queue_size": self._activity_queue.qsize(),
             "buffer_sizes": buffer_sizes,                # 各Platformă缓冲区大小

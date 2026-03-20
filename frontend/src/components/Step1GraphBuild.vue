@@ -6,7 +6,7 @@
         <div class="card-header">
           <div class="step-info">
             <span class="step-num">01</span>
-            <span class="step-title">本体生成</span>
+            <span class="step-title">OntologieGenerare</span>
           </div>
           <div class="step-status">
             <span v-if="currentPhase > 0" class="badge success">已Finalizare</span>
@@ -18,13 +18,13 @@
         <div class="card-content">
           <p class="api-note">POST /api/graph/ontology/generate</p>
           <p class="description">
-            LLM分析文档内容și模拟需求，提取出现实种子，自动生成合适本体结构
+            LLMAnalizăDocumentațieConținutșiSimulareCerință，提取出现实种子，自动Generare合适Ontologie结构
           </p>
 
           <!-- Loading / Progress -->
           <div v-if="currentPhase === 0 && ontologyProgress" class="progress-section">
             <div class="spinner-sm"></div>
-            <span>{{ ontologyProgress.message || '正在分析文档...' }}</span>
+            <span>{{ ontologyProgress.message || '正înAnalizăDocumentație...' }}</span>
           </div>
 
           <!-- Detail Overlay -->
@@ -110,7 +110,7 @@
         <div class="card-header">
           <div class="step-info">
             <span class="step-num">02</span>
-            <span class="step-title">GraphRAG构建</span>
+            <span class="step-title">GraphRAGConstruire</span>
           </div>
           <div class="step-status">
             <span v-if="currentPhase > 1" class="badge success">已Finalizare</span>
@@ -122,18 +122,18 @@
         <div class="card-content">
           <p class="api-note">POST /api/graph/build</p>
           <p class="description">
-            基于生成本体，将文档自动分块后调用 Zep 构建知识图谱，提取实体和关系，并形成时序记忆și社区摘要
+            基于GenerareOntologie，将Documentație自动分块后调用 Zep ConstruireCunoștințeGraf，提取EntitateșiRelație，并形成时序Memorieși社区摘要
           </p>
           
           <!-- Stats Cards -->
           <div class="stats-grid">
             <div class="stat-card">
               <span class="stat-value">{{ graphStats.nodes }}</span>
-              <span class="stat-label">实体节点</span>
+              <span class="stat-label">EntitateNod</span>
             </div>
             <div class="stat-card">
               <span class="stat-value">{{ graphStats.edges }}</span>
-              <span class="stat-label">关系边</span>
+              <span class="stat-label">Relație边</span>
             </div>
             <div class="stat-card">
               <span class="stat-value">{{ graphStats.types }}</span>
@@ -148,23 +148,23 @@
         <div class="card-header">
           <div class="step-info">
             <span class="step-num">03</span>
-            <span class="step-title">构建Finalizare</span>
+            <span class="step-title">ConstruireFinalizare</span>
           </div>
           <div class="step-status">
-            <span v-if="currentPhase >= 2" class="badge accent">进行中</span>
+            <span v-if="currentPhase >= 2" class="badge accent">进行</span>
           </div>
         </div>
         
         <div class="card-content">
           <p class="api-note">POST /api/simulation/create</p>
-          <p class="description">图谱构建已Finalizare，请进入Pasul următor进行模拟环境搭建</p>
+          <p class="description">GrafConstruire已Finalizare，请进入Pasul următor进行SimulareMediu搭建</p>
           <button 
             class="action-btn" 
             :disabled="currentPhase < 2 || creatingSimulation"
             @click="handleEnterEnvSetup"
           >
             <span v-if="creatingSimulation" class="spinner-sm"></span>
-            {{ creatingSimulation ? 'Creare中...' : '进入环境搭建 ➝' }}
+            {{ creatingSimulation ? 'Creare...' : '进入Mediu搭建 ➝' }}
           </button>
         </div>
       </div>
@@ -208,10 +208,10 @@ const selectedOntologyItem = ref(null)
 const logContent = ref(null)
 const creatingSimulation = ref(false)
 
-// 进入环境搭建 - Creare simulation 并跳转
+// 进入Mediu搭建 - Creare simulation 并跳转
 const handleEnterEnvSetup = async () => {
   if (!props.projectData?.project_id || !props.projectData?.graph_id) {
-    console.error('缺少Proiectsau图谱Informații')
+    console.error('缺少ProiectsauGrafInformații')
     return
   }
   
@@ -226,18 +226,18 @@ const handleEnterEnvSetup = async () => {
     })
     
     if (res.success && res.data?.simulation_id) {
-      // 跳转到 simulation 页面
+      // 跳转la simulation 页面
       router.push({
         name: 'Simulation',
         params: { simulationId: res.data.simulation_id }
       })
     } else {
-      console.error('Creare模拟Eșec:', res.error)
-      alert('Creare模拟Eșec: ' + (res.error || '未知Eroare'))
+      console.error('CreareSimulareEșec:', res.error)
+      alert('CreareSimulareEșec: ' + (res.error || '未知Eroare'))
     }
   } catch (err) {
-    console.error('Creare模拟异常:', err)
-    alert('Creare模拟异常: ' + err.message)
+    console.error('CreareSimulareExcepție:', err)
+    alert('CreareSimulareExcepție: ' + err.message)
   } finally {
     creatingSimulation.value = false
   }

@@ -65,7 +65,7 @@ Ordinea de procesare (de la cel mai mare la cel mai mic):
 - Comentarii HTML `<!-- ... -->`
 - Stringuri în JS: `'text chinezesc'`, `"text chinezesc"`, template literals
 - Placeholder-uri: `placeholder="文本"`
-- Title/tooltip: `title="提示"`
+- Title/tooltip: `title="Indicație"`
 - Mesaje alert/confirm care apar utilizatorului
 - Text în `data()`, `computed`, `methods` care e afișat
 
@@ -90,9 +90,9 @@ git commit -m "translate(frontend): <ComponentName>.vue — ZH/EN → RO"
 
 **ATENȚIE la prompt-urile LLM:**
 - Prompt-urile system/user sunt CRITICE — traduce-le complet
-- Exemplu: `"你是社交媒体模拟专家。返回纯JSON格式。"` → `"Ești un expert în simulare social media. Returnează format JSON pur."`
+- Exemplu: `"你Da社交媒体Simulare专家。Înapoi纯JSONFormat。"` → `"Ești un expert în simulare social media. Returnează format JSON pur."`
 - Păstrează instrucțiunile tehnice (JSON format etc.) dar traduce contextul
-- Dacă un prompt menționează "中国人作息习惯" (obiceiuri chinezești), adaptează-l la "obiceiuri locale"
+- Dacă un prompt menționează "国人作息习惯" (obiceiuri chinezești), adaptează-l la "obiceiuri locale"
 
 **Restul fișierelor backend (în ordine):**
 4. `backend/app/services/simulation_runner.py`
@@ -115,12 +115,12 @@ git commit -m "translate(frontend): <ComponentName>.vue — ZH/EN → RO"
 21. `backend/scripts/*.py`
 
 **Ce traduci în Python:**
-- Docstrings: `"""构建知识图谱"""` → `"""Construiește graful de cunoștințe"""`
-- Comentarii: `# 解析文件` → `# Parsează fișierul`
-- Stringuri afișate utilizatorului: `print("配置错误:")` → `print("Eroare configurare:")`
+- Docstrings: `"""ConstruireCunoștințeGraf"""` → `"""Construiește graful de cunoștințe"""`
+- Comentarii: `# 解析Fișier` → `# Parsează fișierul`
+- Stringuri afișate utilizatorului: `print("ConfigurareEroare:")` → `print("Eroare configurare:")`
 - Prompt-uri LLM (TOATE — system, user, template-uri)
-- Mesaje de eroare vizibile: `raise ValueError("无效的配置")` → `raise ValueError("Configurare invalidă")`
-- F-strings cu text: `f"生成Agent配置 ({n}个)"` → `f"Generare configurare Agent ({n})"`
+- Mesaje de eroare vizibile: `raise ValueError("无效Configurare")` → `raise ValueError("Configurare invalidă")`
+- F-strings cu text: `f"GenerareAgentConfigurare ({n}个)"` → `f"Generare configurare Agent ({n})"`
 
 **Ce NU traduci în Python:**
 - `logger.debug(...)` cu date tehnice
@@ -160,23 +160,23 @@ git push origin translate/ro-full
 
 | ZH/EN Original | RO Traducere |
 |---|---|
-| 图谱构建 | Construire graf |
-| 知识图谱 | Graf de cunoștințe |
-| 环境搭建 | Configurare mediu |
-| 模拟/仿真 | Simulare |
-| 报告生成 | Generare raport |
-| 深度互动 | Interacțiune avansată |
-| 智能体/Agent | Agent |
-| 实体 / Entity | Entitate |
-| 节点 | Nod |
-| 关系/边 | Relație |
+| GrafConstruire | Construire graf |
+| CunoștințeGraf | Graf de cunoștințe |
+| Mediu搭建 | Configurare mediu |
+| Simulare/仿Adevărat | Simulare |
+| RaportGenerare | Generare raport |
+| Interacțiune Avansată | Interacțiune avansată |
+| Agent/Agent | Agent |
+| Entitate / Entity | Entitate |
+| Nod | Nod |
+| Relație/边 | Relație |
 | 舆情 | Opinie publică |
 | 推演预测 | Predicție simulativă |
 | 群体智能 / Swarm Intelligence | Inteligență colectivă |
-| 种子信息 | Informație sursă |
+| 种子Informații | Informație sursă |
 | 平行世界 | Lume paralelă |
-| 上帝视角 | Perspectivă globală |
-| 数字沙盘 | Sandbox digital |
+| 帝视角 | Perspectivă globală |
+| Număr沙盘 | Sandbox digital |
 | Hot Topics | Subiecte fierbinți |
 | Narrative Direction | Direcție narativă |
 | Ontology | Ontologie |

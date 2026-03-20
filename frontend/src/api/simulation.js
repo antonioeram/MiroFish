@@ -9,7 +9,7 @@ export const createSimulation = (data) => {
 }
 
 /**
- * 准备Simulare环境（异步任务）
+ * 准备SimulareMediu（异步Sarcină）
  * @param {Object} data - { simulation_id, entity_types?, use_llm_for_profiles?, parallel_profile_count?, force_regenerate? }
  */
 export const prepareSimulation = (data) => {
@@ -17,7 +17,7 @@ export const prepareSimulation = (data) => {
 }
 
 /**
- * Interogare准备任务进度
+ * Interogare准备SarcinăProgres
  * @param {Object} data - { task_id?, simulation_id? }
  */
 export const getPrepareStatus = (data) => {
@@ -33,7 +33,7 @@ export const getSimulation = (simulationId) => {
 }
 
 /**
- * ObținereSimulare的 Agent Profiles
+ * ObținereSimulare Agent Profiles
  * @param {string} simulationId
  * @param {string} platform - 'reddit' | 'twitter'
  */
@@ -42,7 +42,7 @@ export const getSimulationProfiles = (simulationId, platform = 'reddit') => {
 }
 
 /**
- * 实时Obținere生成中的 Agent Profiles
+ * 实时ObținereGenerare Agent Profiles
  * @param {string} simulationId
  * @param {string} platform - 'reddit' | 'twitter'
  */
@@ -59,9 +59,9 @@ export const getSimulationConfig = (simulationId) => {
 }
 
 /**
- * 实时Obținere生成中的SimulareConfigurare
+ * 实时ObținereGenerareSimulareConfigurare
  * @param {string} simulationId
- * @returns {Promise} ReturnareConfigurareInformații，包含元Date和Configurare内容
+ * @returns {Promise} ReturnareConfigurareInformații，包含元DateșiConfigurareConținut
  */
 export const getSimulationConfigRealtime = (simulationId) => {
   return service.get(`/api/simulation/${simulationId}/config/realtime`)
@@ -69,7 +69,7 @@ export const getSimulationConfigRealtime = (simulationId) => {
 
 /**
  * 列出所有Simulare
- * @param {string} projectId - 可选，按项目ID过滤
+ * @param {string} projectId - 可选，按ProiectID过滤
  */
 export const listSimulations = (projectId) => {
   const params = projectId ? { project_id: projectId } : {}
@@ -85,7 +85,7 @@ export const startSimulation = (data) => {
 }
 
 /**
- * 停止Simulare
+ * OprireSimulare
  * @param {Object} data - { simulation_id }
  */
 export const stopSimulation = (data) => {
@@ -93,7 +93,7 @@ export const stopSimulation = (data) => {
 }
 
 /**
- * ObținereSimulare运行实时Stare
+ * ObținereSimulareRulare实时Stare
  * @param {string} simulationId
  */
 export const getRunStatus = (simulationId) => {
@@ -101,7 +101,7 @@ export const getRunStatus = (simulationId) => {
 }
 
 /**
- * ObținereSimulare运行详细Stare（包含最近动作）
+ * ObținereSimulareRulare详细Stare（包含最近Acțiune）
  * @param {string} simulationId
  */
 export const getRunStatusDetail = (simulationId) => {
@@ -109,7 +109,7 @@ export const getRunStatusDetail = (simulationId) => {
 }
 
 /**
- * ObținereSimulare中的帖子
+ * ObținereSimulare帖子
  * @param {string} simulationId
  * @param {string} platform - 'reddit' | 'twitter'
  * @param {number} limit - Returnare数量
@@ -122,7 +122,7 @@ export const getSimulationPosts = (simulationId, platform = 'reddit', limit = 50
 }
 
 /**
- * ObținereSimulare时间线（按轮次汇总）
+ * ObținereSimulareTimp线（按轮次汇总）
  * @param {string} simulationId
  * @param {number} startRound - 起始轮次
  * @param {number} endRound - 结束轮次
@@ -144,7 +144,7 @@ export const getAgentStats = (simulationId) => {
 }
 
 /**
- * ObținereSimulare动作历史
+ * ObținereSimulareAcțiune历史
  * @param {string} simulationId
  * @param {Object} params - { limit, offset, platform, agent_id, round_num }
  */
@@ -153,7 +153,7 @@ export const getSimulationActions = (simulationId, params = {}) => {
 }
 
 /**
- * 关闭Simulare环境（优雅退出）
+ * ÎnchidereSimulareMediu（优雅Ieșire）
  * @param {Object} data - { simulation_id, timeout? }
  */
 export const closeSimulationEnv = (data) => {
@@ -161,7 +161,7 @@ export const closeSimulationEnv = (data) => {
 }
 
 /**
- * ObținereSimulare环境Stare
+ * ObținereSimulareMediuStare
  * @param {Object} data - { simulation_id }
  */
 export const getEnvStatus = (data) => {
@@ -177,8 +177,8 @@ export const interviewAgents = (data) => {
 }
 
 /**
- * Obținere历史SimulareListă（带项目Detalii）
- * 用于首页历史项目展示
+ * Obținere历史SimulareListă（带ProiectDetalii）
+ * 用于Acasă历史Proiect展示
  * @param {number} limit - Returnare数量限制
  */
 export const getSimulationHistory = (limit = 20) => {

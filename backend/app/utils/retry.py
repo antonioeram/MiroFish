@@ -1,6 +1,6 @@
 """
 API调用Reîncercare机制
-用于ProcesareLLM等外部API调用的Reîncercare逻辑
+用于ProcesareLLM等外部API调用Reîncercare逻辑
 """
 
 import time
@@ -22,16 +22,16 @@ def retry_with_backoff(
     on_retry: Optional[Callable[[Exception, int], None]] = None
 ):
     """
-    带指数退避的Reîncercare装饰器
+    带指数退避Reîncercare装饰器
     
     Args:
         max_retries: 最大Reîncercare次数
         initial_delay: 初始延迟（秒）
         max_delay: 最大延迟（秒）
         backoff_factor: 退避因子
-        jitter: 是否添加随机抖动
-        exceptions: 需要Reîncercare的异常Tip
-        on_retry: Reîncercare时的回调函数 (exception, retry_count)
+        jitter: DaNu添加随机抖动
+        exceptions: 需要ReîncercareExcepțieTip
+        on_retry: Reîncercare时回调Funcție (exception, retry_count)
     
     Usage:
         @retry_with_backoff(max_retries=3)
@@ -52,7 +52,7 @@ def retry_with_backoff(
                     last_exception = e
                     
                     if attempt == max_retries:
-                        logger.error(f"函数 {func.__name__} 在 {max_retries} 次Reîncercare后仍Eșec: {str(e)}")
+                        logger.error(f"Funcție {func.__name__} în {max_retries} 次Reîncercare后仍Eșec: {str(e)}")
                         raise
                     
                     # 计算延迟
@@ -61,7 +61,7 @@ def retry_with_backoff(
                         current_delay = current_delay * (0.5 + random.random())
                     
                     logger.warning(
-                        f"函数 {func.__name__} 第 {attempt + 1} 次尝试Eșec: {str(e)}, "
+                        f"Funcție {func.__name__} 第 {attempt + 1} 次尝试Eșec: {str(e)}, "
                         f"{current_delay:.1f}秒后Reîncercare..."
                     )
                     
@@ -87,7 +87,7 @@ def retry_with_backoff_async(
     on_retry: Optional[Callable[[Exception, int], None]] = None
 ):
     """
-    异步版本的Reîncercare装饰器
+    异步VersiuneReîncercare装饰器
     """
     import asyncio
     
@@ -105,7 +105,7 @@ def retry_with_backoff_async(
                     last_exception = e
                     
                     if attempt == max_retries:
-                        logger.error(f"异步函数 {func.__name__} 在 {max_retries} 次Reîncercare后仍Eșec: {str(e)}")
+                        logger.error(f"异步Funcție {func.__name__} în {max_retries} 次Reîncercare后仍Eșec: {str(e)}")
                         raise
                     
                     current_delay = min(delay, max_delay)
@@ -113,7 +113,7 @@ def retry_with_backoff_async(
                         current_delay = current_delay * (0.5 + random.random())
                     
                     logger.warning(
-                        f"异步函数 {func.__name__} 第 {attempt + 1} 次尝试Eșec: {str(e)}, "
+                        f"异步Funcție {func.__name__} 第 {attempt + 1} 次尝试Eșec: {str(e)}, "
                         f"{current_delay:.1f}秒后Reîncercare..."
                     )
                     
@@ -131,7 +131,7 @@ def retry_with_backoff_async(
 
 class RetryableAPIClient:
     """
-    可Reîncercare的APIClient封装
+    可ReîncercareAPIClient封装
     """
     
     def __init__(
@@ -154,16 +154,16 @@ class RetryableAPIClient:
         **kwargs
     ) -> Any:
         """
-        执行函数调用并在Eșec时Reîncercare
+        执行Funcție调用并înEșec时Reîncercare
         
         Args:
-            func: 要调用的函数
-            *args: 函数参数
-            exceptions: 需要Reîncercare的异常Tip
-            **kwargs: 函数关键字参数
+            func: 要调用Funcție
+            *args: FuncțieParametru
+            exceptions: 需要ReîncercareExcepțieTip
+            **kwargs: Funcție关Cheie字Parametru
             
         Returns:
-            函数Returnare值
+            FuncțieReturnareValoare
         """
         last_exception = None
         delay = self.initial_delay
@@ -176,7 +176,7 @@ class RetryableAPIClient:
                 last_exception = e
                 
                 if attempt == self.max_retries:
-                    logger.error(f"API调用在 {self.max_retries} 次Reîncercare后仍Eșec: {str(e)}")
+                    logger.error(f"API调用în {self.max_retries} 次Reîncercare后仍Eșec: {str(e)}")
                     raise
                 
                 current_delay = min(delay, self.max_delay)
@@ -203,13 +203,13 @@ class RetryableAPIClient:
         批量调用并对每个Eșec项单独Reîncercare
         
         Args:
-            items: 要Procesare的Proiect列表
-            process_func: Procesare函数，接收单个item作为参数
-            exceptions: 需要Reîncercare的异常Tip
-            continue_on_failure: 单项Eșec后是否ContinuareProcesare其他项
+            items: 要ProcesareProiectListă
+            process_func: ProcesareFuncție，接收单个item作为Parametru
+            exceptions: 需要ReîncercareExcepțieTip
+            continue_on_failure: 单项Eșec后DaNuContinuareProcesare其他项
             
         Returns:
-            (SuccesRezultat列表, Eșec项列表)
+            (SuccesRezultatListă, Eșec项Listă)
         """
         results = []
         failures = []

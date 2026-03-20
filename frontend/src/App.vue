@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-// 使用 Vue Router 来管理页面
+// Utilizare Vue Router 来管理页面
 </script>
 
 <style>

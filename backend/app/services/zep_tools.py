@@ -1,6 +1,6 @@
 """
 Zep检索InstrumentServiciu
-封装Graf搜索、Nod读取、边Interogare等Instrument，供Report Agent使用
+封装Graf搜索、Nod读取、边Interogare等Instrument，供Report AgentUtilizare
 
 核心检索Instrument（优化后）：
 1. InsightForge（深度洞察检索）- 最强大混合检索，AutomatGenerare子问题并多维度检索
@@ -42,7 +42,7 @@ class SearchResult:
         }
     
     def to_text(self) -> str:
-        """转换为文本格式，供LLM理解"""
+        """转换为文本Format，供LLM理解"""
         text_parts = [f"搜索Interogare: {self.query}", f"找la {self.total_count} 条相关Informații"]
         
         if self.facts:
@@ -72,7 +72,7 @@ class NodeInfo:
         }
     
     def to_text(self) -> str:
-        """转换为文本格式"""
+        """转换为文本Format"""
         entity_type = next((l for l in self.labels if l not in ["Entity", "Node"]), "NecunoscutTip")
         return f"Entitate: {self.name} (Tip: {entity_type})\n摘要: {self.summary}"
 
@@ -109,7 +109,7 @@ class EdgeInfo:
         }
     
     def to_text(self, include_temporal: bool = False) -> str:
-        """转换为文本格式"""
+        """转换为文本Format"""
         source = self.source_node_name or self.source_node_uuid[:8]
         target = self.target_node_name or self.target_node_uuid[:8]
         base_text = f"Relație: {source} --[{self.name}]--> {target}\n事实: {self.fact}"
@@ -168,7 +168,7 @@ class InsightForgeResult:
         }
     
     def to_text(self) -> str:
-        """转换为详细文本格式，供LLM理解"""
+        """转换为详细文本Format，供LLM理解"""
         text_parts = [
             f"## ViitorPredicție深度Analiză",
             f"Analiză问题: {self.query}",
@@ -247,7 +247,7 @@ class PanoramaResult:
         }
     
     def to_text(self) -> str:
-        """转换为文本格式（Complet版本，不截断）"""
+        """转换为文本Format（CompletVersiune，不截断）"""
         text_parts = [
             f"## 广度搜索Rezultat（Viitor全景视图）",
             f"Interogare: {self.query}",
@@ -285,7 +285,7 @@ class AgentInterview:
     """IndividualAgentInterviuRezultat"""
     agent_name: str
     agent_role: str  # RolTip（如：学生、教师、媒体等）
-    agent_bio: str  # 简介
+    agent_bio: str  # Descriere
     question: str  # Interviu问题
     response: str  # Interviu回答
     key_quotes: List[str] = field(default_factory=list)  # 关Cheie引言
@@ -303,7 +303,7 @@ class AgentInterview:
     def to_text(self) -> str:
         text = f"**{self.agent_name}** ({self.agent_role})\n"
         # 显示Completagent_bio，不截断
-        text += f"_简介: {self.agent_bio}_\n\n"
+        text += f"_Descriere: {self.agent_bio}_\n\n"
         text += f"**Q:** {self.question}\n\n"
         text += f"**A:** {self.response}\n"
         if self.key_quotes:
@@ -372,7 +372,7 @@ class InterviewResult:
         }
     
     def to_text(self) -> str:
-        """转换为详细文本格式，供LLM理解șiRaport引用"""
+        """转换为详细文本Format，供LLM理解șiRaport引用"""
         text_parts = [
             "## 深度InterviuRaport",
             f"**Interviu主题:** {self.interview_topic}",
@@ -391,7 +391,7 @@ class InterviewResult:
         else:
             text_parts.append("（无InterviuÎnregistrare）\n\n---")
 
-        text_parts.append("\n### Interviu摘要și核心观点")
+        text_parts.append("\n### Interviu摘要și核心Opinie")
         text_parts.append(self.summary or "（无摘要）")
 
         return "\n".join(text_parts)
@@ -405,7 +405,7 @@ class ZepToolsService:
     1. insight_forge - 深度洞察检索（最强大，AutomatGenerare子问题，多维度检索）
     2. panorama_search - 广度搜索（Obținere全貌，包括过期Conținut）
     3. quick_search - Simplu搜索（Rapid检索）
-    4. interview_agents - 深度Interviu（InterviuSimulareAgent，Obținere多视角观点）
+    4. interview_agents - 深度Interviu（InterviuSimulareAgent，Obținere多视角Opinie）
     
     【基础Instrument】
     - search_graph - Graf语义搜索
@@ -471,7 +471,7 @@ class ZepToolsService:
         """
         Graf语义搜索
         
-        使用混合搜索（语义+BM25）înGraf搜索相关Informații。
+        Utilizare混合搜索（语义+BM25）înGraf搜索相关Informații。
         dacăZep Cloudsearch API不可用，则降级为本地关Cheie词匹配。
         
         Args:
@@ -485,7 +485,7 @@ class ZepToolsService:
         """
         logger.info(f"Graf搜索: graph_id={graph_id}, query={query[:50]}...")
         
-        # 尝试使用Zep Cloud Search API
+        # 尝试UtilizareZep Cloud Search API
         try:
             search_results = self._call_with_retry(
                 func=lambda: self.client.graph.search(
@@ -540,7 +540,7 @@ class ZepToolsService:
             
         except Exception as e:
             logger.warning(f"Zep Search APIEșec，降级为本地搜索: {str(e)}")
-            # 降级：使用本地关Cheie词匹配搜索
+            # 降级：Utilizare本地关Cheie词匹配搜索
             return self._local_search(graph_id, query, limit, scope)
     
     def _local_search(
@@ -564,7 +564,7 @@ class ZepToolsService:
         Returns:
             SearchResult: 搜索Rezultat
         """
-        logger.info(f"使用本地搜索: query={query[:30]}...")
+        logger.info(f"Utilizare本地搜索: query={query[:30]}...")
         
         facts = []
         edges_result = []
@@ -921,7 +921,7 @@ class ZepToolsService:
         # Obținere所有EntitateNod
         all_nodes = self.get_all_nodes(graph_id)
         
-        # 筛选有实际TipEntitate（nu纯EntityNod）
+        # Filtrare有实际TipEntitate（nu纯EntityNod）
         entities = []
         for node in all_nodes:
             custom_labels = [l for l in node.labels if l not in ["Entity", "Node"]]
@@ -954,7 +954,7 @@ class ZepToolsService:
         【InsightForge - 深度洞察检索】
         
         最强大混合检索Funcție，Automat分解问题并多维度检索：
-        1. 使用LLM将问题分解为多个子问题
+        1. UtilizareLLM将问题分解为多个子问题
         2. 对每个子问题进行语义搜索
         3. 提取相关Entitate并Obținere其详细Informații
         4. 追踪Relație链
@@ -978,7 +978,7 @@ class ZepToolsService:
             sub_queries=[]
         )
         
-        # Step 1: 使用LLMGenerare子问题
+        # Step 1: UtilizareLLMGenerare子问题
         sub_queries = self._generate_sub_queries(
             query=query,
             simulation_requirement=simulation_requirement,
@@ -1097,17 +1097,17 @@ class ZepToolsService:
         max_queries: int = 5
     ) -> List[str]:
         """
-        使用LLMGenerare子问题
+        UtilizareLLMGenerare子问题
         
         将Complex问题分解为多个可以独立检索子问题
         """
-        system_prompt = """你Da一个专业问题Analiză专家。你任务Da将一个Complex问题分解为多个可以înSimulare世界独立观察子问题。
+        system_prompt = """你Da一个专业问题Analiză专家。你SarcinăDa将一个Complex问题分解为多个可以înSimulare世界独立观察子问题。
 
 要求：
 1. 每个子问题应该足够具体，可以înSimulare世界找la相关AgentComportamentsauEveniment
 2. 子问题应该覆盖原问题不同维度（如：谁、什么、为什么、怎么样、何时、何地）
 3. 子问题应该șiSimulare场景相关
-4. ReturnareJSON格式：{"sub_queries": ["子问题1", "子问题2", ...]}"""
+4. ReturnareJSONFormat：{"sub_queries": ["子问题1", "子问题2", ...]}"""
 
         user_prompt = f"""SimulareCerință背景：
 {simulation_requirement}
@@ -1117,7 +1117,7 @@ class ZepToolsService:
 请将以问题分解为{max_queries}个子问题：
 {query}
 
-ReturnareJSON格式子问题Listă。"""
+ReturnareJSONFormat子问题Listă。"""
 
         try:
             response = self.llm.chat_json(
@@ -1133,7 +1133,7 @@ ReturnareJSON格式子问题Listă。"""
             return [str(sq) for sq in sub_queries[:max_queries]]
             
         except Exception as e:
-            logger.warning(f"Generare子问题Eșec: {str(e)}，使用Implicit子问题")
+            logger.warning(f"Generare子问题Eșec: {str(e)}，UtilizareImplicit子问题")
             # 降级：Returnare基于原问题变体
             return [
                 query,
@@ -1282,16 +1282,16 @@ ReturnareJSON格式子问题Listă。"""
         
         调用Adevărat实OASISInterviuAPI，InterviuSimulare正înRulareAgent：
         1. Automat读取人设Fișier，解所有SimulareAgent
-        2. 使用LLMAnalizăInterviuCerință，智能Selectare最相关Agent
-        3. 使用LLMGenerareInterviu问题
+        2. UtilizareLLMAnalizăInterviuCerință，智能Selectare最相关Agent
+        3. UtilizareLLMGenerareInterviu问题
         4. 调用 /api/simulation/interview/batch Interfață进行Adevărat实Interviu（双Platformă同时Interviu）
         5. 整合所有InterviuRezultat，GenerareInterviuRaport
         
         【重要】此Funcționalitate需要SimulareMediu处于RulareStare（OASISMediu未Închidere）
         
-        【使用场景】
+        【Utilizare场景】
         - 需要de la不同Rol视角解Eveniment看法
-        - 需要收集多方意见și观点
+        - 需要收集多方意见șiOpinie
         - 需要ObținereSimulareAgentAdevărat实回答（nuLLMSimulare）
         
         Args:
@@ -1324,7 +1324,7 @@ ReturnareJSON格式子问题Listă。"""
         result.total_agents = len(profiles)
         logger.info(f"Încărcarela {len(profiles)} 个Agent人设")
         
-        # Step 2: 使用LLMSelectare要InterviuAgent（Returnareagent_idListă）
+        # Step 2: UtilizareLLMSelectare要InterviuAgent（Returnareagent_idListă）
         selected_agents, selected_indices, selection_reasoning = self._select_agents_for_interview(
             profiles=profiles,
             interview_requirement=interview_requirement,
@@ -1348,14 +1348,14 @@ ReturnareJSON格式子问题Listă。"""
         # 将问题合并为一个Interviuprompt
         combined_prompt = "\n".join([f"{i+1}. {q}" for i, q in enumerate(result.interview_questions)])
         
-        # 添加优化前缀，约束Agent回复格式
+        # 添加优化前缀，约束AgentRăspunsFormat
         INTERVIEW_PROMPT_PREFIX = (
             "你正în接受一次Interviu。请结合你人设、所有过往Memorieși行动，"
             "以纯文本方式直接回答以问题。\n"
-            "回复要求：\n"
+            "Răspuns要求：\n"
             "1. 直接用自然语言回答，不要调用任何Instrument\n"
-            "2. 不要ReturnareJSON格式sauInstrument调用格式\n"
-            "3. 不要使用MarkdownTitlu（如#、##、###）\n"
+            "2. 不要ReturnareJSONFormatsauInstrument调用Format\n"
+            "3. 不要UtilizareMarkdownTitlu（如#、##、###）\n"
             "4. 按问题编号逐一回答，每个回答以「问题X：」开头（X为问题编号）\n"
             "5. 每个问题回答之间用Gol行分隔\n"
             "6. 回答要有实质Conținut，每个问题至少回答2-3句话\n\n"
@@ -1369,7 +1369,7 @@ ReturnareJSON格式子问题Listă。"""
             for agent_idx in selected_indices:
                 interviews_request.append({
                     "agent_id": agent_idx,
-                    "prompt": optimized_prompt  # 使用优化后prompt
+                    "prompt": optimized_prompt  # Utilizare优化后prompt
                     # 不指定platform，API会întwitterșireddit两个Platformă都Interviu
                 })
             
@@ -1393,7 +1393,7 @@ ReturnareJSON格式子问题Listă。"""
                 return result
             
             # Step 5: 解析APIReturnareRezultat，ConstruireAgentInterviewObiect
-            # 双Platformă模式Returnare格式: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
+            # 双Platformă模式ReturnareFormat: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
             api_data = api_result.get("result", {})
             results_dict = api_data.get("results", {}) if isinstance(api_data, dict) else {}
             
@@ -1415,8 +1415,8 @@ ReturnareJSON格式子问题Listă。"""
                 reddit_response = self._clean_tool_call_response(reddit_response)
 
                 # 始终Output双Platformă标记
-                twitter_text = twitter_response if twitter_response else "（该Platformă未获得回复）"
-                reddit_text = reddit_response if reddit_response else "（该Platformă未获得回复）"
+                twitter_text = twitter_response if twitter_response else "（该Platformă未获得Răspuns）"
+                reddit_text = reddit_response if reddit_response else "（该Platformă未获得Răspuns）"
                 response_text = f"【TwitterPlatformă回答】\n{twitter_text}\n\n【RedditPlatformă回答】\n{reddit_text}"
 
                 # 提取关Cheie引言（de la两个Platformă回答）
@@ -1483,7 +1483,7 @@ ReturnareJSON格式子问题Listă。"""
     
     @staticmethod
     def _clean_tool_call_response(response: str) -> str:
-        """清理 Agent 回复 JSON Instrument调用包裹，提取实际Conținut"""
+        """清理 Agent Răspuns JSON Instrument调用包裹，提取实际Conținut"""
         if not response or not response.strip().startswith('{'):
             return response
         text = response.strip()
@@ -1515,7 +1515,7 @@ ReturnareJSON格式子问题Listă。"""
         
         profiles = []
         
-        # 优先尝试读取Reddit JSON格式
+        # 优先尝试读取Reddit JSONFormat
         reddit_profile_path = os.path.join(sim_dir, "reddit_profiles.json")
         if os.path.exists(reddit_profile_path):
             try:
@@ -1526,14 +1526,14 @@ ReturnareJSON格式子问题Listă。"""
             except Exception as e:
                 logger.warning(f"读取 reddit_profiles.json Eșec: {e}")
         
-        # 尝试读取Twitter CSV格式
+        # 尝试读取Twitter CSVFormat
         twitter_profile_path = os.path.join(sim_dir, "twitter_profiles.csv")
         if os.path.exists(twitter_profile_path):
             try:
                 with open(twitter_profile_path, 'r', encoding='utf-8') as f:
                     reader = csv.DictReader(f)
                     for row in reader:
-                        # CSV格式转换为统一格式
+                        # CSVFormat转换为统一Format
                         profiles.append({
                             "realname": row.get("name", ""),
                             "username": row.get("username", ""),
@@ -1556,7 +1556,7 @@ ReturnareJSON格式子问题Listă。"""
         max_agents: int
     ) -> tuple:
         """
-        使用LLMSelectare要InterviuAgent
+        UtilizareLLMSelectare要InterviuAgent
         
         Returns:
             tuple: (selected_agents, selected_indices, reasoning)
@@ -1577,15 +1577,15 @@ ReturnareJSON格式子问题Listă。"""
             }
             agent_summaries.append(summary)
         
-        system_prompt = """你Da一个专业Interviu策划专家。你任务Da根据InterviuCerință，de laSimulareAgentListăSelectare最适合InterviuObiect。
+        system_prompt = """你Da一个专业Interviu策划专家。你SarcinăDa根据InterviuCerință，de laSimulareAgentListăSelectare最适合InterviuObiect。
 
 Selectare标准：
-1. Agent身份/职业șiInterviu主题相关
-2. Agent可能持有独特sau有价Valoare观点
-3. Selectare多样化视角（如：支持方、反对方、立方、专业人士等）
+1. Agent身份/ProfesieșiInterviu主题相关
+2. Agent可能持有独特sau有价ValoareOpinie
+3. Selectare多样化视角（如：Suportă方、反对方、立方、专业人士等）
 4. 优先SelectareșiEveniment直接相关Rol
 
-ReturnareJSON格式：
+ReturnareJSONFormat：
 {
     "selected_indices": [选AgentIndexListă],
     "reasoning": "Selectare理由说明"
@@ -1625,11 +1625,11 @@ Simulare背景：
             return selected_agents, valid_indices, reasoning
             
         except Exception as e:
-            logger.warning(f"LLMSelectareAgentEșec，使用ImplicitSelectare: {e}")
+            logger.warning(f"LLMSelectareAgentEșec，UtilizareImplicitSelectare: {e}")
             # 降级：Selectare前N个
             selected = profiles[:max_agents]
             indices = list(range(min(max_agents, len(profiles))))
-            return selected, indices, "使用ImplicitSelectare策略"
+            return selected, indices, "UtilizareImplicitSelectare策略"
     
     def _generate_interview_questions(
         self,
@@ -1637,7 +1637,7 @@ Simulare背景：
         simulation_requirement: str,
         selected_agents: List[Dict[str, Any]]
     ) -> List[str]:
-        """使用LLMGenerareInterviu问题"""
+        """UtilizareLLMGenerareInterviu问题"""
         
         agent_roles = [a.get("profession", "Necunoscut") for a in selected_agents]
         
@@ -1646,12 +1646,12 @@ Simulare背景：
 问题要求：
 1. 开放性问题，鼓励详细回答
 2. 针对不同Rol可能有不同答案
-3. 涵盖事实、观点、感受等多个维度
+3. 涵盖事实、Opinie、感受等多个维度
 4. 语言自然，像Adevărat实Interviu一样
 5. 每个问题控制în50字以内，简洁明
 6. 直接提问，不要包含背景说明sau前缀
 
-ReturnareJSON格式：{"questions": ["问题1", "问题2", ...]}"""
+ReturnareJSONFormat：{"questions": ["问题1", "问题2", ...]}"""
 
         user_prompt = f"""InterviuCerință：{interview_requirement}
 
@@ -1670,12 +1670,12 @@ InterviuObiectRol：{', '.join(agent_roles)}
                 temperature=0.5
             )
             
-            return response.get("questions", [f"关于{interview_requirement}，您有什么看法？"])
+            return response.get("questions", [f"Despre{interview_requirement}，您有什么看法？"])
             
         except Exception as e:
             logger.warning(f"GenerareInterviu问题Eșec: {e}")
             return [
-                f"关于{interview_requirement}，您观点Da什么？",
+                f"Despre{interview_requirement}，您OpinieDa什么？",
                 "这件事对您sau您所代表群体有什么Impact？",
                 "您认为应该如何解决sau改进这个问题？"
             ]
@@ -1698,18 +1698,18 @@ InterviuObiectRol：{', '.join(agent_roles)}
         system_prompt = """你Da一个专业新闻编辑。请根据多位受访者回答，Generare一份Interviu摘要。
 
 摘要要求：
-1. 提炼各方主要观点
-2. 指出观点共识și分歧
+1. 提炼各方主要Opinie
+2. 指出Opinie共识și分歧
 3. 突出有价Valoare引言
 4. 客观立，不偏袒任何一方
 5. 控制în1000字内
 
-格式约束（必须遵守）：
-- 使用纯文本段落，用Gol行分隔不同Parțial
-- 不要使用MarkdownTitlu（如#、##、###）
-- 不要使用分割线（如---、***）
-- 引用受访者原话时使用文引号「」
-- 可以使用**加粗**标记关Cheie词，但不要使用其他Markdown语法"""
+Format约束（必须遵守）：
+- Utilizare纯文本段落，用Gol行分隔不同Parțial
+- 不要UtilizareMarkdownTitlu（如#、##、###）
+- 不要Utilizare分割线（如---、***）
+- 引用受访者原话时Utilizare文引号「」
+- 可以Utilizare**加粗**标记关Cheie词，但不要Utilizare其他Markdown语法"""
 
         user_prompt = f"""Interviu主题：{interview_requirement}
 

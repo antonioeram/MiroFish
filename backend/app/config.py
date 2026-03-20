@@ -1,33 +1,33 @@
 """
 Configurare管理
-统一从Proiect根目录的 .env FișierÎncărcareConfigurare
+统一de laProiect根Director .env FișierÎncărcareConfigurare
 """
 
 import os
 from dotenv import load_dotenv
 
-# ÎncărcareProiect根目录的 .env Fișier
-# 路径: MiroFish/.env (相对于 backend/app/config.py)
+# ÎncărcareProiect根Director .env Fișier
+# Cale: MiroFish/.env (相pentru backend/app/config.py)
 project_root_env = os.path.join(os.path.dirname(__file__), '../../.env')
 
 if os.path.exists(project_root_env):
     load_dotenv(project_root_env, override=True)
 else:
-    # 如果根目录没有 .env，尝试Încărcare环境变量（用于生产环境）
+    # dacă根Director没有 .env，尝试ÎncărcareMediuVariabilă（用于生产Mediu）
     load_dotenv(override=True)
 
 
 class Config:
-    """FlaskConfigurare类"""
+    """FlaskConfigurareClasă"""
     
     # FlaskConfigurare
     SECRET_KEY = os.environ.get('SECRET_KEY', 'mirofish-secret-key')
     DEBUG = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
     
-    # JSONConfigurare - 禁用ASCII转义，让中文直接显示（而不是 \uXXXX 格式）
+    # JSONConfigurare - 禁用ASCII转义，让文直接显示（而不Da \uXXXX Format）
     JSON_AS_ASCII = False
     
-    # LLMConfigurare（统一使用OpenAI格式）
+    # LLMConfigurare（统一UtilizareOpenAIFormat）
     LLM_API_KEY = os.environ.get('LLM_API_KEY')
     LLM_BASE_URL = os.environ.get('LLM_BASE_URL', 'https://api.openai.com/v1')
     LLM_MODEL_NAME = os.environ.get('LLM_MODEL_NAME', 'gpt-4o-mini')
@@ -35,7 +35,7 @@ class Config:
     # ZepConfigurare
     ZEP_API_KEY = os.environ.get('ZEP_API_KEY')
     
-    # Fișier上传Configurare
+    # Fișier传Configurare
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024  # 50MB
     UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '../uploads')
     ALLOWED_EXTENSIONS = {'pdf', 'md', 'txt', 'markdown'}
@@ -48,7 +48,7 @@ class Config:
     OASIS_DEFAULT_MAX_ROUNDS = int(os.environ.get('OASIS_DEFAULT_MAX_ROUNDS', '10'))
     OASIS_SIMULATION_DATA_DIR = os.path.join(os.path.dirname(__file__), '../uploads/simulations')
     
-    # OASIS平台可用动作Configurare
+    # OASISPlatformă可用AcțiuneConfigurare
     OASIS_TWITTER_ACTIONS = [
         'CREATE_POST', 'LIKE_POST', 'REPOST', 'FOLLOW', 'DO_NOTHING', 'QUOTE_POST'
     ]
@@ -65,7 +65,7 @@ class Config:
     
     @classmethod
     def validate(cls):
-        """验证必要Configurare"""
+        """Verificare必要Configurare"""
         errors = []
         if not cls.LLM_API_KEY:
             errors.append("LLM_API_KEY 未Configurare")
