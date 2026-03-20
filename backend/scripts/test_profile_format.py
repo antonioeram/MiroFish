@@ -1,8 +1,8 @@
 """
-测试Profile格式生成是否符合OASIS要求
+TestareProfileFormatGenerare是否符合OASIS要求
 验证：
-1. Twitter Profile生成CSV格式
-2. Reddit Profile生成JSON详细格式
+1. Twitter ProfileGenerareCSVFormat
+2. Reddit ProfileGenerareJSON详细Format
 """
 
 import os
@@ -18,12 +18,12 @@ from app.services.oasis_profile_generator import OasisProfileGenerator, OasisAge
 
 
 def test_profile_formats():
-    """测试Profile格式"""
+    """TestareProfileFormat"""
     print("=" * 60)
-    print("OASIS Profile格式测试")
+    print("OASIS ProfileFormatTestare")
     print("=" * 60)
     
-    # 创建测试Profile数据
+    # CreareTestareProfileDate
     test_profiles = [
         OasisAgentProfile(
             user_id=0,
@@ -68,8 +68,8 @@ def test_profile_formats():
         twitter_path = os.path.join(temp_dir, "twitter_profiles.csv")
         reddit_path = os.path.join(temp_dir, "reddit_profiles.json")
         
-        # 测试Twitter CSV格式
-        print("\n1. 测试Twitter Profile (CSV格式)")
+        # TestareTwitter CSVFormat
+        print("\n1. TestareTwitter Profile (CSVFormat)")
         print("-" * 40)
         generator._save_twitter_csv(test_profiles, twitter_path)
         
@@ -81,7 +81,7 @@ def test_profile_formats():
         print(f"   文件: {twitter_path}")
         print(f"   行数: {len(rows)}")
         print(f"   表头: {list(rows[0].keys())}")
-        print(f"\n   示例数据 (第1行):")
+        print(f"\n   示例Date (第1行):")
         for key, value in rows[0].items():
             print(f"     {key}: {value}")
         
@@ -90,12 +90,12 @@ def test_profile_formats():
                                    'friend_count', 'follower_count', 'statuses_count', 'created_at']
         missing = set(required_twitter_fields) - set(rows[0].keys())
         if missing:
-            print(f"\n   [错误] 缺少字段: {missing}")
+            print(f"\n   [Eroare] 缺少字段: {missing}")
         else:
             print(f"\n   [通过] 所有必需字段都存在")
         
-        # 测试Reddit JSON格式
-        print("\n2. 测试Reddit Profile (JSON详细格式)")
+        # TestareReddit JSONFormat
+        print("\n2. TestareReddit Profile (JSON详细Format)")
         print("-" * 40)
         generator._save_reddit_json(test_profiles, reddit_path)
         
@@ -106,41 +106,41 @@ def test_profile_formats():
         print(f"   文件: {reddit_path}")
         print(f"   条目数: {len(reddit_data)}")
         print(f"   字段: {list(reddit_data[0].keys())}")
-        print(f"\n   示例数据 (第1条):")
+        print(f"\n   示例Date (第1条):")
         print(json.dumps(reddit_data[0], ensure_ascii=False, indent=4))
         
-        # 验证详细格式字段
+        # 验证详细Format字段
         required_reddit_fields = ['realname', 'username', 'bio', 'persona']
         optional_reddit_fields = ['age', 'gender', 'mbti', 'country', 'profession', 'interested_topics']
         
         missing = set(required_reddit_fields) - set(reddit_data[0].keys())
         if missing:
-            print(f"\n   [错误] 缺少必需字段: {missing}")
+            print(f"\n   [Eroare] 缺少必需字段: {missing}")
         else:
             print(f"\n   [通过] 所有必需字段都存在")
         
         present_optional = set(optional_reddit_fields) & set(reddit_data[0].keys())
-        print(f"   [信息] 可选字段: {present_optional}")
+        print(f"   [Informații] 可选字段: {present_optional}")
     
     print("\n" + "=" * 60)
-    print("测试完成!")
+    print("TestareFinalizare!")
     print("=" * 60)
 
 
 def show_expected_formats():
-    """显示OASIS期望的格式"""
+    """显示OASIS期望的Format"""
     print("\n" + "=" * 60)
-    print("OASIS 期望的Profile格式参考")
+    print("OASIS 期望的ProfileFormat参考")
     print("=" * 60)
     
-    print("\n1. Twitter Profile (CSV格式)")
+    print("\n1. Twitter Profile (CSVFormat)")
     print("-" * 40)
     twitter_example = """user_id,user_name,name,bio,friend_count,follower_count,statuses_count,created_at
 0,user0,User Zero,I am user zero with interests in technology.,100,150,500,2023-01-01
 1,user1,User One,Tech enthusiast and coffee lover.,200,250,1000,2023-01-02"""
     print(twitter_example)
     
-    print("\n2. Reddit Profile (JSON详细格式)")
+    print("\n2. Reddit Profile (JSON详细Format)")
     print("-" * 40)
     reddit_example = [
         {
