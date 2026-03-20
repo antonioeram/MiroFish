@@ -90,8 +90,8 @@ const router = useRouter()
 const viewMode = ref('split') // graph | split | workbench
 
 // Step State
-const currentStep = ref(1) // 1: 图谱构建, 2: 环境搭建, 3: 开始模拟, 4: 报告生成, 5: 深度互动
-const stepNames = ['图谱构建', '环境搭建', '开始模拟', '报告生成', '深度互动']
+const currentStep = ref(1) // 1: 图谱构建, 2: 环境搭建, 3: Start模拟, 4: 报告生成, 5: 深度互动
+const stepNames = ['图谱构建', '环境搭建', 'Start模拟', '报告生成', '深度互动']
 
 // Data State
 const currentProjectId = ref(route.params.projectId)
@@ -161,7 +161,7 @@ const handleNextStep = (params = {}) => {
     currentStep.value++
     addLog(`进入 Step ${currentStep.value}: ${stepNames[currentStep.value - 1]}`)
     
-    // 如果是从 Step 2 进入 Step 3，记录模拟轮数配置
+    // 如果Da从 Step 2 进入 Step 3，记录模拟轮数配置
     if (currentStep.value === 3 && params.maxRounds) {
       addLog(`自定义模拟轮数: ${params.maxRounds} 轮`)
     }

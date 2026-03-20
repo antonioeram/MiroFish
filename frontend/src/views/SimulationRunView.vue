@@ -23,7 +23,7 @@
       <div class="header-right">
         <div class="workflow-step">
           <span class="step-num">Step 3/5</span>
-          <span class="step-name">开始模拟</span>
+          <span class="step-name">Start模拟</span>
         </div>
         <div class="step-divider"></div>
         <span class="status-indicator" :class="statusClass">
@@ -47,7 +47,7 @@
         />
       </div>
 
-      <!-- Right Panel: Step3 开始模拟 -->
+      <!-- Right Panel: Step3 Start模拟 -->
       <div class="panel-wrapper right" :style="rightPanelStyle">
         <Step3Simulation
           :simulationId="currentSimulationId"
@@ -145,47 +145,47 @@ const toggleMaximize = (target) => {
 }
 
 const handleGoBack = async () => {
-  // 在返回 Step 2 之前，先关闭正在运行的模拟
-  addLog('准备返回 Step 2，正在关闭模拟...')
+  // 在返回 Step 2 之前，先Închidere正在运行模拟
+  addLog('准备返回 Step 2，正在Închidere模拟...')
   
-  // 停止轮询
+  // Oprire轮询
   stopGraphRefresh()
   
   try {
-    // 先尝试优雅关闭模拟环境
+    // 先尝试优雅Închidere模拟环境
     const envStatusRes = await getEnvStatus({ simulation_id: currentSimulationId.value })
     
     if (envStatusRes.success && envStatusRes.data?.env_alive) {
-      addLog('正在关闭模拟环境...')
+      addLog('正在Închidere模拟环境...')
       try {
         await closeSimulationEnv({ 
           simulation_id: currentSimulationId.value,
           timeout: 10
         })
-        addLog('✓ 模拟环境已关闭')
+        addLog('✓ 模拟环境已Închidere')
       } catch (closeErr) {
-        addLog(`关闭模拟环境失败，尝试强制停止...`)
+        addLog(`Închidere模拟环境Eșec，尝试强制Oprire...`)
         try {
           await stopSimulation({ simulation_id: currentSimulationId.value })
-          addLog('✓ 模拟已强制停止')
+          addLog('✓ 模拟已强制Oprire')
         } catch (stopErr) {
-          addLog(`强制停止失败: ${stopErr.message}`)
+          addLog(`强制OprireEșec: ${stopErr.message}`)
         }
       }
     } else {
-      // 环境未运行，检查是否需要停止进程
+      // 环境未运行，检查DaNu需要Oprire进程
       if (isSimulating.value) {
-        addLog('正在停止模拟进程...')
+        addLog('正在Oprire模拟进程...')
         try {
           await stopSimulation({ simulation_id: currentSimulationId.value })
-          addLog('✓ 模拟已停止')
+          addLog('✓ 模拟已Oprire')
         } catch (err) {
-          addLog(`停止模拟失败: ${err.message}`)
+          addLog(`Oprire模拟Eșec: ${err.message}`)
         }
       }
     }
   } catch (err) {
-    addLog(`检查模拟状态失败: ${err.message}`)
+    addLog(`检查模拟StareEșec: ${err.message}`)
   }
   
   // 返回到 Step 2 (环境搭建)
@@ -201,9 +201,9 @@ const handleNextStep = () => {
 // --- Data Logic ---
 const loadSimulationData = async () => {
   try {
-    addLog(`加载模拟数据: ${currentSimulationId.value}`)
+    addLog(`Încărcare模拟数据: ${currentSimulationId.value}`)
     
-    // 获取 simulation 信息
+    // 获取 simulation Informații
     const simRes = await getSimulation(currentSimulationId.value)
     if (simRes.success && simRes.data) {
       const simData = simRes.data
@@ -213,18 +213,18 @@ const loadSimulationData = async () => {
         const configRes = await getSimulationConfig(currentSimulationId.value)
         if (configRes.success && configRes.data?.time_config?.minutes_per_round) {
           minutesPerRound.value = configRes.data.time_config.minutes_per_round
-          addLog(`时间配置: 每轮 ${minutesPerRound.value} 分钟`)
+          addLog(`Timp配置: 每轮 ${minutesPerRound.value} 分钟`)
         }
       } catch (configErr) {
-        addLog(`获取时间配置失败，使用默认值: ${minutesPerRound.value}分钟/轮`)
+        addLog(`获取Timp配置Eșec，使用默认值: ${minutesPerRound.value}分钟/轮`)
       }
       
-      // 获取 project 信息
+      // 获取 project Informații
       if (simData.project_id) {
         const projRes = await getProject(simData.project_id)
         if (projRes.success && projRes.data) {
           projectData.value = projRes.data
-          addLog(`项目加载成功: ${projRes.data.project_id}`)
+          addLog(`ProiectÎncărcareSucces: ${projRes.data.project_id}`)
           
           // 获取 graph 数据
           if (projRes.data.graph_id) {
@@ -233,16 +233,16 @@ const loadSimulationData = async () => {
         }
       }
     } else {
-      addLog(`加载模拟数据失败: ${simRes.error || '未知错误'}`)
+      addLog(`Încărcare模拟数据Eșec: ${simRes.error || '未知Eroare'}`)
     }
   } catch (err) {
-    addLog(`加载异常: ${err.message}`)
+    addLog(`Încărcare异常: ${err.message}`)
   }
 }
 
 const loadGraph = async (graphId) => {
-  // 当正在模拟时，自动刷新不显示全屏 loading，以免闪烁
-  // 手动刷新或初始加载时显示 loading
+  // 当正在模拟时，自动Reîmprospătare不显示全屏 loading，以免闪烁
+  // 手动Reîmprospătaresau初始Încărcare时显示 loading
   if (!isSimulating.value) {
     graphLoading.value = true
   }
@@ -252,11 +252,11 @@ const loadGraph = async (graphId) => {
     if (res.success) {
       graphData.value = res.data
       if (!isSimulating.value) {
-        addLog('图谱数据加载成功')
+        addLog('图谱数据ÎncărcareSucces')
       }
     }
   } catch (err) {
-    addLog(`图谱加载失败: ${err.message}`)
+    addLog(`图谱ÎncărcareEșec: ${err.message}`)
   } finally {
     graphLoading.value = false
   }
@@ -273,8 +273,8 @@ let graphRefreshTimer = null
 
 const startGraphRefresh = () => {
   if (graphRefreshTimer) return
-  addLog('开启图谱实时刷新 (30s)')
-  // 立即刷新一次，然后每30秒刷新
+  addLog('开启图谱实时Reîmprospătare (30s)')
+  // 立即Reîmprospătare一次，然后每30秒Reîmprospătare
   graphRefreshTimer = setInterval(refreshGraph, 30000)
 }
 
@@ -282,7 +282,7 @@ const stopGraphRefresh = () => {
   if (graphRefreshTimer) {
     clearInterval(graphRefreshTimer)
     graphRefreshTimer = null
-    addLog('停止图谱实时刷新')
+    addLog('Oprire图谱实时Reîmprospătare')
   }
 }
 

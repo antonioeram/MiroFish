@@ -7,7 +7,7 @@
 </script>
 
 <style>
-/* 全局样式重置 */
+/* 全局样式Resetare */
 * {
   margin: 0;
   padding: 0;
